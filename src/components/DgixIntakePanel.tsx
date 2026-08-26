@@ -169,7 +169,7 @@ export function DgixIntakePanel() {
                 </td>
                 <td className="muted">
                   {item.executionAuthorized
-                    ? "AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED"
+                    ? item.reviewStateLabel
                     : "not authorized"}
                   {item.materializedIntoAde ? " · ADE records created" : " · no ADE records created"}
                 </td>

@@ -93,6 +93,71 @@ export async function graphGet(
   }
 }
 
+export type GraphPostFn = (
+  apiPath: string,
+  fields: Record<string, string>,
+  accessToken: string
+) => Promise<MetaGraphResult<Record<string, unknown>>>;
+
+export async function graphPost(
+  apiPath: string,
+  fields: Record<string, string>,
+  accessToken: string
+): Promise<MetaGraphResult<Record<string, unknown>>> {
+  if (!accessToken) {
+    return {
+      ok: false,
+      code: "missing_connection_configuration",
+      message: "Facebook authorization is not configured on the server."
+    };
+  }
+  const url = graphPathUrl(apiPath);
+  const body = new URLSearchParams();
+  for (const [key, value] of Object.entries(fields)) {
+    if (value) body.set(key, value);
+  }
+  body.set("access_token", accessToken);
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), metaTimeoutMs());
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body,
+      signal: controller.signal,
+      cache: "no-store"
+    });
+    let payload: unknown = null;
+    try {
+      payload = await res.json();
+    } catch {
+      payload = null;
+    }
+    if (!res.ok || (payload && typeof payload === "object" && payload !== null && "error" in payload)) {
+      return classifyGraphError(payload, res.status);
+    }
+    if (!payload || typeof payload !== "object") {
+      return { ok: false, code: "meta_api_error", message: "Meta returned an unreadable response." };
+    }
+    return { ok: true, value: payload as Record<string, unknown> };
+  } catch (error) {
+    const aborted = error instanceof Error && error.name === "AbortError";
+    return {
+      ok: false,
+      code: "network_api_failure",
+      message: aborted
+        ? "Meta did not respond in time. ADE did not publish or create ads."
+        : "ADE could not reach the Meta Graph API. ADE did not publish or create ads."
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function classifyGraphError(payload: unknown, httpStatus: number): MetaGraphResult<Record<string, unknown>> {
   const error =
     payload && typeof payload === "object" && "error" in payload
@@ -201,8 +266,9 @@ export function facebookPublicConfigBanner() {
     platform: FACEBOOK_PLATFORM,
     graphApiVersion: cfg.graphApiVersion,
     realPublishingImplemented: false,
+    organicExecutionAdapterImplemented: true,
     paidExecutionImplemented: false
   };
 }
 
-export type { GraphGetFn };
+export type { GraphGetFn, GraphPostFn };

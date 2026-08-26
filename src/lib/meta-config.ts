@@ -90,6 +90,7 @@ export function facebookConnectionConfigPublic() {
         (adAccountId && secrets.pageAccessToken)
     ),
     realPublishingImplemented: false,
+    organicExecutionAdapterImplemented: true,
     paidExecutionImplemented: false
   };
 }

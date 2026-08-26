@@ -66,8 +66,11 @@ export function DgixFacebookConnectionPanel() {
     <div className="panel" style={{ marginBottom: "1rem" }} id="facebook-connection">
       <h2>Facebook connection</h2>
       <p>
-        Connection capability is not execution. Real Facebook Publishing and Paid
-        Advertising Execution remain <strong>NOT YET IMPLEMENTED</strong>.
+        Connection capability is not automatic publishing. The Organic Facebook
+        Execution Adapter is implemented. Real Facebook Publishing is{" "}
+        <strong>IMPLEMENTED BUT REAL VALIDATION PENDING</strong> until Meta
+        credentials/assets succeed. Paid Advertising Execution remains{" "}
+        <strong>NOT YET IMPLEMENTED</strong>.
       </p>
       <table className="table">
         <thead>

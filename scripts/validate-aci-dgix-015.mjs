@@ -116,8 +116,9 @@ mustContain(workspace.text, "NOT AVAILABLE");
 mustContain(workspace.text, "Paid");
 mustContain(workspace.text, "Real Facebook Publishing");
 mustContain(workspace.text, "Paid Advertising Execution");
-mustContain(workspace.text, "Real Facebook Publishing — NOT YET IMPLEMENTED");
+mustContain(workspace.text, "IMPLEMENTED BUT REAL VALIDATION PENDING");
 mustContain(workspace.text, "Paid Advertising Execution — NOT YET IMPLEMENTED");
+mustContain(workspace.text, "Organic Facebook Execution Adapter");
 if (/Facebook Account Connection[\s\S]{0,40}NOT YET IMPLEMENTED/.test(workspace.text.replace(/<!--.*?-->/g, ""))) {
   fail("Facebook Account Connection still labeled NOT YET IMPLEMENTED");
 }

@@ -28,7 +28,7 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
         The Operator reviews exactly what would be sent, then authorizes or rejects it.
       </p>
       <div className="banner">{intake.authorityNote}</div>
-      <p className={intake.executionAuthorized ? "status-nyet" : "muted"}>
+      <p className={intake.executionStatus === "executed" ? "status-ok" : intake.executionStatus === "execution_failed" ? "error" : intake.executionAuthorized ? "status-ok" : "muted"}>
         State: {intake.reviewStateLabel}
         {intake.decisionBy ? ` · decided by ${intake.decisionBy}` : ""}
         {intake.decisionAt ? ` at ${intake.decisionAt}` : ""}
@@ -200,10 +200,10 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
 
       {intake.platformHandoff ? (
         <div className="panel" style={{ marginBottom: "1rem" }}>
-          <h2>Future adapter input (not sent)</h2>
+          <h2>Adapter handoff (ACP contract, not Meta secrets)</h2>
           <p className="muted">
-            AUTHORIZED ACP → Platform Resolver → Facebook Adapter → Meta API. This ACI
-            does not call Meta. No credentials are included.
+            AUTHORIZED ACP → DGIX → Facebook Organic Adapter → Meta Graph API → Facebook
+            Page. DGIX does not rewrite ACP content. Credentials stay on the server.
           </p>
           <pre className="draft">{JSON.stringify(intake.platformHandoff, null, 2)}</pre>
         </div>
@@ -231,11 +231,39 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
         </table>
       </div>
 
+      {intake.latestExecution ? (
+        <div className="panel" style={{ marginBottom: "1rem" }}>
+          <h2>Facebook execution record</h2>
+          <p>
+            Status: {intake.latestExecution.status}
+            {intake.latestExecution.externalObjectId
+              ? ` · Facebook object ${intake.latestExecution.externalObjectId}`
+              : ""}
+          </p>
+          <p className="muted">
+            Adapter {intake.latestExecution.adapterId} · {intake.latestExecution.operation} ·
+            Graph {intake.latestExecution.graphApiVersion}
+            {intake.latestExecution.pageId ? ` · Page ${intake.latestExecution.pageId}` : ""}
+            {intake.latestExecution.completedAt
+              ? ` · ${intake.latestExecution.completedAt}`
+              : ` · attempted ${intake.latestExecution.attemptedAt}`}
+          </p>
+          {intake.latestExecution.sanitizedError ? (
+            <p className="error">{intake.latestExecution.sanitizedError}</p>
+          ) : null}
+        </div>
+      ) : null}
+
       <AcpReviewActions
         intakeId={Number(intake.id)}
         executionReady={intake.executionReady}
         reviewState={String(intake.reviewState)}
         executionAuthorized={intake.executionAuthorized}
+        executionStatus={intake.executionStatus ? String(intake.executionStatus) : null}
+        reviewStateLabel={String(intake.reviewStateLabel)}
+        canExecuteOrganic={Boolean(intake.canExecuteOrganic)}
+        latestExecution={intake.latestExecution}
+        distributionType={intake.package.execution?.distributionType || null}
       />
       <p className="next-step">
         <Link href="/dgix">Back to DGIX</Link>

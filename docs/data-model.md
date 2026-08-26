@@ -1,10 +1,12 @@
-# ADE data model (schema v8)
+# ADE data model (schema v9)
 
 Nebula copy: [`docs/nebula/data-model/current-data-model.md`](nebula/data-model/current-data-model.md). SQL source of truth remains `src/lib/schema.sql`.
 
 Engine: **SQLite** via Node `node:sqlite`.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
 SQL source of truth: `src/lib/schema.sql`. Runtime column upgrades: `src/lib/migrate.ts`.
+
+Schema v9 adds `dgix_executions` (token-free organic Facebook execution attempts: adapter, Graph operation/version, Page id, status, external object id, sanitized error). Existing files are upgraded on startup. `initialized_at` is not reset.
 
 Schema v8 adds `dgix_platform_connections` (token-free Facebook connection snapshot: Page/Ad Account identity, organic/paid flags, last validation). Existing files are upgraded on startup. `initialized_at` is not reset.
 
@@ -58,21 +60,22 @@ Foreign keys are enabled. IDs are integers. Timestamps are ISO-8601 text.
 
 The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set. Campaigns, selected sources, plan items, drafts, Goal/content links, and imported Campaign Packages survive restart.
 
-## DGIX intake, authorization, and Facebook connection (schema v8)
+## DGIX intake, authorization, connection, and organic execution (schema v9)
 
 | Table | Role |
 | --- | --- |
 | `dgix_missions` | Minimum Mission row for an imported ACP (title, business, platform, objective, intake/authorization status). `goal_id` / `campaign_id` stay null. |
 | `dgix_acp_intakes` | Stored ACP v1 JSON, package identity, originating system, created/imported timestamps, review state, Operator decision, execution-ready vs legacy profile. `execution_authorized` is set only by explicit authorize. `materialized` stays 0. |
 | `dgix_platform_connections` | Last Facebook connection validation snapshot. Page/Ad Account identity and organic/paid capability only. No tokens. |
+| `dgix_executions` | Organic Facebook execution attempts. No tokens. Success requires a Meta object id. At most one succeeded row per intake. |
 
-Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Adapter/connection: [`docs/dgix/FACEBOOK_CONNECTION.md`](dgix/FACEBOOK_CONNECTION.md). Import is not approval. Authorization is not publishing. Connection is not publishing.
+Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Adapter/connection: [`docs/dgix/FACEBOOK_CONNECTION.md`](dgix/FACEBOOK_CONNECTION.md). Organic execution: [`docs/dgix/FACEBOOK_ORGANIC_EXECUTION.md`](dgix/FACEBOOK_ORGANIC_EXECUTION.md). Import is not approval. Authorization is not publishing.
 
-## Not in v8
+## Not in v9
 
 - Auth users/sessions
 - Encrypted secrets storage
-- Live Meta Graph payloads or platform analytics
+- Live Meta Graph payloads beyond sanitized organic execution records, or platform analytics
 - Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics
 

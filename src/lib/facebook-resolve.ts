@@ -12,6 +12,11 @@ import type { AcpPackage } from "./acp-validate.ts";
 
 export const BLOCKED_VALIDATION =
   "REAL CONNECTION VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED";
+export const BLOCKED_PUBLISH =
+  "REAL FACEBOOK PUBLISH VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED";
+export const FACEBOOK_ORGANIC_ADAPTER = "facebook_organic_page";
+export const FACEBOOK_PAID_ADAPTER = "facebook_paid_marketing";
+export const ORGANIC_PAGE_FEED_OPERATION = "page_feed_post";
 
 export type ResolvedFacebookConnection = {
   platform: typeof FACEBOOK_PLATFORM;
@@ -113,16 +118,26 @@ export function routeAuthorizedAcp(pkg: AcpPackage | { execution?: AcpPackage["e
     };
   }
   const adapter =
-    distributionType === "paid" ? "facebook_paid_marketing" : "facebook_organic_page";
+    distributionType === "paid" ? FACEBOOK_PAID_ADAPTER : FACEBOOK_ORGANIC_ADAPTER;
+  if (distributionType === "paid") {
+    return {
+      ready: false,
+      executed: false,
+      adapter,
+      distributionType,
+      platform: FACEBOOK_PLATFORM,
+      reason:
+        "Paid Advertising Execution is NOT YET IMPLEMENTED. The organic Facebook adapter will not create Campaign/Ad Set/Creative/Ad objects."
+    };
+  }
   return {
-    ready: false,
+    ready: true,
     executed: false,
     adapter,
     distributionType,
     platform: FACEBOOK_PLATFORM,
+    operation: ORGANIC_PAGE_FEED_OPERATION,
     reason:
-      distributionType === "paid"
-        ? "Paid Advertising Execution is NOT YET IMPLEMENTED. Routing contract only. No Campaign/Ad Set/Creative/Ad was created."
-        : "Real Facebook Publishing is NOT YET IMPLEMENTED. Routing contract only. No Page post was published."
+      "facebook + organic routes to the Facebook Organic Adapter (Page feed text post). Execution still requires Operator authorization, a valid organic connection, and an explicit execute action."
   };
 }

@@ -99,7 +99,7 @@ test("authorized ACP routing selects organic vs paid adapters without executing"
     }
   });
   assert.equal(organic.executed, false);
-  assert.equal(organic.ready, false);
+  assert.equal(organic.ready, true);
   assert.equal(organic.adapter, "facebook_organic_page");
 
   const paid = routeAuthorizedAcp({
@@ -113,6 +113,7 @@ test("authorized ACP routing selects organic vs paid adapters without executing"
     }
   });
   assert.equal(paid.executed, false);
+  assert.equal(paid.ready, false);
   assert.equal(paid.adapter, "facebook_paid_marketing");
 });
 

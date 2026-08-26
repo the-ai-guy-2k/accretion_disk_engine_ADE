@@ -75,14 +75,15 @@ for (const capability of [
 }
 mustContain(workspace.text, "IMPLEMENTED");
 for (const label of [
-  "Real Facebook Publishing",
   "Facebook Metrics Retrieval",
   "Results Package Export"
 ]) {
   mustContain(workspace.text, `${label} — NOT YET IMPLEMENTED`);
 }
 mustContain(workspace.text, "Facebook Account Connection");
-ok("DGIX workspace reports authorization implemented and Facebook execution not connected");
+mustContain(workspace.text, "Organic Facebook Execution Adapter");
+mustContain(workspace.text, "IMPLEMENTED BUT REAL VALIDATION PENDING");
+ok("DGIX workspace reports authorization implemented and organic adapter present");
 
 const imageMissing = cloneValid("image-missing");
 imageMissing.execution.postType = "image";
@@ -168,20 +169,23 @@ const authorized = await req("POST", `/api/dgix/acp/${intake.id}/authorize`, { d
 if (!authorized.data.ok) fail(authorized.data.error || "authorize POST failed");
 if (authorized.data.intake.reviewState !== "authorized") fail(`expected authorized, got ${authorized.data.intake.reviewState}`);
 if (!authorized.data.intake.executionAuthorized) fail("executionAuthorized not set");
-if (authorized.data.intake.executionStatus !== "authorized_platform_not_connected") {
+if (authorized.data.intake.executionStatus !== "ready_for_facebook_execution") {
   fail(`unexpected executionStatus ${authorized.data.intake.executionStatus}`);
 }
 if (authorized.data.intake.materializedIntoAde || authorized.data.intake.goalId || authorized.data.intake.campaignId) {
   fail("authorization materialized Standard ADE records");
 }
-if (!String(authorized.data.banner || "").replace(/[—–]/g, "-").includes("PLATFORM EXECUTION NOT YET CONNECTED")) {
-  fail("authorization banner did not state platform execution is not connected");
+if (!String(authorized.data.banner || "").replace(/[—–]/g, "-").includes("READY FOR FACEBOOK EXECUTION")) {
+  fail("authorization banner did not state the ACP is ready for Facebook execution");
+}
+if (!String(authorized.data.banner || "").includes("did not call Facebook")) {
+  fail("authorization banner did not state Facebook was not called");
 }
 ok("Operator can AUTHORIZE without executing");
 
 const afterAuthPage = await page(`/dgix/acp/${intake.id}`);
-mustContain(afterAuthPage.text, "AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED");
-ok("authorized package stays disconnected from Facebook");
+mustContain(afterAuthPage.text, "AUTHORIZED — READY FOR FACEBOOK EXECUTION");
+ok("authorized package is ready for a separate Facebook execute action");
 
 const after = await req("GET", "/api/workflow/summary");
 if (!after.data.ok) fail("workflow summary failed after authorize");

@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/db";
+import { WorkflowError } from "@/lib/errors";
 import {
   ACP_TO_ADE_MAPPING,
   ACP_VERSION,
@@ -24,7 +25,11 @@ export const MISSION_STATUS = {
 } as const;
 
 export const EXECUTION_STATUS = {
-  not_connected: "authorized_platform_not_connected"
+  not_connected: "authorized_platform_not_connected",
+  ready_for_facebook_execution: "ready_for_facebook_execution",
+  execution_attempted: "execution_attempted",
+  executed: "executed",
+  execution_failed: "execution_failed"
 } as const;
 
 const LEGACY_STATE: Record<string, string> = {
@@ -42,14 +47,49 @@ export function canonicalAcpState(value: unknown): string {
   return LEGACY_STATE[raw] || raw || ACP_STATE.imported;
 }
 
-export function acpStateLabel(state: string): string {
+export function acpStateLabel(state: string, executionStatus?: string | null): string {
   const canonical = canonicalAcpState(state);
   if (canonical === ACP_STATE.authorized) {
-    return "AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED";
+    if (executionStatus === EXECUTION_STATUS.executed) return "EXECUTED";
+    if (executionStatus === EXECUTION_STATUS.execution_failed) return "EXECUTION FAILED";
+    if (executionStatus === EXECUTION_STATUS.execution_attempted) return "EXECUTION ATTEMPTED";
+    return "AUTHORIZED — READY FOR FACEBOOK EXECUTION";
   }
   if (canonical === ACP_STATE.ready_for_decision) return "REVIEWED / READY FOR DECISION";
   if (canonical === ACP_STATE.rejected) return "REJECTED";
   return "IMPORTED";
+}
+
+function shapeExecutionRow(row: Record<string, unknown>) {
+  return {
+    id: Number(row.id),
+    intakeId: Number(row.intake_id),
+    packageId: String(row.package_id),
+    clientId: String(row.client_id),
+    platform: String(row.platform),
+    distributionType: String(row.distribution_type),
+    adapterId: String(row.adapter_id),
+    operation: String(row.operation),
+    graphApiVersion: String(row.graph_api_version),
+    pageId: row.page_id == null ? null : String(row.page_id),
+    attemptedAt: String(row.attempted_at),
+    completedAt: row.completed_at == null ? null : String(row.completed_at),
+    status: String(row.status),
+    externalObjectId: row.external_object_id == null ? null : String(row.external_object_id),
+    sanitizedError: row.sanitized_error == null ? null : String(row.sanitized_error)
+  };
+}
+
+function executionsForIntake(intakeId: number) {
+  try {
+    return (
+      getDb()
+        .prepare("SELECT * FROM dgix_executions WHERE intake_id = ? ORDER BY id DESC")
+        .all(intakeId) as Record<string, unknown>[]
+    ).map(shapeExecutionRow);
+  } catch {
+    return [];
+  }
 }
 
 function parseRaw(raw: string): AcpPackage {
@@ -71,6 +111,11 @@ function shapeIntake(row: Record<string, unknown>) {
   const reviewState = canonicalAcpState(row.review_state);
   const executionReady = profileFromPackage(pkg) === "execution_ready";
   const authorized = reviewState === ACP_STATE.authorized;
+  const executionStatus =
+    (row.execution_status as string | null) ||
+    (authorized ? EXECUTION_STATUS.ready_for_facebook_execution : null);
+  const executions = executionsForIntake(Number(row.id));
+  const latestExecution = executions[0] || null;
   return {
     id: row.id,
     missionId: row.mission_id,
@@ -82,9 +127,11 @@ function shapeIntake(row: Record<string, unknown>) {
     packageCreatedAt: row.package_created_at,
     importedAt: row.imported_at,
     reviewState,
-    reviewStateLabel: acpStateLabel(reviewState),
+    reviewStateLabel: acpStateLabel(reviewState, executionStatus),
     executionAuthorized: Boolean(row.execution_authorized) || authorized,
-    executionStatus: row.execution_status || (authorized ? EXECUTION_STATUS.not_connected : null),
+    executionStatus,
+    executions,
+    latestExecution,
     decisionAt: row.decision_at || null,
     decisionBy: row.decision_by || null,
     acpProfile: row.acp_profile || profileFromPackage(pkg),
@@ -101,9 +148,14 @@ function shapeIntake(row: Record<string, unknown>) {
     review: reviewView(pkg),
     platformHandoff: adapterHandoff(pkg),
     facebookRouting: routeAuthorizedAcp(pkg),
+    canExecuteOrganic:
+      authorized &&
+      executionReady &&
+      (pkg.execution?.distributionType || "organic") === "organic" &&
+      executionStatus !== EXECUTION_STATUS.executed,
     mapping: ACP_TO_ADE_MAPPING,
     authorityNote: executionReady
-      ? "This package is execution-ready as prepared by the originating system. DGIX will not regenerate the post. Import is not approval. Authorization is not Facebook publishing and does not create Standard ADE Goal, Campaign, Source, or Draft records."
+      ? "This package is execution-ready as prepared by the originating system. DGIX will not regenerate the post. Import is not approval. Authorization is not Facebook publishing. Publishing requires a separate Operator execute action, a valid organic Facebook connection, and a successful Meta response."
       : "This is a legacy ACP intake record without an execution block. It is preserved. It cannot be authorized for platform execution until an execution-ready ACP is imported. Import is not approval."
   };
 }
@@ -266,7 +318,7 @@ export function decideAcpExecution(
      SET review_state = ?, execution_authorized = 1, execution_status = ?,
          decision_at = ?, decision_by = ?, updated_at = ?
      WHERE id = ?`
-  ).run(ACP_STATE.authorized, EXECUTION_STATUS.not_connected, stamp, actor, stamp, id);
+  ).run(ACP_STATE.authorized, EXECUTION_STATUS.ready_for_facebook_execution, stamp, actor, stamp, id);
   db.prepare("UPDATE dgix_missions SET status = ?, updated_at = ? WHERE id = ?").run(
     MISSION_STATUS.authorized,
     stamp,
@@ -276,8 +328,8 @@ export function decideAcpExecution(
   if (updated.materializedIntoAde) {
     throw new WorkflowError("Authorization must not materialize Standard ADE records", 500);
   }
-  if (updated.executionStatus !== EXECUTION_STATUS.not_connected) {
-    throw new WorkflowError("Authorization must remain disconnected from Facebook", 500);
+  if (updated.executionStatus === EXECUTION_STATUS.executed) {
+    throw new WorkflowError("Authorization must not publish to Facebook", 500);
   }
   return updated;
 }

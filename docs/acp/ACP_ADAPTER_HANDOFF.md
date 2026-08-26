@@ -1,35 +1,33 @@
 # ACP → platform adapter handoff
 
-**ACI-DGIX-014** defined the ACP payload. **ACI-DGIX-015** adds the Platform Resolver and connection layer. Neither slice publishes.
+**ACI-DGIX-014** defined the ACP payload. **ACI-DGIX-015** added the Platform Resolver and connection layer. **ACI-DGIX-016** executes authorized **organic** Facebook Page posts. Paid advertising remains unimplemented.
 
 ```text
 AUTHORIZED ACP
         ↓
 Platform Resolver   (clientId + platform → ADE-held Facebook connection)
         ↓
-  distributionType = organic → facebook_organic_page
-  distributionType = paid    → facebook_paid_marketing
-        ↓
-Meta Graph / Marketing API   (not executed in ACI-DGIX-015)
+  distributionType = organic → facebook_organic_page → POST /{page-id}/feed
+  distributionType = paid    → facebook_paid_marketing (refused; not implemented)
 ```
 
-Graph API version: **v26.0**. Details: [`docs/dgix/FACEBOOK_CONNECTION.md`](../dgix/FACEBOOK_CONNECTION.md)
+Graph API version: **v26.0**. Connection: [`docs/dgix/FACEBOOK_CONNECTION.md`](../dgix/FACEBOOK_CONNECTION.md). Organic adapter: [`docs/dgix/FACEBOOK_ORGANIC_EXECUTION.md`](../dgix/FACEBOOK_ORGANIC_EXECUTION.md).
 
-## What the future adapter receives from ACP
+## What the organic adapter receives from ACP
 
 | Field | Source | Notes |
 | --- | --- | --- |
 | `clientId` | `execution.clientId` | Logical business identifier (example: `TAIG`) |
 | `platform` | `execution.platform` | Logical platform (example: `facebook`) |
 | `distributionType` | `execution.distributionType` | `organic` (default) or `paid` |
-| `postType` | `execution.postType` | Currently `text` or `image`. Not a proven Meta Graph type. |
+| `postType` | `execution.postType` | `text` → Page feed; `image` refused in this adapter |
 | `message` | `execution.message` | Final publish-ready caption. Do not regenerate. |
-| `mediaReference` | `execution.mediaReference` | Required for image posts |
-| `link` / `callToAction` | execution | Optional |
-| `publishMode` / `scheduledAt` | execution | `now` or `scheduled` |
+| `mediaReference` | `execution.mediaReference` | Required for image posts at ACP intake; not uploaded here |
+| `link` / `callToAction` | execution | `link` may map to Meta `link`; CTA text is not a Graph CTA type |
+| `publishMode` / `scheduledAt` | execution | `now` or scheduled unpublished feed post |
 | `packageId` / `campaignName` / `isTest` | ACP identity | Provenance / records |
 
-Runtime: `adapterHandoff()` plus `routeAuthorizedAcp()`. `executed` remains false until a later publishing ACI.
+Runtime: `adapterHandoff()` plus `routeAuthorizedAcp()`. `executed` on the handoff object remains a contract flag; actual success is `dgix_executions.status = succeeded` plus a Meta object id.
 
 ## What DGIX supplies from the connection (not from ACP)
 
@@ -40,9 +38,9 @@ Runtime: `adapterHandoff()` plus `routeAuthorizedAcp()`. `executed` remains fals
 
 Tokens never leave the server configuration.
 
-## Organic next step
+## Organic execution
 
-Authorized ACP + resolved Facebook Page connection → Page publishing operation (future ACI).
+Authorized ACP + resolved Facebook Page connection + explicit Operator execute → `POST /v26.0/{page-id}/feed`. Success requires Meta `id`. Duplicate successful publishes are blocked.
 
 ## Paid next step
 
@@ -50,4 +48,4 @@ The paid adapter must translate the ACP into Marketing API objects:
 
 Campaign → Ad Set → Creative → Ad
 
-Not implemented in ACI-DGIX-015.
+Not implemented. The organic adapter refuses `distributionType = paid`.

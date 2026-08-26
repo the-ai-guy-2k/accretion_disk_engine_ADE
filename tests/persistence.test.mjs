@@ -27,7 +27,8 @@ const REQUIRED_TABLES = [
   "recommendations",
   "dgix_missions",
   "dgix_acp_intakes",
-  "dgix_platform_connections"
+  "dgix_platform_connections",
+  "dgix_executions"
 ];
 
 test("SQLite foundation creates required tables and schema version", () => {
@@ -49,7 +50,7 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "8");
+  assert.equal(version.value, "9");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
@@ -101,5 +102,25 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
   assert.ok(!connectionCols.includes("access_token"), "connection table must not store access tokens");
   assert.ok(!connectionCols.includes("page_access_token"), "connection table must not store page tokens");
+  const executionCols = db.prepare("PRAGMA table_info(dgix_executions)").all().map((row) => row.name);
+  for (const col of [
+    "intake_id",
+    "package_id",
+    "client_id",
+    "platform",
+    "distribution_type",
+    "adapter_id",
+    "operation",
+    "graph_api_version",
+    "page_id",
+    "attempted_at",
+    "status",
+    "external_object_id",
+    "sanitized_error"
+  ]) {
+    assert.ok(executionCols.includes(col), `dgix_executions missing ${col}`);
+  }
+  assert.ok(!executionCols.includes("access_token"), "execution table must not store access tokens");
+  assert.ok(!executionCols.includes("page_access_token"), "execution table must not store page tokens");
   db.close();
 });

@@ -23,7 +23,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       intake,
       banner:
         decision === "authorize"
-          ? "AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED. DGIX did not call Facebook and did not use the Standard ADE mock publisher."
+          ? "AUTHORIZED — READY FOR FACEBOOK EXECUTION. DGIX did not call Facebook and did not use the Standard ADE mock publisher. Publishing requires a separate execute action."
           : "Package rejected. Nothing was published."
     });
   } catch (error) {

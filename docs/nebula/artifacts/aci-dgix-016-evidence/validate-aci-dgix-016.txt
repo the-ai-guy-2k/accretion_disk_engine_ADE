@@ -1,0 +1,15 @@
+﻿
+> accretion-disk-engine@0.1.0 validate:aci-dgix-016
+> node scripts/validate-aci-dgix-016.mjs
+
+OK: health schema v9 Graph v26.0
+OK: DGIX workspace current truth is present
+OK: unauthorized imported ACP cannot execute
+OK: reviewed but unauthorized ACP cannot execute
+OK: rejected ACP cannot execute
+OK: paid ACP cannot execute through the organic adapter
+OK: authorized organic Facebook ACP is ready for a separate execute action
+OK: REAL FACEBOOK PUBLISH VALIDATION BLOCKED ΓÇö CREDENTIAL/ASSET INPUT REQUIRED
+OK: ACP values remain unmodified and credentials stay off client records
+PASS ACI-DGIX-016 Facebook organic execution (REAL FACEBOOK PUBLISH VALIDATION BLOCKED ΓÇö CREDENTIAL/ASSET INPUT REQUIRED)
+

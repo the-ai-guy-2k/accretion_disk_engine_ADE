@@ -5,7 +5,7 @@ export const DGIX_FULL = "Distribution, Growth & Intelligence Exchange";
 export const DGIX_STATUS = "POST-MVP — IN DEVELOPMENT";
 
 export const DGIX_CONCEPT =
-  "The Client QEN prepares an execution-ready Campaign Package. DGIX validates it, the Operator reviews exactly what will be sent and authorizes or rejects it, and a future platform adapter will execute and measure. DGIX does not regenerate the post and does not reconstruct the campaign as Standard ADE Goal, Campaign, Source, or Draft records.";
+  "The Client QEN prepares an execution-ready Campaign Package. DGIX validates it, the Operator reviews exactly what will be sent and authorizes or rejects it, then may execute an authorized organic Facebook ACP through the Facebook Organic Adapter. DGIX does not regenerate the post and does not reconstruct the campaign as Standard ADE Goal, Campaign, Source, or Draft records.";
 
 export const DGIX_FLOW = [
   {
@@ -27,14 +27,14 @@ export const DGIX_FLOW = [
     label: "Human Approval",
     availability: "implemented" as const,
     href: "/dgix#intake",
-    note: "Operator Authorization is implemented. Authorization means DGIX may later execute through a configured adapter. It is not Facebook publishing."
+    note: "Operator Authorization is implemented. Authorization means DGIX may execute through a configured adapter when the Operator takes a separate execute action. It is not automatic Facebook publishing."
   },
   {
     id: "distribution",
     label: "Distribution",
-    availability: "not_implemented" as const,
+    availability: "implemented" as const,
     href: "/dgix#facebook-connection",
-    note: "Facebook Account Connection can be validated against Meta. Real Page publishing is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
+    note: "Organic Facebook Page publishing is implemented for authorized text posts. Real publishing still requires Operator-supplied Meta credentials/assets. Paid advertising execution is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
   },
   {
     id: "measurement",
@@ -64,11 +64,12 @@ export const DGIX_IMPLEMENTED_CAPABILITIES = [
   { name: "ACP Validation", status: "IMPLEMENTED" },
   { name: "Operator Review", status: "IMPLEMENTED" },
   { name: "Operator Authorization", status: "IMPLEMENTED" },
-  { name: "Facebook Account Connection", status: "IMPLEMENTED" }
+  { name: "Facebook Account Connection", status: "IMPLEMENTED" },
+  { name: "Organic Facebook Execution Adapter", status: "IMPLEMENTED" },
+  { name: "Real Facebook Publishing", status: "IMPLEMENTED BUT REAL VALIDATION PENDING" }
 ] as const;
 
 export const DGIX_FUTURE_CAPABILITIES = [
-  { name: "Real Facebook Publishing", status: "NOT YET IMPLEMENTED" },
   { name: "Paid Advertising Execution", status: "NOT YET IMPLEMENTED" },
   { name: "Facebook Metrics Retrieval", status: "NOT YET IMPLEMENTED" },
   { name: "Results Package Export", status: "NOT YET IMPLEMENTED" },
@@ -102,13 +103,13 @@ export const DGIX_ORIENTATION = [
     key: "DECISION",
     question: "What requires my approval?",
     answer:
-      "The Operator reviews the final content and explicitly authorizes or rejects it. Import is not approval. Authorization is not Facebook publishing. DGIX does not ask the Operator to regenerate the post."
+      "The Operator reviews the final content and explicitly authorizes or rejects it. Import is not approval. Authorization is not Facebook publishing. An authorized organic Facebook ACP can be executed only through a separate Operator action."
   },
   {
     key: "EXECUTION",
     question: "What approved activity is being distributed?",
     answer:
-      "Facebook Account Connection is implemented. Real Facebook publishing is not. An authorized ACP is not posted automatically. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
+      "The Facebook Organic Adapter can publish an authorized text Page post through Graph API v26.0 when organic Page operations are available. Real publishing is implemented but real validation is pending until Operator-supplied Meta credentials/assets succeed. Paid advertising is not implemented. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
   },
   {
     key: "RESULT",
@@ -143,8 +144,8 @@ export const ADE_ENGINE_LINKS = [
 
 export const DGIX_MISSION_MODEL = {
   table: "dgix_missions",
-  related: "dgix_acp_intakes, dgix_platform_connections",
-  schemaVersion: "8",
+  related: "dgix_acp_intakes, dgix_platform_connections, dgix_executions",
+  schemaVersion: "9",
   purpose:
-    "Persistence for imported ACP review/authorization and a token-free Facebook connection snapshot. Authorization still does not publish. Connection validation does not create ads."
+    "Persistence for imported ACP review/authorization, a token-free Facebook connection snapshot, and organic execution attempts. Authorization still does not publish automatically. Successful execution requires a Meta object id. Tokens are never stored."
 } as const;

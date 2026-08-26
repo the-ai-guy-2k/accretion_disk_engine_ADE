@@ -118,9 +118,9 @@ Packages **without** `execution` remain valid ACP v1 **legacy** intakes (ACI-DGI
 
 On schema v7, older values are remapped: `pending_operator_review` → `imported`, `operator_reviewed` → `ready_for_decision`, `declined` → `rejected`. Original JSON is not rewritten.
 
-Authorization means: the Operator authorizes DGIX to execute this package through its configured platform adapter **when that capability exists**.
+Authorization means: the Operator authorizes DGIX to execute this package through its configured platform adapter **when that capability exists**. Authorization does not publish.
 
-After authorize, the truthful status is **AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED** (`execution_status = authorized_platform_not_connected`). DGIX does not call Facebook and does not use the Standard ADE mock Facebook adapter as DGIX execution.
+After authorize, the truthful status for an organic Facebook ACP is **AUTHORIZED — READY FOR FACEBOOK EXECUTION** (`execution_status = ready_for_facebook_execution`). Publishing requires a separate Operator execute action, a valid organic Facebook connection, and a Meta object id. DGIX does not use the Standard ADE mock Facebook adapter as DGIX execution.
 
 ## Credential boundary
 
@@ -128,9 +128,9 @@ ACP identifies the client/business and target platform logically:
 
 ```text
 ACP:  client_id = TAIG, platform = facebook
-DGIX: resolve the configured TAIG Facebook connection (future)
+DGIX: resolve the configured TAIG Facebook connection
       obtain ADE-held identifiers/credentials (never from the artifact)
-      adapter → Meta API (future)
+      facebook + organic → Facebook Organic Adapter → Meta Graph Page feed
 ```
 
 Rejected credential-like keys include `access_token`, `page_access_token`, `api_key`, `password`, `client_secret`, `app_secret`, `ade_ai_api_key`, `openai_api_key`, `meta_app_secret`, and similar.
@@ -143,7 +143,7 @@ Adapter handoff for an authorized package is documented in [`ACP_ADAPTER_HANDOFF
 | --- | --- | --- |
 | Who prepares content | Operator in Hub (Goal → Campaign → Source → Draft) | Client QEN via ACP |
 | Who authorizes | ADE Review (`/review`) | DGIX Operator Authorization |
-| Execution | Mock Facebook adapter (Channel 01) | Future platform adapter from an authorized ACP |
+| Execution | Mock Facebook adapter (Channel 01) | Organic Facebook adapter for authorized Page text posts; paid ads not implemented |
 | ACP import/authorize | Does not create Goal, Campaign, Source, or Draft | Execution does not depend on reconstructing ACP inside Standard ADE |
 
 ACP campaign/objective fields are retained for records, attribution, measurement, and intelligence exchange.

@@ -14,15 +14,15 @@ AUTHORIZED ACP
         ↓
 Platform resolver (ADE-held config, not ACP)
         ↓
-  distribution_type = organic → facebook_organic_page  (not executed in this ACI)
-  distribution_type = paid    → facebook_paid_marketing (not executed in this ACI)
+  distribution_type = organic → facebook_organic_page  (Page feed text post; ACI-DGIX-016)
+  distribution_type = paid    → facebook_paid_marketing (not executed; organic adapter refuses)
 ```
 
 One DGIX, one ACP format. `platform = facebook` plus `execution.distributionType` (`organic` | `paid`, default `organic`) selects the future Meta operation family.
 
 ## Organic family
 
-DGIX → Facebook Page connection → Graph API Page operations (future publish).
+DGIX → Facebook Page connection → Graph API Page operations (organic feed post in ACI-DGIX-016).
 
 Required to validate organic capability:
 
@@ -72,7 +72,7 @@ CONNECTED requires a successful live Meta identity call. Missing credentials are
 
 Absence of an Ad Account does not invalidate a valid organic Page connection. A Page-only connection is not automatically paid-capable.
 
-Connection capability ≠ execution capability. Real Facebook Publishing and Paid Advertising Execution remain not implemented.
+Connection capability ≠ automatic execution. Organic Facebook Page publishing is implemented in ACI-DGIX-016 when Organic Page Operations are AVAILABLE and the Operator takes a separate execute action. Paid Advertising Execution remains not implemented.
 
 ## Failures
 
@@ -88,10 +88,10 @@ Operator-facing codes (no credentials in the message):
 
 Failures never set an ACP to executed.
 
-## Future organic handoff
+## Organic execution (ACI-DGIX-016)
 
-Authorized ACP (content/intent) + resolved Page connection (Page id, ADE-held token, Graph version, adapter) → Page publishing operation (later ACI).
+See [`FACEBOOK_ORGANIC_EXECUTION.md`](FACEBOOK_ORGANIC_EXECUTION.md). Authorized organic Facebook ACPs can POST `/{page-id}/feed` on Graph **v26.0**. Connection validation still does not publish.
 
-## Future paid handoff
+## Paid handoff
 
-Authorized ACP remains the business contract. The paid adapter must translate it into Campaign → Ad Set → Creative → Ad. Not implemented here.
+Authorized ACP remains the business contract. The paid adapter must translate it into Campaign → Ad Set → Creative → Ad. Not implemented here. The organic adapter refuses paid ACPs.

@@ -48,7 +48,8 @@ ADE automates repetitive social-media management work and uses AI-assisted analy
 | DGIX Operator workspace | Working — orientation workspace; not a complete DGIX product |
 | DGIX ACP v1 intake / Operator review | Working — import is not approval or publishing |
 | DGIX Operator authorization | Working — authorization is not Facebook publishing |
-| DGIX Facebook connection | Working — validates identity when credentials exist; does not publish |
+| DGIX Facebook connection | Working — validates identity when credentials exist; does not publish by itself |
+| DGIX organic Facebook execution | Working — authorized Page text posts when organic capability is available; real Meta success is not fabricated |
 | Persistence (local SQLite) | Working |
 
 The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manually entered.
@@ -58,10 +59,10 @@ The Hub does **not** display live social metrics or fabricated audience/business
 | Area | Status |
 | --- | --- |
 | Calendar scheduling | Not implemented (queue only) |
-| Real Facebook / Meta authentication, publishing, or metrics | Not implemented (mock adapter + manual results only) |
+| Real Facebook / Meta authentication, publishing, or metrics | Organic DGIX Page publishing is implemented; live validation may be blocked without credentials. Mock adapter + manual results remain Standard ADE. Paid ads and platform metrics are not implemented |
 | Leads / CRM | Not implemented (placeholder) |
 | Paid targeting / distribution optimization | Not implemented |
-| DGIX (ACRP results export, real Facebook publishing, paid ads, optimization) | POST-MVP — IN DEVELOPMENT. Workspace, ACP, authorization, and Facebook connection exist; publishing/ads/metrics/export are not implemented |
+| DGIX (ACRP results export, paid ads, optimization) | POST-MVP — IN DEVELOPMENT. Workspace, ACP, authorization, Facebook connection, and organic adapter exist; paid/metrics/export are not implemented |
 | Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 | Authentication | Not implemented |
 
@@ -111,6 +112,7 @@ npm run validate:aci-dgix-012
 npm run validate:aci-dgix-013
 npm run validate:aci-dgix-014
 npm run validate:aci-dgix-015
+npm run validate:aci-dgix-016
 ```
 
 Production-style local run after `npm run build`:
@@ -123,9 +125,9 @@ npm start
 
 ## Persistence
 
-On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v8** for DGIX Facebook connection snapshots; v7 authorization columns remain). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, recommendations, imported Campaign Packages, and connection status (never tokens).
+On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v9** for DGIX organic execution records; v8 connection snapshots and v7 authorization columns remain). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, recommendations, imported Campaign Packages, connection status, and execution attempts (never tokens).
 
-See [docs/data-model.md](docs/data-model.md), [docs/acp/ACP_V1.md](docs/acp/ACP_V1.md), [docs/acp/ACP_ADAPTER_HANDOFF.md](docs/acp/ACP_ADAPTER_HANDOFF.md), [docs/dgix/FACEBOOK_CONNECTION.md](docs/dgix/FACEBOOK_CONNECTION.md), and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
+See [docs/data-model.md](docs/data-model.md), [docs/acp/ACP_V1.md](docs/acp/ACP_V1.md), [docs/acp/ACP_ADAPTER_HANDOFF.md](docs/acp/ACP_ADAPTER_HANDOFF.md), [docs/dgix/FACEBOOK_CONNECTION.md](docs/dgix/FACEBOOK_CONNECTION.md), [docs/dgix/FACEBOOK_ORGANIC_EXECUTION.md](docs/dgix/FACEBOOK_ORGANIC_EXECUTION.md), and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
 
 ## Configuration
 
@@ -192,7 +194,8 @@ Do not treat unvalidated feature branches as the validated ADE state.
 - Localhost MVP, not the full product intent
 - No authentication
 - Live AI drafts (Create) and live AI analysis (Intelligence) when credentials are configured; deterministic analytics remain the ranking/progress baseline
-- No live Facebook publish, scheduling calendar, or platform analytics
+- Organic Facebook Page publishing is implemented in DGIX for authorized text posts; live Meta success is not fabricated when credentials are missing
+- No scheduling calendar or platform-retrieved Facebook metrics
 - Manual metrics are operator-entered; they are not Meta-supplied numbers
 - Requires Node with `node:sqlite` (22.5+)
 - Default bind is localhost port 3000

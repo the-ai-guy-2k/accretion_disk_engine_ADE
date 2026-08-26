@@ -37,10 +37,12 @@ export default function DgixWorkspacePage() {
 
       <div className="banner">
         DGIX is post-MVP and in development. Campaign Package Intake, ACP
-        Validation, Operator Review, Operator Authorization, and Facebook Account
-        Connection are implemented. Real Facebook publishing, paid advertising
+        Validation, Operator Review, Operator Authorization, Facebook Account
+        Connection, and the Organic Facebook Execution Adapter are implemented.
+        Real Facebook publishing is implemented but real validation is pending
+        until Operator-supplied Meta credentials/assets succeed. Paid advertising
         execution, metrics retrieval, and Results Package export remain{" "}
-        <strong>NOT YET IMPLEMENTED</strong>. Connection is not publishing.
+        <strong>NOT YET IMPLEMENTED</strong>. Authorization is not publishing.
       </div>
 
       <div className="workflow-strip" aria-label="DGIX operating flow">
@@ -65,8 +67,9 @@ export default function DgixWorkspacePage() {
       </div>
       <p className="muted" style={{ marginTop: "-0.4rem", marginBottom: "1rem" }}>
         Client QEN → Execution-Ready ACP → DGIX Validation → Operator Review →
-        Operator Authorization → Platform Adapter → Platform API. Human Approval
-        is Operator Authorization. Distribution is not yet connected.
+        Operator Authorization → Facebook Organic Adapter → Meta Graph API.
+        Human Approval is Operator Authorization. Organic distribution can execute
+        when authorized; paid advertising remains NOT YET IMPLEMENTED.
       </p>
 
       <DgixIntakePanel />
@@ -165,9 +168,11 @@ export default function DgixWorkspacePage() {
             originating Client QEN/system.
           </p>
           <p className="muted">
-            The Client QEN prepares. The Operator authorizes. DGIX will later
-            execute and measure. Real Facebook and Results Package return are not
-            yet implemented. DGIX does not reconstruct the campaign in Standard ADE.
+            The Client QEN prepares. The Operator authorizes. An authorized organic
+            Facebook ACP can be executed through the Facebook Organic Adapter when
+            a valid Page connection exists. Paid advertising and Results Package
+            return are not yet implemented. DGIX does not reconstruct the campaign
+            in Standard ADE.
           </p>
         </article>
       </div>
@@ -202,7 +207,15 @@ export default function DgixWorkspacePage() {
             {DGIX_IMPLEMENTED_CAPABILITIES.map((item) => (
               <tr key={item.name}>
                 <td>{item.name}</td>
-                <td className="status-ok">{item.status}</td>
+                <td
+                  className={
+                    item.status === "IMPLEMENTED BUT REAL VALIDATION PENDING"
+                      ? "status-nyet"
+                      : "status-ok"
+                  }
+                >
+                  {item.status}
+                </td>
               </tr>
             ))}
             {DGIX_FUTURE_CAPABILITIES.map((item) => (
@@ -242,10 +255,11 @@ export default function DgixWorkspacePage() {
         <article className="panel">
           <h2>Human authority</h2>
           <p>
-            Client QEN prepares → Operator authorizes → DGIX may later execute
-            through a connected Facebook adapter. Importing a package does not
-            approve it. Authorizing it does not publish it. A Facebook connection
-            does not post.
+            Client QEN prepares → Operator authorizes → Operator may execute an
+            authorized organic Facebook ACP through the connected adapter. Importing
+            a package does not approve it. Authorizing it does not publish it.
+            Publishing requires a separate execute action and a successful Meta
+            object id.
           </p>
           <p>
             <Link href="/review">Open ADE Review / Approval</Link>
@@ -258,7 +272,8 @@ export default function DgixWorkspacePage() {
         <p>
           A DGIX Mission is a Business Objective + Campaign Package + ADE
           Execution + Platform Evidence + Results Package. This ACI persists the
-          Mission only far enough to hold an imported ACP and its review state.
+          Mission far enough to hold an imported ACP, its review/authorization
+          state, a Facebook connection snapshot, and organic execution attempts.
         </p>
         <p className="muted">
           Schema v{DGIX_MISSION_MODEL.schemaVersion} tables{" "}

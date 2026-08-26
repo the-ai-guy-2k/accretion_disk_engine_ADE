@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         connection.realValidation === "blocked"
           ? connection.blockedReason
           : connection.facebook === "CONNECTED"
-            ? "Facebook connection validated against Meta. Real publishing and paid execution are still NOT YET IMPLEMENTED. No post or ad was created."
+            ? "Facebook connection validated against Meta. Connection validation does not publish. Paid advertising execution is still NOT YET IMPLEMENTED. No post or ad was created."
             : "Facebook connection is not valid. Nothing was published and no advertising objects were created."
     });
   } catch (error) {

@@ -161,6 +161,31 @@ export function ensureRuntimeSchema(db: DatabaseSync): void {
     UNIQUE (client_id, platform)
   )`);
 
+  db.exec(`CREATE TABLE IF NOT EXISTS dgix_executions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    intake_id INTEGER NOT NULL,
+    package_id TEXT NOT NULL,
+    client_id TEXT NOT NULL,
+    platform TEXT NOT NULL,
+    distribution_type TEXT NOT NULL,
+    adapter_id TEXT NOT NULL,
+    operation TEXT NOT NULL,
+    graph_api_version TEXT NOT NULL,
+    page_id TEXT,
+    attempted_at TEXT NOT NULL,
+    completed_at TEXT,
+    status TEXT NOT NULL,
+    external_object_id TEXT,
+    sanitized_error TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (intake_id) REFERENCES dgix_acp_intakes(id)
+  )`);
+  db.exec(
+    `CREATE UNIQUE INDEX IF NOT EXISTS dgix_executions_one_success
+     ON dgix_executions (intake_id) WHERE status = 'succeeded'`
+  );
+
   const stamp = nowIso();
   const existingChannel = db
     .prepare("SELECT id FROM channels WHERE channel_type = ? LIMIT 1")

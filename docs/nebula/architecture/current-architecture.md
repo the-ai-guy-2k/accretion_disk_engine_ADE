@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX through ACI-DGIX-015 Facebook connection foundation (**POST-MVP — IN DEVELOPMENT**).  
+**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX through ACI-DGIX-016 Facebook organic execution (**POST-MVP — IN DEVELOPMENT**).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -9,7 +9,7 @@ Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema
 
 - **Node.js** 22.5+ (`node:sqlite`)
 - **Next.js** App Router + **React** + **TypeScript**
-- **SQLite** file `data/ade.sqlite` (schema **v8**)
+- **SQLite** file `data/ade.sqlite` (schema **v9**)
 - Single process: Hub UI and JSON APIs in the same Next.js server
 - Local run: `npm run dev` → http://localhost:3000
 
@@ -20,7 +20,7 @@ No Docker, Postgres, Redis, Temporal, NestJS, Laravel, Postiz, or Mixpost in thi
 ```text
 ADE Hub / UI
   src/app/* pages, src/components/AppShell.tsx
-  /dgix — DGIX Operator workspace (ACP intake, review, authorization; not a second app)
+  /dgix — DGIX Operator workspace (ACP intake, review, authorization, organic Facebook execute; not a second app)
         ↓
 ADE-native workflow / application layer
   src/lib/workflow.ts
@@ -38,13 +38,17 @@ SQLite persistence
   data/ade.sqlite
         ↓
 Publishing adapter boundary
-  src/lib/channel-adapter.ts
+  src/lib/channel-adapter.ts          (Standard ADE mock Facebook)
+  src/lib/facebook-organic-adapter.ts (DGIX organic Page feed)
         ↓
 Manual / mock Facebook adapter
   adapter_id = manual_facebook
   Channel 01 — no Meta Graph call
         ↓
-Future (not implemented): real social-platform adapters, ACRP export
+DGIX organic Facebook adapter (authorized ACP only)
+  POST /v26.0/{page-id}/feed when credentials exist
+        ↓
+Future (not implemented): paid ads, Facebook metrics retrieval, ACRP export
 ```
 
 ## Hub surfaces (implemented)
@@ -52,8 +56,8 @@ Future (not implemented): real social-platform adapters, ACRP export
 | Route | Role |
 | --- | --- |
 | `/` | Hub — next step, Goal, happening now, decisions, recent results, recommendation |
-| `/dgix` | DGIX workspace — ACP intake, Operator review, Operator authorization, operating model, proving mission |
-| `/dgix/acp/[id]` | Operator review/authorization of an imported Campaign Package (not Standard ADE content approval) |
+| `/dgix` | DGIX workspace — ACP intake, Operator review, Operator authorization, Facebook connection, organic execute, operating model, proving mission |
+| `/dgix/acp/[id]` | Operator review/authorization/execute of an imported Campaign Package (not Standard ADE content approval) |
 | `/goals` | Goals |
 | `/campaigns`, `/campaigns/[id]` | Campaign workspace |
 | `/sources` | Sources |
@@ -100,7 +104,16 @@ Future (not implemented): real social-platform adapters, ACRP export
 - `confirm` → PUBLISHED with `mock-fb-…` external id
 - `fail` → FAILED with reason
 
-Banners in the UI state that this is not real Facebook publishing.
+Banners in the UI state that this is not real Facebook publishing. DGIX organic execution does not use this mock adapter.
+
+## DGIX organic Facebook adapter (implemented)
+
+`facebook-organic-adapter` in `src/lib/facebook-organic-adapter.ts`:
+
+- Routes `facebook` + `organic` only
+- Maps ACP `message` (and optional `link`) onto Graph `POST /{page-id}/feed`
+- Marks EXECUTED only when Meta returns an object id
+- Refuses paid ACPs and duplicate successful publishes
 
 ## Intelligence / planning boundaries (implemented)
 
@@ -112,14 +125,14 @@ Banners in the UI state that this is not real Facebook publishing.
 ## Standard ADE vs DGIX
 
 - **Standard ADE** (`/` plus Goal → Intelligence): the Operator directly creates and manages Goals, Campaigns, Sources, content, approvals, results, and intelligence.
-- **DGIX** (`/dgix`): execution-ready ACP intake, validation, Operator review/authorization, and Facebook connection validation. Real Facebook publishing, paid execution, and Results Package return remain future. **POST-MVP — IN DEVELOPMENT.**
+- **DGIX** (`/dgix`): execution-ready ACP intake, validation, Operator review/authorization, Facebook connection, and organic Page publishing for authorized text posts. Real publishing still requires Operator-supplied Meta credentials/assets. Paid execution, metric retrieval, and Results Package return remain future. **POST-MVP — IN DEVELOPMENT.**
 
-Both use the same ADE engine. DGIX authorization does not call Facebook and does not use the mock adapter as real-platform execution. ACP import/authorize does not create Standard ADE Goal/Campaign/Source/Draft records.
+Both use the same ADE engine. DGIX authorization does not publish. Organic execute does not use the mock adapter as real-platform execution. ACP import/authorize does not create Standard ADE Goal/Campaign/Source/Draft records.
 
 ## Not implemented (do not treat as current)
 
-- Real Facebook / Meta Graph publishing
-- Facebook account connection / OAuth
+- Paid Facebook / Meta advertising object creation
+- Facebook OAuth / interactive token acquisition
 - Automatic Client QEN connectivity
 - Results Package (ACRP) export
 - Calendar scheduling (queue only; plan timing is a hint)

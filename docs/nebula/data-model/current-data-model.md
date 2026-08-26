@@ -1,6 +1,6 @@
 # ADE implemented data model
 
-**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v8**).  
+**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v9**).  
 **Working copy for operators:** [`docs/data-model.md`](../../data-model.md) — kept in place so existing README links still work.  
 This Nebula record restates current relationships. If those files ever diverge, **code wins**.
 
@@ -31,7 +31,7 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 
 | Table | Implemented use |
 | --- | --- |
-| `app_meta` | `schema_version` (8), `initialized_at` |
+| `app_meta` | `schema_version` (9), `initialized_at` |
 | `goals` | Operator goals; progress is computed, not stored as a live platform value |
 | `sources` | Source material; optional `goal_id` |
 | `campaigns` | Campaign on a Goal; plan summary/mode/boundary |
@@ -44,8 +44,9 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 | `metrics` | Manual results on a publication (`capture_method = manual`) |
 | `recommendations` | Stored analysis (`deterministic_mock` or `live_ai`) with evidence JSON and analysis-mode boundary |
 | `dgix_missions` | DGIX Mission for ACP intake/review/authorization; Goal/Campaign FKs unused |
-| `dgix_acp_intakes` | Imported ACP v1 JSON + provenance + review/authorization state; not Facebook execution |
+| `dgix_acp_intakes` | Imported ACP v1 JSON + provenance + review/authorization/execution status |
 | `dgix_platform_connections` | Token-free Facebook connection snapshot (Page/Ad Account identity, organic/paid flags) |
+| `dgix_executions` | Token-free organic Facebook execution attempts (adapter, operation, Page id, Meta object id or sanitized error) |
 | `audience_network_events` | Placeholder — unused by workflow |
 | `leads` | Placeholder — unused by workflow |
 | `opportunities` | Placeholder — unused by workflow |
@@ -57,8 +58,8 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 - Duplicate queue for the same content is refused.
 - Platform-captured metrics are refused (409).
 
-## Not in v8
+## Not in v9
 
-Auth, encrypted secrets, live Meta payloads, calendar schedule rows, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.
+Auth, encrypted secrets, paid Marketing API objects, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.
 
 ACP import and Operator authorization do not create Goal, Campaign, Source, or Draft rows. `dgix_missions.goal_id` / `campaign_id` remain null.
