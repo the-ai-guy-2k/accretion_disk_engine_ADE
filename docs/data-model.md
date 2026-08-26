@@ -1,10 +1,12 @@
-# ADE data model (schema v5)
+# ADE data model (schema v6)
 
 Nebula copy: [`docs/nebula/data-model/current-data-model.md`](nebula/data-model/current-data-model.md). SQL source of truth remains `src/lib/schema.sql`.
 
 Engine: **SQLite** via Node `node:sqlite`.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
 SQL source of truth: `src/lib/schema.sql`. Runtime column upgrades: `src/lib/migrate.ts`.
+
+Schema v6 adds DGIX `dgix_missions` and `dgix_acp_intakes` for ACP v1 intake/review. Existing files are upgraded on startup. `initialized_at` is not reset.
 
 Schema v5 adds ACI-008 live-AI generation metadata on `content_items` (`generation_provider`, `generation_model`, `generation_status`). Existing files are upgraded on startup. `initialized_at` is not reset.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
@@ -50,9 +52,18 @@ Foreign keys are enabled. IDs are integers. Timestamps are ISO-8601 text.
 
 ## Restart behavior
 
-The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set. Campaigns, selected sources, plan items, drafts, and Goal/content links survive restart.
+The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set. Campaigns, selected sources, plan items, drafts, Goal/content links, and imported Campaign Packages survive restart.
 
-## Not in v5
+## DGIX intake (ACI-DGIX-013, schema v6)
+
+| Table | Role |
+| --- | --- |
+| `dgix_missions` | Minimum Mission row for an imported ACP (title, business, platform, objective, intake review status). `goal_id` / `campaign_id` stay null until a later governed materialization. |
+| `dgix_acp_intakes` | Stored ACP v1 JSON, package identity, originating system, created/imported timestamps, review state. `execution_authorized` and `materialized` stay 0 on import. |
+
+Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Import is not approval.
+
+## Not in v6
 
 - Auth users/sessions
 - Encrypted secrets storage
@@ -60,10 +71,4 @@ The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the 
 - Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics
 
-## Proposed later (not implemented) — DGIX Mission
-
-ACI-DGIX-012 did not change schema v5. A later bounded DGIX ACI may add `dgix_missions`:
-
-`id`, `title`, `business_label`, `platform`, `objective`, `status`, nullable `goal_id`, nullable `campaign_id`, `is_test`, `created_at`, `notes`.
-
-That table would bind a business objective to existing ADE Goal/Campaign rows plus future ACP/ACRP artifact references. It is **not** present now.
+ACP materialization into ADE Goal/Campaign/Source/Draft records is not performed on import.

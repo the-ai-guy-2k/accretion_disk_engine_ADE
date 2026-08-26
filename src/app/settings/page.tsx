@@ -45,8 +45,8 @@ export default function SettingsPage() {
         <p className="muted" style={{ marginTop: "1rem" }}>
           Meta / Facebook variables are listed for later DGIX work. They are not used
           in this MVP. Open the <Link href="/dgix">DGIX workspace</Link> for the
-          post-MVP operating model. Real Facebook publishing, metric retrieval, and
-          Campaign Package intake remain not implemented.
+          post-MVP operating model. ACP v1 Campaign Package intake is implemented on
+          DGIX. Real Facebook publishing and metric retrieval remain not implemented.
         </p>
         <p>
           <Link href="/leads">Leads placeholder</Link>

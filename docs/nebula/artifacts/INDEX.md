@@ -16,6 +16,7 @@ Large evidence remains in original locations. This index preserves traceability 
 | ACI-010 | `docs/nebula/artifacts/aci-010-evidence/` |
 | ACI-011 | `docs/nebula/artifacts/aci-011-evidence/` |
 | ACI-DGIX-012 | `docs/nebula/artifacts/aci-dgix-012-evidence/` |
+| ACI-DGIX-013 | `docs/nebula/artifacts/aci-dgix-013-evidence/` |
 
 Canonical data model: `docs/data-model.md`  
 Canonical harvest decision: `ADE_ACI_003_HYBRID_HARVEST_REPORT.md`

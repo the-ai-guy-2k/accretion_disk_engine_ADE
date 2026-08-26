@@ -1,0 +1,61 @@
+{
+  "acpVersion": "1",
+  "packageId": "acp-test-taig-facebook-contacts-001",
+  "originatingSystem": "human-authored-test-artifact",
+  "clientBusinessId": "TAIG",
+  "campaignName": "TAIG Facebook qualified-contact proving campaign",
+  "createdAt": "2026-08-26T21:00:00Z",
+  "isTest": true,
+  "objective": {
+    "statement": "Generate 2 qualified TAIG client contacts through Facebook.",
+    "measurementTarget": {
+      "metric": "leads_generated",
+      "startingValue": 0,
+      "targetValue": 2,
+      "unit": "qualified_contacts"
+    },
+    "intendedPlatforms": ["facebook"]
+  },
+  "audience": {
+    "description": "People who may need practical AI help for a small business and could become qualified TAIG client contacts. TEST DATA — not an actual audience segment pull from Facebook."
+  },
+  "content": {
+    "posts": [
+      {
+        "title": "A practical next step for local operators",
+        "body": "TEST DATA. If you run a small operation and want a clear next step on using AI without the hype, TAIG can talk it through. This proposed post is campaign-package copy only. It has not been published to Facebook.",
+        "callToAction": "Send a short note describing the problem you want help with.",
+        "mediaReferences": [
+          {
+            "kind": "description",
+            "value": "Optional still image of a simple workshop table. Not attached. Not a Facebook media upload."
+          }
+        ]
+      }
+    ]
+  },
+  "provenance": {
+    "originatingIntelligenceSource": "Social Engine Build QEN proving-scenario brief (TEST DATA)",
+    "sourceEvidence": [
+      {
+        "title": "ACI-DGIX-013 proving mission",
+        "reference": "QEN instruction: Generate 2 qualified TAIG client contacts through Facebook",
+        "notes": "Demonstration artifact. Not Facebook insights. Not actual TAIG client records."
+      }
+    ],
+    "notes": "External artifact content. Not internally generated ADE evidence."
+  },
+  "executionIntent": {
+    "timingPreference": "Weekday morning if later executed. Timing is a preference only; ADE has no calendar scheduler.",
+    "restrictions": [
+      "Do not represent contacts as already generated.",
+      "Do not claim live Facebook distribution.",
+      "Human approval is required before any future publishing path."
+    ],
+    "approvalRequirements": "human_approval_required"
+  },
+  "measurementIntent": {
+    "signals": ["leads_generated", "meaningful_conversations"],
+    "notes": "Success is +2 qualified contacts, not vanity views. Platform-retrieved Facebook metrics are not part of this package."
+  }
+}

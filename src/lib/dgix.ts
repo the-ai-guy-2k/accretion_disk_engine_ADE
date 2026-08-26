@@ -1,4 +1,4 @@
-/** DGIX workspace orientation. No persistent Mission table in this ACI. */
+/** DGIX workspace orientation and ACP intake status. */
 
 export const DGIX_SHORT = "DGIX";
 export const DGIX_FULL = "Distribution, Growth & Intelligence Exchange";
@@ -11,9 +11,9 @@ export const DGIX_FLOW = [
   {
     id: "campaign_package",
     label: "Campaign Package",
-    availability: "not_implemented" as const,
-    href: null,
-    note: "ACP intake is not implemented. This stage is orientation only."
+    availability: "implemented" as const,
+    href: "/dgix#intake",
+    note: "ACP v1 intake is implemented. Import is Operator-controlled review, not approval or publishing."
   },
   {
     id: "review",
@@ -27,7 +27,7 @@ export const DGIX_FLOW = [
     label: "Human Approval",
     availability: "ade_engine" as const,
     href: "/review",
-    note: "Mandatory. AI cannot skip this. No autonomous DGIX publishing path."
+    note: "Mandatory. AI cannot skip this. ACP import does not approve content."
   },
   {
     id: "distribution",
@@ -59,8 +59,11 @@ export const DGIX_FLOW = [
   }
 ] as const;
 
+export const DGIX_IMPLEMENTED_CAPABILITIES = [
+  { name: "Campaign Package Intake", status: "IMPLEMENTED — Operator-controlled ACP v1 import and review" }
+] as const;
+
 export const DGIX_FUTURE_CAPABILITIES = [
-  { name: "Campaign Package Intake", status: "NOT YET IMPLEMENTED" },
   { name: "Facebook Account Connection", status: "NOT YET IMPLEMENTED" },
   { name: "Real Facebook Publishing", status: "NOT YET IMPLEMENTED" },
   { name: "Facebook Metrics Retrieval", status: "NOT YET IMPLEMENTED" },
@@ -89,13 +92,13 @@ export const DGIX_ORIENTATION = [
     key: "INPUT",
     question: "What campaign/business intelligence was supplied?",
     answer:
-      "Campaign Package intake is not yet implemented. No Client QEN artifact has been imported."
+      "ACP v1 intake is implemented. The Operator can import a structured Campaign Package. Automatic Client QEN connectivity is not implemented."
   },
   {
     key: "DECISION",
     question: "What requires my approval?",
     answer:
-      "Any content ADE would execute still requires a human approve/reject on the existing Review screen. DGIX does not auto-publish."
+      "Imported packages require Operator review. Any later ADE content still requires approve/reject on Review. Import is not approval. DGIX does not auto-publish."
   },
   {
     key: "EXECUTION",
@@ -134,25 +137,10 @@ export const ADE_ENGINE_LINKS = [
   { href: "/intelligence", label: "Intelligence" }
 ] as const;
 
-/**
- * Proposed later (not implemented): a `dgix_missions` row would bind a business
- * objective to optional ADE Goal/Campaign IDs plus future ACP/ACRP artifact refs.
- * ACI-DGIX-012 does not add this table.
- */
-export const PROPOSED_DGIX_MISSION_MODEL = {
+export const DGIX_MISSION_MODEL = {
   table: "dgix_missions",
-  schemaVersionWhenAdded: "later bounded ACI — not v5",
-  fields: [
-    "id",
-    "title",
-    "business_label",
-    "platform",
-    "objective",
-    "status",
-    "goal_id (nullable FK)",
-    "campaign_id (nullable FK)",
-    "is_test",
-    "created_at",
-    "notes"
-  ]
+  related: "dgix_acp_intakes",
+  schemaVersion: "6",
+  purpose:
+    "Minimum persistence for an imported ACP and its review state. Goal/Campaign FKs remain unused until a later governed materialization ACI."
 } as const;

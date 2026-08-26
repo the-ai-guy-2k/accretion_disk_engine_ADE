@@ -18,7 +18,7 @@ export function initFoundation(dbPath = dbFile) {
   db.prepare(
     `INSERT INTO app_meta (key, value, updated_at) VALUES (?, ?, ?)
      ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`
-  ).run("schema_version", "5", stamp);
+  ).run("schema_version", "6", stamp);
   const existing = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("initialized_at");
   if (!existing) {
     db.prepare(

@@ -1,0 +1,34 @@
+{
+  "acpVersion": "1",
+  "packageId": "acp-invalid-missing-objective-001",
+  "originatingSystem": "human-authored-test-artifact",
+  "clientBusinessId": "TAIG",
+  "campaignName": "Incomplete proving campaign",
+  "createdAt": "2026-08-26T21:05:00Z",
+  "isTest": true,
+  "audience": {
+    "description": "TEST DATA audience placeholder."
+  },
+  "content": {
+    "posts": [
+      {
+        "body": "TEST DATA. This invalid package has campaign identity and a post, but no objective.statement or measurement target."
+      }
+    ]
+  },
+  "provenance": {
+    "originatingIntelligenceSource": "ACI-DGIX-013 invalid-package test",
+    "sourceEvidence": [
+      {
+        "title": "Intentional schema failure",
+        "reference": "missing objective"
+      }
+    ]
+  },
+  "executionIntent": {
+    "approvalRequirements": "human_approval_required"
+  },
+  "measurementIntent": {
+    "signals": ["leads_generated"]
+  }
+}

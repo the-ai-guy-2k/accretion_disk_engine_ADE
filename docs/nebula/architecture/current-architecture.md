@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX Operator workspace added in ACI-DGIX-012 (**POST-MVP — IN DEVELOPMENT**).  
+**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX Operator workspace ACI-DGIX-012. ACP v1 intake ACI-DGIX-013 (**POST-MVP — IN DEVELOPMENT**).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -9,7 +9,7 @@ Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema
 
 - **Node.js** 22.5+ (`node:sqlite`)
 - **Next.js** App Router + **React** + **TypeScript**
-- **SQLite** file `data/ade.sqlite` (schema **v5**)
+- **SQLite** file `data/ade.sqlite` (schema **v6**)
 - Single process: Hub UI and JSON APIs in the same Next.js server
 - Local run: `npm run dev` → http://localhost:3000
 
@@ -20,7 +20,7 @@ No Docker, Postgres, Redis, Temporal, NestJS, Laravel, Postiz, or Mixpost in thi
 ```text
 ADE Hub / UI
   src/app/* pages, src/components/AppShell.tsx
-  /dgix — DGIX Operator workspace (orientation; not a second app)
+  /dgix — DGIX Operator workspace (ACP v1 intake + review; not a second app)
         ↓
 ADE-native workflow / application layer
   src/lib/workflow.ts
@@ -44,7 +44,7 @@ Manual / mock Facebook adapter
   adapter_id = manual_facebook
   Channel 01 — no Meta Graph call
         ↓
-Future (not implemented): ACP intake, real social-platform adapters, ACRP export
+Future (not implemented): real social-platform adapters, ACRP export
 ```
 
 ## Hub surfaces (implemented)
@@ -52,7 +52,8 @@ Future (not implemented): ACP intake, real social-platform adapters, ACRP export
 | Route | Role |
 | --- | --- |
 | `/` | Hub — next step, Goal, happening now, decisions, recent results, recommendation |
-| `/dgix` | DGIX workspace — operating model, proving mission, future-capability status. Reuses ADE engine; does not duplicate it |
+| `/dgix` | DGIX workspace — ACP v1 intake, operating model, proving mission |
+| `/dgix/acp/[id]` | Operator review of an imported Campaign Package (not ADE content approval) |
 | `/goals` | Goals |
 | `/campaigns`, `/campaigns/[id]` | Campaign workspace |
 | `/sources` | Sources |
@@ -111,7 +112,7 @@ Banners in the UI state that this is not real Facebook publishing.
 ## Standard ADE vs DGIX
 
 - **Standard ADE** (`/` plus Goal → Intelligence): the Operator directly creates and manages Goals, Campaigns, Sources, content, approvals, results, and intelligence.
-- **DGIX** (`/dgix`): orientation workspace for structured campaign/business intelligence, ADE execution, platform evidence, and a Results Package return to a Client QEN. **POST-MVP — IN DEVELOPMENT.**
+- **DGIX** (`/dgix`): ACP v1 intake and Operator review of structured campaign intelligence. Real Facebook and Results Package return remain future. **POST-MVP — IN DEVELOPMENT.**
 
 Both use the same ADE engine. DGIX does not introduce an autonomous publishing path.
 
@@ -119,14 +120,14 @@ Both use the same ADE engine. DGIX does not introduce an autonomous publishing p
 
 - Real Facebook / Meta Graph publishing
 - Facebook account connection / OAuth
-- Campaign Package (ACP) intake
+- Automatic Client QEN connectivity
 - Results Package (ACRP) export
 - Calendar scheduling (queue only; plan timing is a hint)
 - Platform-collected analytics
 - Authentication
 - Lead capture / opportunity pipeline (tables exist unused)
 - Postiz or Mixpost runtime
-- Persistent `dgix_missions` table (proposed for a later DGIX ACI; see data model)
+- ACP → ADE Goal/Campaign/Source/Draft materialization (explicit later action; not performed on import)
 
 ## Hybrid harvest (ACI-003)
 

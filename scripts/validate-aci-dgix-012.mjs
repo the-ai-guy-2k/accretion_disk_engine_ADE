@@ -87,8 +87,8 @@ mustContain(dgix.text, "Intelligence");
 mustContain(dgix.text, "Results Package");
 ok("DGIX operating flow is present");
 
+mustContain(dgix.text, "Campaign Package Intake");
 for (const capability of [
-  "Campaign Package Intake",
   "Facebook Account Connection",
   "Real Facebook Publishing",
   "Facebook Metrics Retrieval",
@@ -98,7 +98,7 @@ for (const capability of [
   mustContain(dgix.text, capability);
 }
 const nyetCount = (dgix.text.match(/NOT YET IMPLEMENTED/g) || []).length;
-if (nyetCount < 6) fail(`expected at least 6 NOT YET IMPLEMENTED labels, found ${nyetCount}`);
+if (nyetCount < 5) fail(`expected remaining unimplemented DGIX labels, found ${nyetCount}`);
 ok("unimplemented DGIX capabilities are labeled");
 
 mustContain(dgix.text, "TEST / DEMONSTRATION");

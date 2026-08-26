@@ -23,6 +23,7 @@ ACI-001 was issued twice. The second (authoritative-path) instruction superseded
 | ACI-010 | [ACI-010.md](ACI-010.md) | MVP integration and UX stabilization | Stored during the product slice |
 | ACI-011 | [ACI-011.md](ACI-011.md) | MVP PAPEV and release baseline | Stored during PAPEV; **MVP PASS** |
 | ACI-DGIX-012 | [ACI-DGIX-012.md](ACI-DGIX-012.md) | DGIX Operator workspace foundation | Stored during the DGIX slice |
+| ACI-DGIX-013 | [ACI-DGIX-013.md](ACI-DGIX-013.md) | ACP v1 contract and intake | Stored during the DGIX slice |
 
 **Still missing (not fabricated):**
 

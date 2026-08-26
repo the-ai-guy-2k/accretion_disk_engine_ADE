@@ -215,3 +215,40 @@ CREATE TABLE IF NOT EXISTS recommendations (
   FOREIGN KEY (goal_id) REFERENCES goals(id),
   FOREIGN KEY (campaign_id) REFERENCES campaigns(id)
 );
+
+CREATE TABLE IF NOT EXISTS dgix_missions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL DEFAULT '',
+  business_label TEXT,
+  platform TEXT,
+  objective TEXT,
+  status TEXT,
+  goal_id INTEGER,
+  campaign_id INTEGER,
+  is_test INTEGER NOT NULL DEFAULT 0,
+  notes TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (goal_id) REFERENCES goals(id),
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id)
+);
+
+CREATE TABLE IF NOT EXISTS dgix_acp_intakes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  mission_id INTEGER NOT NULL,
+  package_id TEXT NOT NULL UNIQUE,
+  acp_version TEXT NOT NULL,
+  originating_system TEXT,
+  client_business_id TEXT,
+  campaign_name TEXT,
+  package_created_at TEXT,
+  imported_at TEXT NOT NULL,
+  raw_json TEXT NOT NULL,
+  review_state TEXT NOT NULL,
+  execution_authorized INTEGER NOT NULL DEFAULT 0,
+  materialized INTEGER NOT NULL DEFAULT 0,
+  is_test INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (mission_id) REFERENCES dgix_missions(id)
+);

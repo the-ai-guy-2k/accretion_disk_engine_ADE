@@ -1,6 +1,6 @@
 # ADE implemented data model
 
-**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v5**).  
+**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v6**).  
 **Working copy for operators:** [`docs/data-model.md`](../../data-model.md) — kept in place so existing README links still work.  
 This Nebula record restates current relationships. If those files ever diverge, **code wins**.
 
@@ -43,6 +43,8 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 | `publications` | Queue: `PENDING` / `READY` / `PUBLISHED` / `FAILED` |
 | `metrics` | Manual results on a publication (`capture_method = manual`) |
 | `recommendations` | Stored analysis (`deterministic_mock` or `live_ai`) with evidence JSON and analysis-mode boundary |
+| `dgix_missions` | DGIX Mission for ACP intake/review only; Goal/Campaign FKs unused in this ACI |
+| `dgix_acp_intakes` | Imported ACP v1 JSON + provenance + review state; not executable |
 | `audience_network_events` | Placeholder — unused by workflow |
 | `leads` | Placeholder — unused by workflow |
 | `opportunities` | Placeholder — unused by workflow |
@@ -54,8 +56,8 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 - Duplicate queue for the same content is refused.
 - Platform-captured metrics are refused (409).
 
-## Not in v5
+## Not in v6
 
 Auth, encrypted secrets, live Meta payloads, calendar schedule rows, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.
 
-**Proposed later (not in v5):** `dgix_missions` to bind a DGIX Mission (business objective + optional Goal/Campaign FKs + future ACP/ACRP refs). ACI-DGIX-012 documents the concept only.
+ACP import does not create Goal, Campaign, Source, or Draft rows. `dgix_missions.goal_id` / `campaign_id` remain null until a later governed action.

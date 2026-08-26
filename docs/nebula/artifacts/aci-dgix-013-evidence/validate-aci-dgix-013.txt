@@ -1,0 +1,16 @@
+﻿
+> accretion-disk-engine@0.1.0 validate:aci-dgix-013
+> node scripts/validate-aci-dgix-013.mjs
+
+OK: health schema v6
+OK: Hub, DGIX, and Standard ADE screens return 200
+OK: DGIX workspace truthfully shows ACP intake implemented
+OK: invalid ACP rejected with useful feedback
+OK: credential fields are rejected
+OK: TEST ACP imported as intake 3 without approval
+OK: ACP provenance persisted
+OK: intake list includes the TEST package
+OK: operator review is not approval
+OK: Operator review page presents ACP coherently
+OK: Standard ADE remains operational; Facebook adapter remains mock
+PASS ACI-DGIX-013 campaign package intake

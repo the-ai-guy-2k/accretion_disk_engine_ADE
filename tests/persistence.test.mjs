@@ -24,7 +24,9 @@ const REQUIRED_TABLES = [
   "audience_network_events",
   "leads",
   "opportunities",
-  "recommendations"
+  "recommendations",
+  "dgix_missions",
+  "dgix_acp_intakes"
 ];
 
 test("SQLite foundation creates required tables and schema version", () => {
@@ -46,7 +48,7 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "5");
+  assert.equal(version.value, "6");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
@@ -76,6 +78,10 @@ test("SQLite foundation creates required tables and schema version", () => {
   const contentCols = db.prepare("PRAGMA table_info(content_items)").all().map((row) => row.name);
   for (const col of ["generation_mode", "generation_note", "generation_provider", "generation_model", "generation_status"]) {
     assert.ok(contentCols.includes(col), `content_items missing ${col}`);
+  }
+  const intakeCols = db.prepare("PRAGMA table_info(dgix_acp_intakes)").all().map((row) => row.name);
+  for (const col of ["package_id", "acp_version", "raw_json", "review_state", "execution_authorized", "imported_at"]) {
+    assert.ok(intakeCols.includes(col), `dgix_acp_intakes missing ${col}`);
   }
   db.close();
 });

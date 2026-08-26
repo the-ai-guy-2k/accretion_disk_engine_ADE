@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { AcpValidationError } from "@/lib/acp-validate";
 import { WorkflowError } from "@/lib/errors";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,12 @@ export function asId(value: string): number {
 }
 
 export function handleError(error: unknown) {
+  if (error instanceof AcpValidationError) {
+    return NextResponse.json(
+      { ok: false, error: error.message, issues: error.issues },
+      { status: error.status }
+    );
+  }
   if (error instanceof WorkflowError) {
     return NextResponse.json({ ok: false, error: error.message }, { status: error.status });
   }

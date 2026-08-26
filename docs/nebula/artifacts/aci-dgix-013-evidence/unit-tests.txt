@@ -1,0 +1,43 @@
+﻿
+> accretion-disk-engine@0.1.0 test
+> node --test tests/persistence.test.mjs tests/workflow-gates.test.mjs tests/analytics-logic.test.mjs tests/campaign-plan.test.mjs tests/ai-generation.test.mjs tests/ai-analysis.test.mjs tests/acp-validate.test.mjs
+
+(node:27576) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/tim/Documents/business_related/The_AI_Guy/nebula/2%20-%20TAIG2K_SOFTWARE/Accretion_disk_engin_ADE/src/lib/acp-validate.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\tim\Documents\business_related\The_AI_Guy\nebula\2 - TAIG2K_SOFTWARE\Accretion_disk_engin_ADE\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Γ£ö TAIG TEST ACP v1 is valid and labeled test data (4.079ms)
+Γ£ö missing objective is rejected with operator-facing path (1.0814ms)
+Γ£ö unsupported version, malformed measurement, and secrets are rejected (1.6258ms)
+Γ£ö content without posts list is not silently repaired (0.4471ms)
+(node:5404) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/tim/Documents/business_related/The_AI_Guy/nebula/2%20-%20TAIG2K_SOFTWARE/Accretion_disk_engin_ADE/src/lib/ai-prompt.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\tim\Documents\business_related\The_AI_Guy\nebula\2 - TAIG2K_SOFTWARE\Accretion_disk_engin_ADE\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Γ£ö analysis system prompt forbids invented metrics and requires evidence distinction (0.8053ms)
+Γ£ö parseAnalysisJson keeps only publication ids present in the evidence pack (1.6068ms)
+Γ£ö missing credentials is detected without using a live analysis call (0.3846ms)
+(node:15224) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/tim/Documents/business_related/The_AI_Guy/nebula/2%20-%20TAIG2K_SOFTWARE/Accretion_disk_engin_ADE/src/lib/ai-prompt.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\tim\Documents\business_related\The_AI_Guy\nebula\2 - TAIG2K_SOFTWARE\Accretion_disk_engin_ADE\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Γ£ö system prompt forbids inventing source-grounded facts (1.0289ms)
+Γ£ö parseGeneratedJson accepts object and fenced payloads (0.8518ms)
+Γ£ö HTTP provider failures map to operator-safe codes (0.233ms)
+Γ£ö missing credentials is detected without using a live provider call (0.2783ms)
+Γ£ö goal progress uses starting value plus contributed results (1.0419ms)
+Γ£ö business outcomes outrank meaningful engagement and raw visibility (0.3724ms)
+Γ£ö recommendation comparison flips when the leading metric flips (0.4569ms)
+Γ£ö campaign plan orders result-proof sources before informational sources (1.2829ms)
+Γ£ö campaign plan purpose follows source type (1.1393ms)
+Γ£ö SQLite foundation creates required tables and schema version (104.5219ms)
+Γ£ö only approved content may enter the publish queue (0.9209ms)
+Γ£ö adapter and confirm transitions refuse duplicates and published terminals (0.2678ms)
+Γä╣ tests 19
+Γä╣ suites 0
+Γä╣ pass 19
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 226.9039

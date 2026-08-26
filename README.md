@@ -46,6 +46,7 @@ ADE automates repetitive social-media management work and uses AI-assisted analy
 | Analytics (deterministic rankings + Goal progress) | Working |
 | Live AI-assisted analysis / recommendations | Working — advisory, not a guarantee |
 | DGIX Operator workspace | Working — orientation workspace; not a complete DGIX product |
+| DGIX ACP v1 intake / Operator review | Working — import is not approval or publishing |
 | Persistence (local SQLite) | Working |
 
 The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manually entered.
@@ -58,7 +59,7 @@ The Hub does **not** display live social metrics or fabricated audience/business
 | Real Facebook / Meta authentication, publishing, or metrics | Not implemented (mock adapter + manual results only) |
 | Leads / CRM | Not implemented (placeholder) |
 | Paid targeting / distribution optimization | Not implemented |
-| DGIX (ACP artifact intake, ACRP results export, real Facebook, optimization) | POST-MVP — IN DEVELOPMENT. Workspace exists; intake, Facebook, and export are not implemented |
+| DGIX (ACRP results export, real Facebook, optimization) | POST-MVP — IN DEVELOPMENT. Workspace and ACP v1 intake exist; Facebook and export are not implemented |
 | Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 | Authentication | Not implemented |
 
@@ -105,6 +106,7 @@ npm run validate:aci009
 npm run validate:aci010
 npm run validate:aci011
 npm run validate:aci-dgix-012
+npm run validate:aci-dgix-013
 ```
 
 Production-style local run after `npm run build`:
@@ -117,9 +119,9 @@ npm start
 
 ## Persistence
 
-On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v5** for ACI-008 live AI generation metadata on drafts; campaigns remain v4 tables). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, and recommendations.
+On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v6** for DGIX Mission + ACP intake tables; v5 live-AI draft metadata remains). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, recommendations, and imported Campaign Packages.
 
-See [docs/data-model.md](docs/data-model.md) and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
+See [docs/data-model.md](docs/data-model.md), [docs/acp/ACP_V1.md](docs/acp/ACP_V1.md), and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
 
 ## Configuration
 

@@ -17,6 +17,7 @@ Each ACR corresponds to one ACI. Evidence is taken from repository reports and v
 | [ACR-010](ACR-010.md) | ACI-010 MVP integration | COMPLETE | Integrated operator journey; `validate:aci010` PASS |
 | [ACR-011](ACR-011.md) | ACI-011 PAPEV | COMPLETE | **MVP PASS**; product baseline `3c18176` |
 | [ACR-DGIX-012](ACR-DGIX-012.md) | ACI-DGIX-012 Operator workspace | COMPLETE | DGIX Hub workspace; intake/Facebook/ACRP not implemented |
+| [ACR-DGIX-013](ACR-DGIX-013.md) | ACI-DGIX-013 ACP intake | COMPLETE | ACP v1 intake/review; import is not approval |
 
 ACR-001–006 files exist but were **recovered in ACI-007**, not written at original completion. See [TRACEABILITY.md](../TRACEABILITY.md).
 

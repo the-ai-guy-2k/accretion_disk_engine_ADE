@@ -1,0 +1,11 @@
+﻿npm test: 19 passed
+validate:aci-dgix-012: PASS
+validate:aci-dgix-013: PASS
+validate:aci004: PASS
+validate:aci005: PASS
+validate:aci006: PASS
+validate:aci008: PASS
+validate:aci009: PASS
+validate:aci010: PASS
+validate:aci011: PASS
+Schema v6. Import is not approval. Facebook adapter remains mock.
