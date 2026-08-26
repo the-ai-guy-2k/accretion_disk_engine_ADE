@@ -18,6 +18,6 @@ Application code remains under `src/`. Do not treat this folder as a second ADE 
 
 **Release branch:** `deployable`  
 **Integration line:** `main` (not rewritten)  
-**Feature work:** `feature/aci-###` → validation → `deployable`
+**Feature work:** `feature/aci-###` or `feature/dgix/aci-dgix-###` → validation → `deployable`
 
 Authoritative remote: `https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE`

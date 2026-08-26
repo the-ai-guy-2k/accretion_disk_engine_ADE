@@ -1,15 +1,15 @@
-# Forward baseline (ADE MVP — post ACI-011 PAPEV)
+# Forward baseline (ADE — post ACI-DGIX-012)
 
 **Date:** 2026-08-26  
-**PAPEV:** **MVP PASS**  
-**Product SHA:** `3c18176` on `deployable`  
-**This overlay:** ACI-011 acceptance records (no major product capability)
+**ADE MVP:** **PASS** (`deployable` product SHA `3c18176`)  
+**DGIX:** **POST-MVP — IN DEVELOPMENT** (Operator workspace from ACI-DGIX-012)
 
 ## Statement
 
-> **The ADE MVP baseline is `deployable` at product commit `3c18176`, accepted by ACI-011 PAPEV: localhost Hub with Goal → Campaign → Source → Draft (manual and live AI) → Review/Approval → mock Facebook publishing → manual results → deterministic Analytics and live AI Intelligence. Human approval is mandatory. Metrics are operator-entered. Facebook is mock. DGIX is post-MVP.**
+> **ADE remains the PAPEV-approved MVP on `deployable`. DGIX is a first-class Operator workspace inside the ADE Hub (`/dgix`). It reuses the existing ADE engine. Campaign Package intake, Facebook account connection, real Facebook publishing, Facebook metric retrieval, Results Package export, and distribution optimization are not implemented.**
 
 ## Next CAE default
 
-Do **not** begin DGIX until the Social Engine Build QEN authorizes post-MVP work.  
-Do not treat unvalidated feature branches as the MVP baseline.
+Do **not** begin ACI-DGIX-013 until the Social Engine Build QEN authorizes it.  
+Do not treat unvalidated feature branches as the promotion baseline.  
+Do not present DGIX as complete.

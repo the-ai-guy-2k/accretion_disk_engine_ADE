@@ -16,7 +16,8 @@ Each ACR corresponds to one ACI. Evidence is taken from repository reports and v
 | [ACR-009](ACR-009.md) | ACI-009 Live AI analytics | COMPLETE | Live OpenAI analysis/recommendations; `validate:aci009` PASS |
 | [ACR-010](ACR-010.md) | ACI-010 MVP integration | COMPLETE | Integrated operator journey; `validate:aci010` PASS |
 | [ACR-011](ACR-011.md) | ACI-011 PAPEV | COMPLETE | **MVP PASS**; product baseline `3c18176` |
+| [ACR-DGIX-012](ACR-DGIX-012.md) | ACI-DGIX-012 Operator workspace | COMPLETE | DGIX Hub workspace; intake/Facebook/ACRP not implemented |
 
 ACR-001–006 files exist but were **recovered in ACI-007**, not written at original completion. See [TRACEABILITY.md](../TRACEABILITY.md).
 
-Traceability rule: **ACI-NNN ↔ ACR-NNN**. Two QEN instructions used number 008; both ACR files are retained.
+Traceability rule: **ACI-NNN ↔ ACR-NNN** for the MVP series. DGIX uses **ACI-DGIX-NNN ↔ ACR-DGIX-NNN**. Two QEN instructions used number 008; both ACR files are retained.

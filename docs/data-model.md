@@ -59,3 +59,11 @@ The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the 
 - Live Meta Graph payloads or platform analytics
 - Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics
+
+## Proposed later (not implemented) — DGIX Mission
+
+ACI-DGIX-012 did not change schema v5. A later bounded DGIX ACI may add `dgix_missions`:
+
+`id`, `title`, `business_label`, `platform`, `objective`, `status`, nullable `goal_id`, nullable `campaign_id`, `is_test`, `created_at`, `notes`.
+
+That table would bind a business objective to existing ADE Goal/Campaign rows plus future ACP/ACRP artifact references. It is **not** present now.

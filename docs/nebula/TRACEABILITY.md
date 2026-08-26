@@ -1,12 +1,14 @@
 # ADE ACI ↔ ACR traceability
 
 **Reconciled:** 2026-08-26  
-**Product code:** ADE MVP baseline `deployable` @ `3c18176`; ACI-011 PAPEV acceptance overlay.  
-**Rule:** ACI-NNN ↔ ACR-NNN. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
+**Product code:** ADE MVP baseline `deployable` @ `3c18176` (ACI-011 PAPEV); DGIX Operator workspace ACI-DGIX-012 on `deployable`.  
+**Rule:** ACI-NNN ↔ ACR-NNN for the MVP series. DGIX uses **ACI-DGIX-NNN ↔ ACR-DGIX-NNN**. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
 
 Classification of ACI files: **ARCHIVED** (stored at time of the slice) | **RECOVERED** (reconstructed later from CAE chat; not an original QEN package) | **PARTIAL** | **MISSING**.
 
 Classification of ACR files: **COMPLETE** (written at slice completion with contemporaneous evidence) | **RECOVERED** (written later from existing reports; evidence cited is real, ACR itself was not contemporaneous) | **PARTIAL** | **MISSING**.
+
+## ADE MVP: ACI-001 → ACI-011
 
 | ACI | ACI artifact | ACI class | ACR | ACR class | Evidence status | Product capability / outcome |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -23,6 +25,14 @@ Classification of ACR files: **COMPLETE** (written at slice completion with cont
 | ACI-009 | `docs/nebula/aci/ACI-009.md` | ARCHIVED | `docs/nebula/acr/ACR-009.md` | COMPLETE | Live AI analytics report + `docs/nebula/artifacts/aci-009-evidence/` + `validate:aci009` | Live AI analysis/recommendations on persisted manual metrics; deterministic analytics preserved |
 | ACI-010 | `docs/nebula/aci/ACI-010.md` | ARCHIVED | `docs/nebula/acr/ACR-010.md` | COMPLETE | Integration report + `docs/nebula/artifacts/aci-010-evidence/` + `validate:aci010` | MVP journey UX/integration; no new major capability |
 | ACI-011 | `docs/nebula/aci/ACI-011.md` | ARCHIVED | `docs/nebula/acr/ACR-011.md` | COMPLETE | PAPEV report + `docs/nebula/artifacts/aci-011-evidence/` + `validate:aci011` | **MVP PASS** — ADE MVP baseline on `deployable` @ `3c18176` |
+
+## DGIX Feature Build: ACI-DGIX-012 → onward
+
+DGIX is **POST-MVP — IN DEVELOPMENT**. It is not a completed product family.
+
+| ACI | ACI artifact | ACI class | ACR | ACR class | Evidence status | Product capability / outcome |
+| --- | --- | --- | --- | --- | --- | --- |
+| ACI-DGIX-012 | `docs/nebula/aci/ACI-DGIX-012.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-012.md` | COMPLETE | Workspace report + `docs/nebula/artifacts/aci-dgix-012-evidence/` + `validate:aci-dgix-012` | DGIX Operator workspace in ADE Hub; engine reused; intake/Facebook/ACRP not implemented |
 
 ## Holes
 

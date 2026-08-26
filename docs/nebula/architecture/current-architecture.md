@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**).  
+**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX Operator workspace added in ACI-DGIX-012 (**POST-MVP — IN DEVELOPMENT**).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -20,6 +20,7 @@ No Docker, Postgres, Redis, Temporal, NestJS, Laravel, Postiz, or Mixpost in thi
 ```text
 ADE Hub / UI
   src/app/* pages, src/components/AppShell.tsx
+  /dgix — DGIX Operator workspace (orientation; not a second app)
         ↓
 ADE-native workflow / application layer
   src/lib/workflow.ts
@@ -42,6 +43,8 @@ Publishing adapter boundary
 Manual / mock Facebook adapter
   adapter_id = manual_facebook
   Channel 01 — no Meta Graph call
+        ↓
+Future (not implemented): ACP intake, real social-platform adapters, ACRP export
 ```
 
 ## Hub surfaces (implemented)
@@ -49,6 +52,7 @@ Manual / mock Facebook adapter
 | Route | Role |
 | --- | --- |
 | `/` | Hub — next step, Goal, happening now, decisions, recent results, recommendation |
+| `/dgix` | DGIX workspace — operating model, proving mission, future-capability status. Reuses ADE engine; does not duplicate it |
 | `/goals` | Goals |
 | `/campaigns`, `/campaigns/[id]` | Campaign workspace |
 | `/sources` | Sources |
@@ -104,14 +108,25 @@ Banners in the UI state that this is not real Facebook publishing.
 - Analysis: `analysis_mode = deterministic_mock` **or** `live_ai` (Intelligence → Analyze with AI)
 - Metrics capture: `capture_method = manual` only; platform collection is refused (409)
 
+## Standard ADE vs DGIX
+
+- **Standard ADE** (`/` plus Goal → Intelligence): the Operator directly creates and manages Goals, Campaigns, Sources, content, approvals, results, and intelligence.
+- **DGIX** (`/dgix`): orientation workspace for structured campaign/business intelligence, ADE execution, platform evidence, and a Results Package return to a Client QEN. **POST-MVP — IN DEVELOPMENT.**
+
+Both use the same ADE engine. DGIX does not introduce an autonomous publishing path.
+
 ## Not implemented (do not treat as current)
 
 - Real Facebook / Meta Graph publishing
+- Facebook account connection / OAuth
+- Campaign Package (ACP) intake
+- Results Package (ACRP) export
 - Calendar scheduling (queue only; plan timing is a hint)
 - Platform-collected analytics
 - Authentication
 - Lead capture / opportunity pipeline (tables exist unused)
 - Postiz or Mixpost runtime
+- Persistent `dgix_missions` table (proposed for a later DGIX ACI; see data model)
 
 ## Hybrid harvest (ACI-003)
 

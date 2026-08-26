@@ -90,6 +90,29 @@ a {
   outline: 1px solid var(--border);
 }
 
+.nav-group {
+  margin: 0.75rem 0 0.2rem;
+  padding: 0.2rem 0.65rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.status-nyet {
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.workflow-strip span.flow-engine {
+  border-color: var(--ok);
+  color: var(--text);
+}
+
+.workflow-strip span.flow-future {
+  border-style: dashed;
+}
+
 .philosophy {
   margin-top: auto;
   padding: 0.75rem;

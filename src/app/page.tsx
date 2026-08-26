@@ -122,7 +122,10 @@ export default function HubPage() {
       <p className="lede">
         <strong>{PRODUCT_NAME}</strong> helps you move one objective through content,
         a human decision, mock publishing, measurement, and a recommendation.
-        AI assists. You decide.
+        AI assists. You decide.{" "}
+        <Link href="/dgix">DGIX</Link> is a specialized post-MVP workspace for
+        structured campaign intelligence and future Client QEN / platform exchange.
+        It is in development and does not replace this Hub journey.
       </p>
       <div className="panel" style={{ marginBottom: "1rem" }}>
         <h2>Suggested next step</h2>

@@ -15,6 +15,16 @@ TAIG is the **initial user and test environment**. ADE itself is a general produ
 
 **MVP baseline:** PAPEV ACI-011 **MVP PASS** on `deployable` (product commit `3c18176`).
 
+```text
+ADE
+├── Standard Operator Workflow
+└── DGIX Operator Workspace   (POST-MVP — IN DEVELOPMENT)
+       ↓
+    Existing ADE Engine
+       ↓
+    Future Artifact / Social Platform Interfaces
+```
+
 Operator philosophy: **Goal → Campaign → Source → Draft → Review → Publishing → Results → Intelligence**  
 AI assists. The operator decides. ADE runs the approved workflow.
 
@@ -35,6 +45,7 @@ ADE automates repetitive social-media management work and uses AI-assisted analy
 | Manual publication results | Working |
 | Analytics (deterministic rankings + Goal progress) | Working |
 | Live AI-assisted analysis / recommendations | Working — advisory, not a guarantee |
+| DGIX Operator workspace | Working — orientation workspace; not a complete DGIX product |
 | Persistence (local SQLite) | Working |
 
 The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manually entered.
@@ -47,11 +58,11 @@ The Hub does **not** display live social metrics or fabricated audience/business
 | Real Facebook / Meta authentication, publishing, or metrics | Not implemented (mock adapter + manual results only) |
 | Leads / CRM | Not implemented (placeholder) |
 | Paid targeting / distribution optimization | Not implemented |
-| DGIX (ACP artifact intake, ACRP results export) | Post-MVP — not in this product |
+| DGIX (ACP artifact intake, ACRP results export, real Facebook, optimization) | POST-MVP — IN DEVELOPMENT. Workspace exists; intake, Facebook, and export are not implemented |
 | Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 | Authentication | Not implemented |
 
-Do not treat DGIX, real Facebook integration, automatic platform metrics, or paid distribution as present in this MVP.
+Do not treat DGIX as complete. Do not treat real Facebook integration, automatic platform metrics, or paid distribution as present.
 
 ## Technology stack
 
@@ -93,6 +104,7 @@ npm run validate:aci008
 npm run validate:aci009
 npm run validate:aci010
 npm run validate:aci011
+npm run validate:aci-dgix-012
 ```
 
 Production-style local run after `npm run build`:
@@ -158,13 +170,14 @@ The local folder name `Accretion_disk_engin_ADE` is the workstation path; the Gi
 
 | Branch | Role |
 | --- | --- |
-| `feature/aci-###` | Work for one ACI. Not release truth. |
+| `feature/aci-###` | Work for one MVP ACI. Not release truth. |
+| `feature/dgix/aci-dgix-###` | Work for one DGIX ACI. Not release truth. |
 | `deployable` | Validated promotion / release line. |
 | `main` | Historical integration line. Do not destroy or rewrite. |
 
 Workflow:
 
-**QEN → ACI → feature/aci-### → CAE implementation → validation → ACR → merge to deployable → remote checkpoint**
+**QEN → ACI → feature branch → CAE implementation → validation → ACR → merge to deployable → remote checkpoint**
 
 Do not treat unvalidated feature branches as the validated ADE state.
 

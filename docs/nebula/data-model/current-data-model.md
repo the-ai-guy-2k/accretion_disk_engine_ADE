@@ -57,3 +57,5 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 ## Not in v5
 
 Auth, encrypted secrets, live Meta payloads, calendar schedule rows, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.
+
+**Proposed later (not in v5):** `dgix_missions` to bind a DGIX Mission (business objective + optional Goal/Campaign FKs + future ACP/ACRP refs). ACI-DGIX-012 documents the concept only.

@@ -18,8 +18,12 @@ export function sqliteDisplayPath(): string {
   return process.env.ADE_SQLITE_PATH?.trim() || "./data/ade.sqlite";
 }
 
-export const NAV_ITEMS = [
+export const NAV_WORKSPACES = [
   { href: "/", label: "Hub" },
+  { href: "/dgix", label: "DGIX" }
+] as const;
+
+export const NAV_STANDARD_ADE = [
   { href: "/goals", label: "Goals" },
   { href: "/campaigns", label: "Campaigns" },
   { href: "/sources", label: "Sources" },
@@ -27,6 +31,9 @@ export const NAV_ITEMS = [
   { href: "/review", label: "Review" },
   { href: "/publishing", label: "Publishing" },
   { href: "/analytics", label: "Analytics" },
-  { href: "/intelligence", label: "Intelligence" },
-  { href: "/settings", label: "Settings" }
+  { href: "/intelligence", label: "Intelligence" }
 ] as const;
+
+export const NAV_UTILITY = [{ href: "/settings", label: "Settings" }] as const;
+
+export const NAV_ITEMS = [...NAV_WORKSPACES, ...NAV_STANDARD_ADE, ...NAV_UTILITY];

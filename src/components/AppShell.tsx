@@ -3,7 +3,14 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FOUNDATION_STAGE, NAV_ITEMS, PRODUCT_NAME, PRODUCT_SHORT } from "@/lib/config";
+import {
+  FOUNDATION_STAGE,
+  NAV_STANDARD_ADE,
+  NAV_UTILITY,
+  NAV_WORKSPACES,
+  PRODUCT_NAME,
+  PRODUCT_SHORT
+} from "@/lib/config";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -17,7 +24,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <p className="brand-sub">Operator hub</p>
         </div>
         <nav className="nav" aria-label="ADE hub">
-          {NAV_ITEMS.map((item) => {
+          {NAV_WORKSPACES.map((item) => {
             const active =
               item.href === "/"
                 ? pathname === "/"
@@ -32,10 +39,51 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
+          <p className="nav-group">Standard ADE</p>
+          {NAV_STANDARD_ADE.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={active ? "active" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          {NAV_UTILITY.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={active ? "active" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
         <div className="philosophy">
-          <strong>Goal → Campaign → Source → Draft → Review → Publishing → Results → Intelligence</strong>
-          AI assists. You decide. ADE runs the approved workflow.
+          {pathname.startsWith("/dgix") ? (
+            <>
+              <strong>
+                Campaign Package → Review → Approval → Distribution → Measurement →
+                Intelligence → Results Package
+              </strong>
+              DGIX uses the ADE engine. AI assists. You decide. Unimplemented stages
+              are labeled honestly.
+            </>
+          ) : (
+            <>
+              <strong>
+                Goal → Campaign → Source → Draft → Review → Publishing → Results →
+                Intelligence
+              </strong>
+              AI assists. You decide. ADE runs the approved workflow.
+            </>
+          )}
         </div>
       </aside>
       <div className="main">
