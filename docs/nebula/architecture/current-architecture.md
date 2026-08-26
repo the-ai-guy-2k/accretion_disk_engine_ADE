@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX Operator workspace ACI-DGIX-012. ACP v1 intake ACI-DGIX-013. Execution-ready ACP + Operator authorization ACI-DGIX-014 (**POST-MVP — IN DEVELOPMENT**).  
+**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**). DGIX through ACI-DGIX-015 Facebook connection foundation (**POST-MVP — IN DEVELOPMENT**).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -9,7 +9,7 @@ Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema
 
 - **Node.js** 22.5+ (`node:sqlite`)
 - **Next.js** App Router + **React** + **TypeScript**
-- **SQLite** file `data/ade.sqlite` (schema **v7**)
+- **SQLite** file `data/ade.sqlite` (schema **v8**)
 - Single process: Hub UI and JSON APIs in the same Next.js server
 - Local run: `npm run dev` → http://localhost:3000
 
@@ -112,7 +112,7 @@ Banners in the UI state that this is not real Facebook publishing.
 ## Standard ADE vs DGIX
 
 - **Standard ADE** (`/` plus Goal → Intelligence): the Operator directly creates and manages Goals, Campaigns, Sources, content, approvals, results, and intelligence.
-- **DGIX** (`/dgix`): execution-ready ACP intake, validation, Operator review of final content, and Operator authorization. Real Facebook and Results Package return remain future. **POST-MVP — IN DEVELOPMENT.**
+- **DGIX** (`/dgix`): execution-ready ACP intake, validation, Operator review/authorization, and Facebook connection validation. Real Facebook publishing, paid execution, and Results Package return remain future. **POST-MVP — IN DEVELOPMENT.**
 
 Both use the same ADE engine. DGIX authorization does not call Facebook and does not use the mock adapter as real-platform execution. ACP import/authorize does not create Standard ADE Goal/Campaign/Source/Draft records.
 

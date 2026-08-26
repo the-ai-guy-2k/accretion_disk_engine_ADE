@@ -23,7 +23,7 @@ feature/aci-### or feature/dgix/aci-dgix-###  →  validation  →  deployable
 
 Do not treat unvalidated feature branches as release truth.
 
-`deployable` was created during ACI-007 from commit `f219fce` (completed work through ACI-006), then fast-forwarded through ACI-007 docs, ACI-008 live-AI generation (`014835b`), reconciliation docs, ACI-009 live AI analytics, ACI-010 MVP integration (`3c18176`), ACI-011 PAPEV acceptance, ACI-DGIX-012 Operator workspace, ACI-DGIX-013 ACP v1 intake, and ACI-DGIX-014 execution-ready ACP / Operator authorization. Current promotion truth is `deployable`. ACI-011 established **`3c18176` as the ADE MVP product baseline**. DGIX is post-MVP and in development.
+`deployable` was created during ACI-007 from commit `f219fce` (completed work through ACI-006), then fast-forwarded through ACI-007 docs, ACI-008 live-AI generation (`014835b`), reconciliation docs, ACI-009 live AI analytics, ACI-010 MVP integration (`3c18176`), ACI-011 PAPEV acceptance, ACI-DGIX-012 Operator workspace, ACI-DGIX-013 ACP v1 intake, ACI-DGIX-014 execution-ready ACP / Operator authorization, and ACI-DGIX-015 Facebook connection foundation. Current promotion truth is `deployable`. ACI-011 established **`3c18176` as the ADE MVP product baseline**. DGIX is post-MVP and in development.
 
 ## CAE execution path
 

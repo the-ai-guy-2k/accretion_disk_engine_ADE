@@ -56,6 +56,7 @@ What DGIX needs to construct a future platform request. Required fields depend o
 | `callToAction` | optional | optional | optional |
 | `publishMode` (`now` \| `scheduled`) | required | required | required |
 | `scheduledAt` (ISO-8601) | no | no | required |
+| `distributionType` (`organic` \| `paid`) | no — default `organic` | no — default `organic` | no — default `organic` |
 
 `clientId` + `platform` are logical identifiers (example: `TAIG` + `facebook`). ACP must not carry Facebook tokens, Meta app secrets, API credentials, passwords, or AI credentials. DGIX later resolves the ADE-held connection.
 

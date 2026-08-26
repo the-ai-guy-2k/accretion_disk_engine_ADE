@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = "7";
+export const SCHEMA_VERSION = "8";
 
 export const FOUNDATION_TABLES = [
   "app_meta",
@@ -17,7 +17,8 @@ export const FOUNDATION_TABLES = [
   "opportunities",
   "recommendations",
   "dgix_missions",
-  "dgix_acp_intakes"
+  "dgix_acp_intakes",
+  "dgix_platform_connections"
 ] as const;
 
 export const CONTENT_STATUS = {

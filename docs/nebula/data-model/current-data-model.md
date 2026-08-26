@@ -1,6 +1,6 @@
 # ADE implemented data model
 
-**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v7**).  
+**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v8**).  
 **Working copy for operators:** [`docs/data-model.md`](../../data-model.md) — kept in place so existing README links still work.  
 This Nebula record restates current relationships. If those files ever diverge, **code wins**.
 
@@ -31,7 +31,7 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 
 | Table | Implemented use |
 | --- | --- |
-| `app_meta` | `schema_version` (7), `initialized_at` |
+| `app_meta` | `schema_version` (8), `initialized_at` |
 | `goals` | Operator goals; progress is computed, not stored as a live platform value |
 | `sources` | Source material; optional `goal_id` |
 | `campaigns` | Campaign on a Goal; plan summary/mode/boundary |
@@ -45,6 +45,7 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 | `recommendations` | Stored analysis (`deterministic_mock` or `live_ai`) with evidence JSON and analysis-mode boundary |
 | `dgix_missions` | DGIX Mission for ACP intake/review/authorization; Goal/Campaign FKs unused |
 | `dgix_acp_intakes` | Imported ACP v1 JSON + provenance + review/authorization state; not Facebook execution |
+| `dgix_platform_connections` | Token-free Facebook connection snapshot (Page/Ad Account identity, organic/paid flags) |
 | `audience_network_events` | Placeholder — unused by workflow |
 | `leads` | Placeholder — unused by workflow |
 | `opportunities` | Placeholder — unused by workflow |
@@ -56,7 +57,7 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 - Duplicate queue for the same content is refused.
 - Platform-captured metrics are refused (409).
 
-## Not in v7
+## Not in v8
 
 Auth, encrypted secrets, live Meta payloads, calendar schedule rows, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.
 

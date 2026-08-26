@@ -33,8 +33,8 @@ export const DGIX_FLOW = [
     id: "distribution",
     label: "Distribution",
     availability: "not_implemented" as const,
-    href: "/publishing",
-    note: "Real platform distribution is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
+    href: "/dgix#facebook-connection",
+    note: "Facebook Account Connection can be validated against Meta. Real Page publishing is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
   },
   {
     id: "measurement",
@@ -63,12 +63,13 @@ export const DGIX_IMPLEMENTED_CAPABILITIES = [
   { name: "Campaign Package Intake", status: "IMPLEMENTED" },
   { name: "ACP Validation", status: "IMPLEMENTED" },
   { name: "Operator Review", status: "IMPLEMENTED" },
-  { name: "Operator Authorization", status: "IMPLEMENTED" }
+  { name: "Operator Authorization", status: "IMPLEMENTED" },
+  { name: "Facebook Account Connection", status: "IMPLEMENTED" }
 ] as const;
 
 export const DGIX_FUTURE_CAPABILITIES = [
-  { name: "Facebook Account Connection", status: "NOT YET IMPLEMENTED" },
   { name: "Real Facebook Publishing", status: "NOT YET IMPLEMENTED" },
+  { name: "Paid Advertising Execution", status: "NOT YET IMPLEMENTED" },
   { name: "Facebook Metrics Retrieval", status: "NOT YET IMPLEMENTED" },
   { name: "Results Package Export", status: "NOT YET IMPLEMENTED" },
   { name: "Distribution / Growth Optimization", status: "NOT YET IMPLEMENTED" }
@@ -107,7 +108,7 @@ export const DGIX_ORIENTATION = [
     key: "EXECUTION",
     question: "What approved activity is being distributed?",
     answer:
-      "Facebook Account Connection and real Facebook publishing are not yet implemented. An authorized ACP stops at AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
+      "Facebook Account Connection is implemented. Real Facebook publishing is not. An authorized ACP is not posted automatically. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
   },
   {
     key: "RESULT",
@@ -142,8 +143,8 @@ export const ADE_ENGINE_LINKS = [
 
 export const DGIX_MISSION_MODEL = {
   table: "dgix_missions",
-  related: "dgix_acp_intakes",
-  schemaVersion: "7",
+  related: "dgix_acp_intakes, dgix_platform_connections",
+  schemaVersion: "8",
   purpose:
-    "Persistence for an imported ACP, its review state, and Operator authorization. Goal/Campaign FKs remain unused. Authorization does not materialize Standard ADE records and does not call Facebook."
+    "Persistence for imported ACP review/authorization and a token-free Facebook connection snapshot. Authorization still does not publish. Connection validation does not create ads."
 } as const;

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DgixFacebookConnectionPanel } from "@/components/DgixFacebookConnectionPanel";
 import { DgixIntakePanel } from "@/components/DgixIntakePanel";
 import {
   ADE_ENGINE_LINKS,
@@ -36,10 +37,10 @@ export default function DgixWorkspacePage() {
 
       <div className="banner">
         DGIX is post-MVP and in development. Campaign Package Intake, ACP
-        Validation, Operator Review, and Operator Authorization are implemented.
-        Facebook Account Connection, real Facebook publishing, metrics retrieval,
-        and Results Package export remain <strong>NOT YET IMPLEMENTED</strong>.
-        Authorization is not publishing.
+        Validation, Operator Review, Operator Authorization, and Facebook Account
+        Connection are implemented. Real Facebook publishing, paid advertising
+        execution, metrics retrieval, and Results Package export remain{" "}
+        <strong>NOT YET IMPLEMENTED</strong>. Connection is not publishing.
       </div>
 
       <div className="workflow-strip" aria-label="DGIX operating flow">
@@ -69,6 +70,8 @@ export default function DgixWorkspacePage() {
       </p>
 
       <DgixIntakePanel />
+
+      <DgixFacebookConnectionPanel />
 
       <div className="panel" style={{ marginBottom: "1rem" }}>
         <h2>DGIX operating flow</h2>
@@ -239,9 +242,10 @@ export default function DgixWorkspacePage() {
         <article className="panel">
           <h2>Human authority</h2>
           <p>
-            Client QEN prepares → Operator authorizes → DGIX executes later.
-            Importing a package does not approve it. Authorizing it does not
-            publish it.
+            Client QEN prepares → Operator authorizes → DGIX may later execute
+            through a connected Facebook adapter. Importing a package does not
+            approve it. Authorizing it does not publish it. A Facebook connection
+            does not post.
           </p>
           <p>
             <Link href="/review">Open ADE Review / Approval</Link>

@@ -75,13 +75,13 @@ for (const capability of [
 }
 mustContain(workspace.text, "IMPLEMENTED");
 for (const label of [
-  "Facebook Account Connection",
   "Real Facebook Publishing",
   "Facebook Metrics Retrieval",
   "Results Package Export"
 ]) {
   mustContain(workspace.text, `${label} — NOT YET IMPLEMENTED`);
 }
+mustContain(workspace.text, "Facebook Account Connection");
 ok("DGIX workspace reports authorization implemented and Facebook execution not connected");
 
 const imageMissing = cloneValid("image-missing");

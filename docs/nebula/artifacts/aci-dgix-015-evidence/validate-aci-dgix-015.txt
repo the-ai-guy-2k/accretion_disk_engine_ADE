@@ -1,0 +1,13 @@
+﻿
+> accretion-disk-engine@0.1.0 validate:aci-dgix-015
+> node scripts/validate-aci-dgix-015.mjs
+
+OK: health schema v8 Graph v26.0
+OK: server-side Facebook connection model is public without secrets
+OK: REAL CONNECTION VALIDATION BLOCKED ΓÇö CREDENTIAL/ASSET INPUT REQUIRED
+OK: DGIX workspace shows connection vs execution truthfully
+OK: ACP remains credential-free
+OK: authorized ACPs are not automatically executed
+OK: Standard ADE remains operational
+PASS ACI-DGIX-015 Meta/Facebook connection (real validation blocked; no fabricated PASS)
+

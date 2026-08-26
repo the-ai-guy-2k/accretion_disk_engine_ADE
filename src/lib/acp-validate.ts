@@ -59,9 +59,11 @@ export type AcpSourceEvidence = {
 
 export const ACP_POST_TYPES = ["text", "image"] as const;
 export const ACP_PUBLISH_MODES = ["now", "scheduled"] as const;
+export const ACP_DISTRIBUTION_TYPES = ["organic", "paid"] as const;
 
 export type AcpPostType = (typeof ACP_POST_TYPES)[number];
 export type AcpPublishMode = (typeof ACP_PUBLISH_MODES)[number];
+export type AcpDistributionType = (typeof ACP_DISTRIBUTION_TYPES)[number];
 
 export type AcpExecution = {
   clientId: string;
@@ -73,6 +75,7 @@ export type AcpExecution = {
   callToAction?: string;
   publishMode: AcpPublishMode;
   scheduledAt?: string;
+  distributionType?: AcpDistributionType;
 };
 
 export type AcpPackage = {
@@ -272,6 +275,21 @@ function parseExecution(raw: unknown, issues: AcpIssue[]): AcpExecution | undefi
   if (postType === "image" && !mediaReference) return undefined;
   if (publishMode === "scheduled" && !scheduledAt) return undefined;
 
+  let distributionType: AcpDistributionType = "organic";
+  if (raw.distributionType != null && raw.distributionType !== "") {
+    const distRaw = reqString(raw.distributionType, "execution.distributionType", issues);
+    if (distRaw && !ACP_DISTRIBUTION_TYPES.includes(distRaw as AcpDistributionType)) {
+      issues.push({
+        path: "execution.distributionType",
+        message: `execution.distributionType must be one of: ${ACP_DISTRIBUTION_TYPES.join(", ")}.`
+      });
+      return undefined;
+    }
+    if (ACP_DISTRIBUTION_TYPES.includes(distRaw as AcpDistributionType)) {
+      distributionType = distRaw as AcpDistributionType;
+    }
+  }
+
   return {
     clientId,
     platform,
@@ -281,7 +299,8 @@ function parseExecution(raw: unknown, issues: AcpIssue[]): AcpExecution | undefi
     ...(link ? { link } : {}),
     ...(callToAction ? { callToAction } : {}),
     publishMode,
-    ...(scheduledAt ? { scheduledAt } : {})
+    ...(scheduledAt ? { scheduledAt } : {}),
+    distributionType
   };
 }
 
@@ -601,6 +620,13 @@ export function reviewView(pkg: AcpPackage) {
 
 export function adapterHandoff(pkg: AcpPackage) {
   if (!pkg.execution) return null;
+  const distributionType = pkg.execution.distributionType || "organic";
+  const adapter =
+    pkg.execution.platform.toLowerCase() === "facebook"
+      ? distributionType === "paid"
+        ? "facebook_paid_marketing"
+        : "facebook_organic_page"
+      : null;
   return {
     clientId: pkg.execution.clientId,
     platform: pkg.execution.platform,
@@ -611,11 +637,14 @@ export function adapterHandoff(pkg: AcpPackage) {
     callToAction: pkg.execution.callToAction || null,
     publishMode: pkg.execution.publishMode,
     scheduledAt: pkg.execution.scheduledAt || null,
+    distributionType,
     packageId: pkg.packageId,
     campaignName: pkg.campaignName,
     isTest: pkg.isTest === true,
+    futureAdapter: adapter,
+    executed: false,
     credentialBoundary:
-      "No access tokens or API secrets. Future DGIX resolves an ADE-held connection from clientId + platform."
+      "No access tokens or API secrets. DGIX resolves an ADE-held Facebook connection from clientId + platform."
   };
 }
 

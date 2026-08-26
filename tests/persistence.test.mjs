@@ -26,7 +26,8 @@ const REQUIRED_TABLES = [
   "opportunities",
   "recommendations",
   "dgix_missions",
-  "dgix_acp_intakes"
+  "dgix_acp_intakes",
+  "dgix_platform_connections"
 ];
 
 test("SQLite foundation creates required tables and schema version", () => {
@@ -48,7 +49,7 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "7");
+  assert.equal(version.value, "8");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
@@ -94,5 +95,11 @@ test("SQLite foundation creates required tables and schema version", () => {
   ]) {
     assert.ok(intakeCols.includes(col), `dgix_acp_intakes missing ${col}`);
   }
+  const connectionCols = db.prepare("PRAGMA table_info(dgix_platform_connections)").all().map((row) => row.name);
+  for (const col of ["client_id", "platform", "page_id", "ad_account_id", "organic_available", "paid_available", "connection_status"]) {
+    assert.ok(connectionCols.includes(col), `dgix_platform_connections missing ${col}`);
+  }
+  assert.ok(!connectionCols.includes("access_token"), "connection table must not store access tokens");
+  assert.ok(!connectionCols.includes("page_access_token"), "connection table must not store page tokens");
   db.close();
 });

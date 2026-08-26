@@ -256,3 +256,23 @@ CREATE TABLE IF NOT EXISTS dgix_acp_intakes (
   updated_at TEXT NOT NULL,
   FOREIGN KEY (mission_id) REFERENCES dgix_missions(id)
 );
+
+CREATE TABLE IF NOT EXISTS dgix_platform_connections (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  client_id TEXT NOT NULL,
+  platform TEXT NOT NULL,
+  graph_api_version TEXT,
+  page_id TEXT,
+  page_name TEXT,
+  ad_account_id TEXT,
+  ad_account_name TEXT,
+  organic_available INTEGER NOT NULL DEFAULT 0,
+  paid_available INTEGER NOT NULL DEFAULT 0,
+  connection_status TEXT NOT NULL,
+  last_validated_at TEXT,
+  last_error TEXT,
+  blocked_reason TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  UNIQUE (client_id, platform)
+);

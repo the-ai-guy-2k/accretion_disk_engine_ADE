@@ -7,7 +7,7 @@ import {
   reviewView,
   type AcpPackage
 } from "@/lib/acp-validate";
-import { WorkflowError } from "@/lib/errors";
+import { routeAuthorizedAcp } from "@/lib/facebook-resolve";
 
 export const ACP_STATE = {
   imported: "imported",
@@ -100,6 +100,7 @@ function shapeIntake(row: Record<string, unknown>) {
     package: pkg,
     review: reviewView(pkg),
     platformHandoff: adapterHandoff(pkg),
+    facebookRouting: routeAuthorizedAcp(pkg),
     mapping: ACP_TO_ADE_MAPPING,
     authorityNote: executionReady
       ? "This package is execution-ready as prepared by the originating system. DGIX will not regenerate the post. Import is not approval. Authorization is not Facebook publishing and does not create Standard ADE Goal, Campaign, Source, or Draft records."

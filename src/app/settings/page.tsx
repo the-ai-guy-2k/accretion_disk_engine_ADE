@@ -10,10 +10,16 @@ const ENV_NAMES = [
   "ADE_AI_MODEL",
   "ADE_AI_BASE_URL",
   "ADE_AI_TIMEOUT_MS",
+  "META_GRAPH_API_VERSION",
+  "ADE_DGIX_FB_CLIENT_ID",
   "META_APP_ID",
   "META_APP_SECRET",
   "META_PAGE_ACCESS_TOKEN",
-  "FACEBOOK_PAGE_ID"
+  "FACEBOOK_PAGE_ID",
+  "ADE_DGIX_FB_PAGE_ID",
+  "ADE_DGIX_FB_PAGE_ACCESS_TOKEN",
+  "META_AD_ACCOUNT_ID",
+  "META_AD_ACCESS_TOKEN"
 ];
 
 export default function SettingsPage() {
@@ -43,10 +49,12 @@ export default function SettingsPage() {
           ))}
         </ul>
         <p className="muted" style={{ marginTop: "1rem" }}>
-          Meta / Facebook variables are listed for later DGIX work. They are not used
-          in this MVP. Open the <Link href="/dgix">DGIX workspace</Link> for the
-          post-MVP operating model. ACP v1 Campaign Package intake is implemented on
-          DGIX. Real Facebook publishing and metric retrieval remain not implemented.
+          Meta / Facebook variables configure the DGIX Facebook connection
+          (logical client, Page identity, optional Ad Account). Secret values are
+          not displayed. Connection validation may call Meta to confirm identity.
+          Real Facebook publishing and paid advertising execution remain not
+          implemented. Open the <Link href="/dgix">DGIX workspace</Link> to see
+          connection status.
         </p>
         <p>
           <Link href="/leads">Leads placeholder</Link>
