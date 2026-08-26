@@ -108,14 +108,16 @@ Schema v1 in `src/lib/schema.sql`:
 
 ## 8. Git / GitHub Status
 
-Recorded after the bootstrap commit/push in `docs/aci/aci-002-evidence/git-status.txt` (written at Git completion).
+Verified after push. Details also in `docs/aci/aci-002-evidence/git-status.txt`.
 
-Intended state:
-
-- `git init` in the authorized folder
-- remote `origin` = `https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE.git`
-- branch `main` (GitHub default)
-- first commit contains the foundation (no `node_modules`, `.next`, SQLite DB, or `.env` secrets)
+| Item | Value |
+| --- | --- |
+| Local Git | initialized at the authorized path |
+| Remote `origin` | `https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE.git` |
+| Branch | `main` (tracks `origin/main`) |
+| Bootstrap commit | `96260ebb803a169d685f7c2d8335ea7774ad1fbf` |
+| GitHub | contains that commit (`ls-remote` HEAD matches) |
+| Excluded from Git | `node_modules/`, `.next/`, `data/*.sqlite*`, `.env` |
 
 ---
 
@@ -194,4 +196,4 @@ Treat this tree as the ADE-owned Hub and data foundation. ACI-003 should **asses
 
 Do not start hybrid harvest implementation until that assessment is accepted.
 
-**ACI-002 status:** ADE exists as a real localhost application at the authorized path, with a usable Hub shell and persistence foundation. Git completion is the remaining recorded proof in §8 evidence.
+**ACI-002 status:** ADE exists as a real localhost application at the authorized path, is on GitHub `main` at `96260ebb803a169d685f7c2d8335ea7774ad1fbf`, runs at http://localhost:3000, and presents a usable Hub shell.
