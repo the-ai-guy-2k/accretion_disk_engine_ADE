@@ -46,7 +46,7 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "4");
+  assert.equal(version.value, "5");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
@@ -72,6 +72,10 @@ test("SQLite foundation creates required tables and schema version", () => {
   const campaignCols = db.prepare("PRAGMA table_info(campaigns)").all().map((row) => row.name);
   for (const col of ["goal_id", "objective", "start_date", "end_date", "plan_summary", "is_test"]) {
     assert.ok(campaignCols.includes(col), `campaigns missing ${col}`);
+  }
+  const contentCols = db.prepare("PRAGMA table_info(content_items)").all().map((row) => row.name);
+  for (const col of ["generation_mode", "generation_note", "generation_provider", "generation_model", "generation_status"]) {
+    assert.ok(contentCols.includes(col), `content_items missing ${col}`);
   }
   db.close();
 });

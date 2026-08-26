@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = "4";
+export const SCHEMA_VERSION = "5";
 
 export const FOUNDATION_TABLES = [
   "app_meta",
@@ -48,6 +48,16 @@ export const CAMPAIGN_STATUS = {
 export const MANUAL_FACEBOOK_ADAPTER_ID = "manual_facebook";
 export const FACEBOOK_CHANNEL_TYPE = "facebook";
 
+export const GENERATION_MODE = {
+  mock_manual: "mock_manual",
+  live_ai: "live_ai"
+} as const;
+
+export const GENERATION_STATUS = {
+  succeeded: "succeeded",
+  failed: "failed"
+} as const;
+
 export const METRIC_KEYS = [
   "views_reach",
   "reactions",
@@ -80,6 +90,8 @@ export type PublicationStatus =
   (typeof PUBLICATION_STATUS)[keyof typeof PUBLICATION_STATUS];
 export type GoalStatus = (typeof GOAL_STATUS)[keyof typeof GOAL_STATUS];
 export type CampaignStatus = (typeof CAMPAIGN_STATUS)[keyof typeof CAMPAIGN_STATUS];
+export type GenerationMode = (typeof GENERATION_MODE)[keyof typeof GENERATION_MODE];
+export type GenerationStatus = (typeof GENERATION_STATUS)[keyof typeof GENERATION_STATUS];
 export type MetricKey = (typeof METRIC_KEYS)[number];
 export type CaptureMethod = (typeof CAPTURE_METHOD)[keyof typeof CAPTURE_METHOD];
 export type FoundationTable = (typeof FOUNDATION_TABLES)[number];

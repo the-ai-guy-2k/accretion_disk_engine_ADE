@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiPublicStatus } from "@/lib/ai-config";
 import { FOUNDATION_STAGE, PRODUCT_NAME, PRODUCT_SHORT, sqliteDisplayPath } from "@/lib/config";
 import { getFoundationStatus } from "@/lib/db";
 
@@ -15,7 +16,8 @@ export function GET() {
       persistence: {
         ...persistence,
         displayPath: sqliteDisplayPath()
-      }
+      },
+      ai: aiPublicStatus()
     });
   } catch (error) {
     return NextResponse.json(

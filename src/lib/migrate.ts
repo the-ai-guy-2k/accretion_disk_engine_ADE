@@ -34,6 +34,9 @@ export function ensureRuntimeSchema(db: DatabaseSync): void {
 
   addColumn(db, "content_items", "generation_mode", "TEXT");
   addColumn(db, "content_items", "generation_note", "TEXT");
+  addColumn(db, "content_items", "generation_provider", "TEXT");
+  addColumn(db, "content_items", "generation_model", "TEXT");
+  addColumn(db, "content_items", "generation_status", "TEXT");
   addColumn(db, "content_items", "is_test", "INTEGER NOT NULL DEFAULT 0");
 
   addColumn(db, "channels", "adapter_id", "TEXT");

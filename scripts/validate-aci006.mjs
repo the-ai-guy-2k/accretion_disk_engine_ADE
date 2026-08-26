@@ -30,10 +30,11 @@ function ok(message) {
 
 const health = await req("GET", "/api/health");
 if (!health.data.ok) fail(health.data.error || "health failed");
-if (String(health.data.persistence?.schemaVersion) !== "4") {
-  fail(`expected schema v4, got ${health.data.persistence?.schemaVersion}`);
+const schemaVersion = Number(health.data.persistence?.schemaVersion);
+if (!Number.isFinite(schemaVersion) || schemaVersion < 4) {
+  fail(`expected schema v4 or later, got ${health.data.persistence?.schemaVersion}`);
 }
-ok("schema v4 health");
+ok("schema v4 or later health");
 
 const goalRes = await req("POST", "/api/goals", {
   title: "[TEST DATA] Increase Audience Network by 10",

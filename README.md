@@ -23,6 +23,7 @@ Implemented loop through ACI-006 also includes **Goals → Campaigns → Decisio
 | ADE Hub shell in the browser | Working |
 | Sources (create, list, select) | Working |
 | Draft from source (mock/manual generation) | Working |
+| Live AI content generation (source-grounded drafts) | Working |
 | Review / edit / approve / reject | Working |
 | Publishing queue + mock Facebook adapter | Working |
 | Goals (create, progress, Hub) | Working |
@@ -30,11 +31,10 @@ Implemented loop through ACI-006 also includes **Goals → Campaigns → Decisio
 | Campaigns (plan + multi-draft from sources) | Working |
 | Manual publication results | Working |
 | Analytics / Intelligence (deterministic) | Working |
-| Live AI generation | Not implemented (mock/manual boundary) |
+| Live AI-assisted analysis / recommendations | Not implemented (deterministic only) |
 | Scheduling | Not implemented (queue only) |
 | Real Facebook/Meta publishing | Not implemented (mock adapter only) |
 | Platform-collected analytics | Not implemented (manual entry only) |
-| Live AI-assisted analysis | Not implemented (deterministic boundary; replaceable later) |
 | Leads | Not implemented |
 | Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 
@@ -76,6 +76,7 @@ npm run db:init
 npm run validate:aci004
 npm run validate:aci005
 npm run validate:aci006
+npm run validate:aci008
 ```
 
 Production-style local run after `npm run build`:
@@ -88,13 +89,23 @@ npm start
 
 ## Persistence
 
-On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v4** for ACI-006 campaigns, content plans, and multi-draft generation). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, and recommendations.
+On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v5** for ACI-008 live AI generation metadata on drafts; campaigns remain v4 tables). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, and recommendations.
 
 See [docs/data-model.md](docs/data-model.md) and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
 
 ## Configuration
 
-Variable **names** are listed in `.env.example`. Do not put secrets in Git. None of the AI or Meta variables are required to start the Hub or complete the mock Facebook path.
+Variable **names** are listed in `.env.example`. Do not put secrets in Git.
+
+**Live AI content generation** (Create → Generate with AI) uses:
+
+- `ADE_AI_PROVIDER` (default `openai`)
+- `ADE_AI_API_KEY` (required for live generation; OpenAI also accepts `OPENAI_API_KEY` if this is empty)
+- `ADE_AI_MODEL` (default `gpt-4o-mini`)
+- `ADE_AI_BASE_URL` (default `https://api.openai.com/v1`)
+- `ADE_AI_TIMEOUT_MS` (default `45000`)
+
+Restart ADE after changing credentials. The Hub still starts without them; Generate with AI then shows an unconfigured state and mock/manual drafts still work. Meta variables are not required for the mock Facebook path. Intelligence/analytics do **not** use the live AI provider in this slice.
 
 ## Directory structure
 
@@ -145,7 +156,8 @@ Do not treat unvalidated feature branches as the validated ADE state.
 
 - Localhost MVP, not the full product intent
 - No authentication
-- No live AI, live Facebook publish, scheduling calendar, or platform analytics
+- Live AI is for **content drafts only**; Intelligence/analytics remain deterministic
+- No live Facebook publish, scheduling calendar, or platform analytics
 - Manual metrics and deterministic recommendations are local decision support only
 - Requires Node with `node:sqlite` (22.5+)
 - Default bind is localhost port 3000

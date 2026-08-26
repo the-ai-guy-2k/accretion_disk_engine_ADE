@@ -5,11 +5,16 @@ import {
   manualFacebookAdapter,
   type ChannelPublishInput
 } from "@/lib/channel-adapter";
+import { generateLiveDraft, liveGenerationNote } from "@/lib/ai-generation";
+import { throwIfFailed } from "@/lib/ai-provider";
+import type { GenerationDirection } from "@/lib/ai-prompt";
 import { WorkflowError } from "@/lib/errors";
 import { activeGoal, resolveGoalId } from "@/lib/goals";
 import {
   CONTENT_STATUS,
   FACEBOOK_CHANNEL_TYPE,
+  GENERATION_MODE,
+  GENERATION_STATUS,
   MANUAL_FACEBOOK_ADAPTER_ID,
   PUBLICATION_STATUS,
   canConfirmOrFail,
@@ -203,8 +208,8 @@ export function createDraftFromSource(
   const stamp = nowIso();
   const result = getDb()
     .prepare(
-      `INSERT INTO content_items (source_id, goal_id, campaign_id, title, body, status, channel_hint, generation_mode, generation_note, is_test, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO content_items (source_id, goal_id, campaign_id, title, body, status, channel_hint, generation_mode, generation_note, generation_provider, generation_model, generation_status, is_test, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       sourceId,
@@ -216,6 +221,58 @@ export function createDraftFromSource(
       FACEBOOK_CHANNEL_TYPE,
       draft.generation_mode,
       draft.generation_note,
+      null,
+      null,
+      null,
+      Number(source.is_test || 0),
+      stamp,
+      stamp
+    );
+  return getContent(Number(result.lastInsertRowid));
+}
+
+export async function createDraftFromLiveAi(
+  sourceId: number,
+  direction?: GenerationDirection,
+  goalId?: number | null
+) {
+  const source = getSource(sourceId);
+  const generated = await generateLiveDraft({
+    source: {
+      id: Number(source.id),
+      title: String(source.title),
+      body: source.body as string,
+      source_type: source.source_type as string,
+      activity_date: source.activity_date as string,
+      provenance: (source.provenance || source.origin) as string,
+      notes: source.notes as string
+    },
+    direction
+  });
+  throwIfFailed(generated);
+  const resolvedGoal =
+    goalId === undefined ? resolveGoalId(source.goal_id) : resolveGoalId(goalId);
+  const stamp = nowIso();
+  const testPrefix = Number(source.is_test || 0) ? "[TEST DATA] " : "";
+  const title = `${testPrefix}${generated.title}`.slice(0, 180);
+  const result = getDb()
+    .prepare(
+      `INSERT INTO content_items (source_id, goal_id, campaign_id, title, body, status, channel_hint, generation_mode, generation_note, generation_provider, generation_model, generation_status, is_test, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      sourceId,
+      resolvedGoal,
+      null,
+      title,
+      generated.body,
+      CONTENT_STATUS.draft,
+      FACEBOOK_CHANNEL_TYPE,
+      GENERATION_MODE.live_ai,
+      liveGenerationNote(generated.provider, generated.model),
+      generated.provider,
+      generated.model,
+      GENERATION_STATUS.succeeded,
       Number(source.is_test || 0),
       stamp,
       stamp

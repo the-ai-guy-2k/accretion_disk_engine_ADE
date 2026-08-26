@@ -1,0 +1,11 @@
+OK: schema v5 health
+OK: AI ready (openai / gpt-4o-mini)
+OK: missing source does not create a draft
+OK: unknown source generate fails without a successful draft
+OK: source 17 persisted
+OK: live AI draft 17 persisted with source 17
+OK: AI draft remains editable
+OK: approved AI draft entered publishing queue
+OK: rejected AI draft cannot enter publishing queue
+OK: mock/manual draft creation still works
+ACI-008 HTTP validation passed against http://localhost:3000

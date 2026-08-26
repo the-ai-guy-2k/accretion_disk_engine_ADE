@@ -10,6 +10,7 @@ Each ACR corresponds to one ACI. Evidence is taken from repository reports and v
 | [ACR-004](ACR-004.md) | ACI-004 | COMPLETE | Vertical-slice report + HTTP/restart evidence |
 | [ACR-005](ACR-005.md) | ACI-005 | COMPLETE | Goals/analytics report + HTTP/restart evidence |
 | [ACR-006](ACR-006.md) | ACI-006 | COMPLETE | Campaign report + HTTP/restart evidence; commit `f219fce` |
-| [ACR-007](ACR-007.md) | ACI-007 | COMPLETE (this slice) | Governance alignment; `deployable` established |
+| [ACR-007](ACR-007.md) | ACI-007 | COMPLETE | Governance alignment; `deployable` established |
+| [ACR-008](ACR-008.md) | ACI-008 | COMPLETE | Live OpenAI content generation; `validate:aci008` PASS |
 
 Traceability rule: **ACI-NNN ↔ ACR-NNN**.

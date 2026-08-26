@@ -23,6 +23,7 @@ ADE Hub / UI
         ↓
 ADE-native workflow / application layer
   src/lib/workflow.ts
+  src/lib/ai-generation.ts (live content generation)
   src/lib/goals.ts
   src/lib/campaigns.ts
   src/lib/campaign-plan.ts
@@ -97,14 +98,14 @@ Banners in the UI state that this is not real Facebook publishing.
 
 ## Intelligence / planning boundaries (implemented)
 
-- Draft generation: `generation_mode = mock_manual`
+- Draft generation: `generation_mode = mock_manual` **or** `live_ai` (Create → Generate with AI)
 - Campaign plan: `plan_mode` deterministic
-- Analysis: `analysis_mode = deterministic_mock`
+- Analysis: `analysis_mode = deterministic_mock` (live AI analytics is **not** implemented)
 - Metrics capture: `capture_method = manual` only; platform collection is refused (409)
 
 ## Not implemented (do not treat as current)
 
-- Live AI generation or analysis
+- Live AI analytics / recommendations (content generation is implemented)
 - Real Facebook / Meta Graph publishing
 - Calendar scheduling (queue only; plan timing is a hint)
 - Platform-collected analytics

@@ -16,6 +16,9 @@ type Content = {
   source_provenance: string;
   source_is_test: number;
   generation_note: string;
+  generation_mode: string;
+  generation_provider: string | null;
+  generation_model: string | null;
   effective_goal_id: number | null;
   goal_title: string | null;
   campaign_id: number | null;
@@ -183,6 +186,17 @@ function ReviewInner() {
             <pre className="draft">{current.source_body || "(empty source body)"}</pre>
             <h2>Draft</h2>
             <p className="muted">{current.generation_note}</p>
+            {current.generation_mode === "live_ai" ? (
+              <div className="banner">
+                AI-assisted draft ({current.generation_provider || "provider"}
+                {current.generation_model ? ` / ${current.generation_model}` : ""}).
+                Edit, then approve or reject. ADE will not auto-publish.
+              </div>
+            ) : (
+              <div className="banner">
+                Mock/manual draft — not live AI output.
+              </div>
+            )}
             <label>
               Title
               <input value={title} onChange={(e) => setTitle(e.target.value)} />

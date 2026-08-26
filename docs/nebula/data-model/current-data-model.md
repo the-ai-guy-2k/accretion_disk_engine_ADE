@@ -1,6 +1,6 @@
 # ADE implemented data model
 
-**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v4**).  
+**Authority:** `src/lib/schema.sql` and `src/lib/migrate.ts` (schema **v5**).  
 **Working copy for operators:** [`docs/data-model.md`](../../data-model.md) — kept in place so existing README links still work.  
 This Nebula record restates current relationships. If those files ever diverge, **code wins**.
 
@@ -31,13 +31,13 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 
 | Table | Implemented use |
 | --- | --- |
-| `app_meta` | `schema_version` (4), `initialized_at` |
+| `app_meta` | `schema_version` (5), `initialized_at` |
 | `goals` | Operator goals; progress is computed, not stored as a live platform value |
 | `sources` | Source material; optional `goal_id` |
 | `campaigns` | Campaign on a Goal; plan summary/mode/boundary |
 | `campaign_sources` | Selected sources for a campaign |
 | `campaign_plan_items` | Planned posts; suggested timing is a hint, not a scheduler |
-| `content_items` | Drafts. Required `source_id`. Optional `goal_id`, `campaign_id`. Status `draft` / `rejected` / `approved` |
+| `content_items` | Drafts. Required `source_id`. Optional `goal_id`, `campaign_id`. Status `draft` / `rejected` / `approved`. `generation_mode` is `mock_manual` or `live_ai`; live drafts also store `generation_provider`, `generation_model`, `generation_status` |
 | `approvals` | Decision history |
 | `channels` | Seeded mock Facebook Channel 01 (`adapter_id = manual_facebook`) |
 | `publications` | Queue: `PENDING` / `READY` / `PUBLISHED` / `FAILED` |
@@ -54,6 +54,6 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 - Duplicate queue for the same content is refused.
 - Platform-captured metrics are refused (409).
 
-## Not in v4
+## Not in v5
 
 Auth, encrypted secrets, live Meta payloads, live AI plan/analysis, calendar schedule rows, fabricated audience/business metrics.
