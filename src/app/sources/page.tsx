@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Provenance, WorkflowStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip, Provenance } from "@/components/WorkflowStrip";
+import { sourceTypeLabel } from "@/lib/labels";
 
 type Source = {
   id: number;
@@ -83,11 +84,12 @@ export default function SourcesPage() {
 
   return (
     <section>
-      <WorkflowStrip current="Source" />
+      <JourneyStrip current="Source" />
       <h1>Sources</h1>
       <p className="lede">
-        Real activity that may later become content. Optionally associate a source with a
-        Goal so later drafts and publications stay on that objective.
+        Real activity that may later become a Draft. Link a Source to a Goal so later
+        drafts stay on that objective. Next step is Create — generate with AI or write
+        a draft without AI.
       </p>
       <div className="split">
         <form
@@ -122,9 +124,9 @@ export default function SourcesPage() {
               value={form.source_type}
               onChange={(e) => setForm({ ...form, source_type: e.target.value })}
             >
-              <option value="taig_activity">taig_activity</option>
-              <option value="client_result">client_result</option>
-              <option value="informational">informational</option>
+              <option value="taig_activity">TAIG activity</option>
+              <option value="client_result">Client result</option>
+              <option value="informational">Informational</option>
             </select>
           </label>
           <label>
@@ -180,14 +182,14 @@ export default function SourcesPage() {
               type="button"
               onClick={() => void create(TEST_SOURCE)}
             >
-              Load ACI-004 test source
+              Load sample TEST DATA source
             </button>
           </div>
         </form>
         <div className="panel">
           <h2>Existing sources</h2>
           {sources.length === 0 ? (
-            <p className="muted">No sources yet.</p>
+            <p className="muted">No sources yet. Save one, then create a draft.</p>
           ) : (
             <table className="table">
               <thead>
@@ -209,14 +211,14 @@ export default function SourcesPage() {
                       />
                       {source.goal_id ? (
                         <p className="muted">
-                          Goal #{source.goal_id} {source.goal_title}
+                          Goal #{source.goal_id} {source.goal_title} · {sourceTypeLabel(source.source_type)}
                         </p>
                       ) : (
-                        <p className="muted">No Goal linked</p>
+                        <p className="muted">No Goal linked · {sourceTypeLabel(source.source_type)}</p>
                       )}
                     </td>
                     <td>
-                      <Link href={`/create?sourceId=${source.id}`}>Create draft</Link>
+                      <Link href={`/create?sourceId=${source.id}`}>Create / generate draft</Link>
                     </td>
                   </tr>
                 ))}

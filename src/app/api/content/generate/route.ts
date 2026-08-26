@@ -22,8 +22,12 @@ export async function POST(request: Request) {
           ? undefined
           : String(body.extra_instruction ?? body.instruction)
     };
+    const campaignId =
+      body.campaign_id == null || body.campaign_id === ""
+        ? undefined
+        : asId(String(body.campaign_id));
     const before = Date.now();
-    const content = await createDraftFromLiveAi(sourceId, direction, goalId);
+    const content = await createDraftFromLiveAi(sourceId, direction, goalId, campaignId);
     const row = content as Record<string, unknown>;
     return NextResponse.json(
       {

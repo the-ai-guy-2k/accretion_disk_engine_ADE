@@ -2,7 +2,7 @@ import path from "node:path";
 
 export const PRODUCT_NAME = "Accretion Disk Engine";
 export const PRODUCT_SHORT = "ADE";
-export const FOUNDATION_STAGE = "ACI-009 live AI analytics";
+export const FOUNDATION_STAGE = "Local MVP";
 
 export function sqlitePath(): string {
   const configured = process.env.ADE_SQLITE_PATH?.trim();
@@ -19,7 +19,7 @@ export function sqliteDisplayPath(): string {
 }
 
 export const NAV_ITEMS = [
-  { href: "/", label: "Dashboard" },
+  { href: "/", label: "Hub" },
   { href: "/goals", label: "Goals" },
   { href: "/campaigns", label: "Campaigns" },
   { href: "/sources", label: "Sources" },
@@ -28,6 +28,5 @@ export const NAV_ITEMS = [
   { href: "/publishing", label: "Publishing" },
   { href: "/analytics", label: "Analytics" },
   { href: "/intelligence", label: "Intelligence" },
-  { href: "/leads", label: "Leads" },
   { href: "/settings", label: "Settings" }
 ] as const;

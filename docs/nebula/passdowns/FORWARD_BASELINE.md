@@ -1,21 +1,15 @@
-# Forward baseline (post ACI-009)
+# Forward baseline (post ACI-010)
 
 **Date:** 2026-08-26  
-**Git:** ACI-009 live AI analytics on `feature/aci-009`, merged to `deployable` after validation.
+**Git:** ACI-010 MVP integration on `feature/aci-010`, merged to `deployable` after validation.
 
 ## Statement
 
-> **The validated ADE product and governance baseline from which the next product ACI will proceed is `deployable` after ACI-009: localhost ADE Hub with Source → Draft (mock/manual and live AI) → Review/Approval → mock Facebook queue, plus Goals, Campaigns/plans, manual results, deterministic rankings, live AI analysis/recommendations, SQLite schema v5, and the Nebula ACI/ACR overlay through ACI-009.**
+> **The validated ADE product baseline is `deployable` after ACI-010: localhost ADE Hub with one operator journey Goal → Campaign → Source → Draft (manual and live AI) → Review/Approval → mock Facebook publishing → manual results → deterministic Analytics and live AI Intelligence, SQLite schema v5, and Nebula ACI/ACR through ACI-010.**
 
-Live AI content generation remains the ACI-008 product slice. ACI-009 added analysis/recommendations; it did not rebuild generation.
-
-## Numbering note
-
-Two QEN instructions used ACI-008 (Live AI generation, then governance reconciliation). Both records remain. QEN issued **ACI-009 as live AI analytics**, not a second generation ACI. That is not a numbering collision.
-
-Historical reconciliation text said QEN might number generation as ACI-009; that did not happen. Generation stays ACI-008.
+No new major capability was added in ACI-010. DGIX and real Facebook remain post-MVP.
 
 ## Next CAE default
 
-`feature/aci-010` → validation → `deployable`  
+Wait for QEN to issue **ACI-011 PAPEV**. Do not start ACI-011 until that instruction exists.  
 Do not treat unvalidated feature branches as release truth.

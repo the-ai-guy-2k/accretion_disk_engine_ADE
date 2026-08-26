@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Provenance, WorkflowStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip, Provenance } from "@/components/WorkflowStrip";
 
 type Content = {
   id: number;
@@ -100,7 +100,11 @@ function ReviewInner() {
       setError(data.error);
       return;
     }
-    setNotice(`Decision recorded: ${action}.`);
+    setNotice(
+      action === "approve"
+        ? "Approved. Next: open Publishing to use the mock Facebook queue."
+        : `Decision recorded: ${action}.`
+    );
     await load(String(current.id));
   }
 
@@ -113,11 +117,11 @@ function ReviewInner() {
 
   return (
     <section>
-      <WorkflowStrip current="Review" />
+      <JourneyStrip current="Review" />
       <h1>Review</h1>
       <p className="lede">
-        Human approval is mandatory. Unapproved content cannot enter the Facebook
-        mock publishing queue.
+        You decide. Unapproved drafts cannot enter Publishing. ADE will not auto-publish
+        AI content.
       </p>
       <div className="split">
         <div className="panel">
@@ -227,7 +231,7 @@ function ReviewInner() {
                 Latest publication #{current.publication.id}: {current.publication.status}
               </p>
             ) : (
-              <p className="muted">No publication row until approval.</p>
+              <p className="muted">No publication until you approve this draft.</p>
             )}
           </div>
         ) : null}

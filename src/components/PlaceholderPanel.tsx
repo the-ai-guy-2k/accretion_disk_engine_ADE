@@ -10,8 +10,7 @@ export function PlaceholderPanel({
       <p className="placeholder-flag">Placeholder shell</p>
       <h1>{title}</h1>
       <p className="lede">
-        This section is navigable and is part of the ADE Hub frame. It does not
-        implement {title.toLowerCase()} capability yet.
+        This section is a placeholder. {title} is not implemented in this MVP.
       </p>
       <div className="panel">
         <h2>Intended later use</h2>

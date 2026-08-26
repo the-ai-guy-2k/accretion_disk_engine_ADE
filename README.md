@@ -13,32 +13,43 @@ TAIG is the **initial user and test environment**. ADE itself is a general produ
 # Accretion Disk Engine
 **ADE**
 
-Operator philosophy: **Goals → Decisions → Results**  
-Implemented loop through ACI-006 also includes **Goals → Campaigns → Decisions → Results**. That is current capability, not a rename of the product.
+Operator philosophy: **Goal → Campaign → Source → Draft → Review → Publishing → Results → Intelligence**  
+AI assists. The operator decides. ADE runs the approved workflow.
 
-## Current capabilities (honest)
+## Implemented MVP capability
+
+ADE automates repetitive social-media management work and uses AI-assisted analytics to help users improve content, viewership, and online presence.
 
 | Area | Status |
 | --- | --- |
-| ADE Hub shell in the browser | Working |
-| Sources (create, list, select) | Working |
-| Draft from source (mock/manual generation) | Working |
-| Live AI content generation (source-grounded drafts) | Working |
-| Review / edit / approve / reject | Working |
-| Publishing queue + mock Facebook adapter | Working |
-| Goals (create, progress, Hub) | Working |
-| Content associated with a Goal | Working |
+| ADE Hub | Working — next-step orientation for the operator journey |
+| Goals | Working |
 | Campaigns (plan + multi-draft from sources) | Working |
+| Sources | Working |
+| Draft from source (manual) | Working |
+| Live AI content generation (source-grounded drafts) | Working |
+| Review / edit / approve / reject | Working — AI cannot skip this |
+| Publishing queue + mock Facebook adapter | Working |
 | Manual publication results | Working |
-| Analytics / Intelligence (deterministic rankings + Goal progress) | Working |
-| Live AI-assisted analysis / recommendations | Working |
-| Scheduling | Not implemented (queue only) |
-| Real Facebook/Meta publishing | Not implemented (mock adapter only) |
-| Platform-collected analytics | Not implemented (manual entry only) |
-| Leads | Not implemented |
-| Postiz / Mixpost | Not imported (patterns only, ACI-003) |
+| Analytics (deterministic rankings + Goal progress) | Working |
+| Live AI-assisted analysis / recommendations | Working — advisory, not a guarantee |
+| Persistence (local SQLite) | Working |
 
-The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manual.
+The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manually entered.
+
+## Future / post-MVP capability (not implemented)
+
+| Area | Status |
+| --- | --- |
+| Calendar scheduling | Not implemented (queue only) |
+| Real Facebook / Meta authentication, publishing, or metrics | Not implemented (mock adapter + manual results only) |
+| Leads / CRM | Not implemented (placeholder) |
+| Paid targeting / distribution optimization | Not implemented |
+| DGIX (ACP artifact intake, ACRP results export) | Post-MVP — not in this product |
+| Postiz / Mixpost | Not imported (patterns only, ACI-003) |
+| Authentication | Not implemented |
+
+Do not treat DGIX, real Facebook integration, automatic platform metrics, or paid distribution as present in this MVP.
 
 ## Technology stack
 
@@ -78,6 +89,7 @@ npm run validate:aci005
 npm run validate:aci006
 npm run validate:aci008
 npm run validate:aci009
+npm run validate:aci010
 ```
 
 Production-style local run after `npm run build`:

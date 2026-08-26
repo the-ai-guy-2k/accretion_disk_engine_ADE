@@ -217,10 +217,14 @@ code {
   font-size: 0.8rem;
 }
 
-.workflow-strip span.current {
+.next-step {
+  margin: 0.65rem 0 0;
   color: var(--text);
-  border-color: var(--accent-dim);
-  background: var(--bg-panel);
+}
+
+.next-step a {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 .form-grid {

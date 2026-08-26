@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { LoopStrip, Provenance } from "@/components/WorkflowStrip";
+import { JourneyStrip, Provenance } from "@/components/WorkflowStrip";
+import { captureLabel, metricDisplay } from "@/lib/labels";
 
 type Source = {
   id: number;
@@ -137,7 +138,7 @@ export default function CampaignWorkspacePage() {
 
   return (
     <section>
-      <LoopStrip current="Campaigns" />
+      <JourneyStrip current="Campaign" />
       <h1>{campaign.title}</h1>
       <p className="lede">
         Goal #{campaign.goal_id} {campaign.goal_title}. Status: {campaign.status}
@@ -210,6 +211,11 @@ export default function CampaignWorkspacePage() {
           <button type="button" onClick={() => void generateDrafts()}>
             Generate drafts from plan
           </button>
+          {selected[0] ? (
+            <Link href={`/create?sourceId=${selected[0]}&campaignId=${id}`}>Generate with AI from a selected Source</Link>
+          ) : (
+            <Link href="/sources">Add a Source first</Link>
+          )}
         </div>
         {error ? <p className="error">{error}</p> : null}
         {notice ? <p className="status-ok">{notice}</p> : null}
@@ -268,7 +274,7 @@ export default function CampaignWorkspacePage() {
         <h2>Drafts</h2>
         <div className="banner">{workspace.banners.generation}</div>
         {workspace.drafts.length === 0 ? (
-          <p className="muted">No drafts yet. Generate them from the plan.</p>
+          <p className="muted">No drafts yet. Generate from the plan, or create a live AI draft from a Source.</p>
         ) : (
           <table className="table">
             <thead>
@@ -305,7 +311,7 @@ export default function CampaignWorkspacePage() {
           <ul className="evidence-list">
             {workspace.results.totals.map((row) => (
               <li key={row.metric_name}>
-                {row.metric_name}: {row.value} ({row.capture_method})
+                {metricDisplay(row.metric_name)}: {row.value} ({captureLabel(row.capture_method)})
               </li>
             ))}
           </ul>

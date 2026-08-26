@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FoundationStatus } from "@/components/FoundationStatus";
 
 const ENV_NAMES = [
@@ -41,6 +42,16 @@ export default function SettingsPage() {
             </li>
           ))}
         </ul>
+        <p className="muted" style={{ marginTop: "1rem" }}>
+          Meta / Facebook variables are listed for later DGIX work. They are not used
+          in this MVP. Leads, paid targeting, and real Facebook publishing are
+          post-MVP.
+        </p>
+        <p>
+          <Link href="/leads">Leads placeholder</Link>
+          {" · "}
+          <Link href="/">Back to Hub</Link>
+        </p>
       </div>
     </section>
   );

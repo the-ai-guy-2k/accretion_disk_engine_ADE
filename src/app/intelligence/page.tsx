@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LoopStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip } from "@/components/WorkflowStrip";
+import { captureLabel, metricDisplay } from "@/lib/labels";
 
 type Evidence = {
   publicationId: number;
@@ -104,16 +105,19 @@ export default function IntelligencePage() {
 
   return (
     <section>
-      <LoopStrip current="Results" />
+      <JourneyStrip current="Intelligence" />
       <h1>Intelligence</h1>
       <p className="lede">
-        Observed evidence, meaning, and recommended next action. Deterministic
-        rankings stay available. Live AI adds interpretation from the same stored
-        metrics — it does not invent platform analytics.
+        Observed evidence, meaning, and recommended next action. Rankings on Analytics
+        stay calculated. Live AI adds interpretation of the same stored metrics — it
+        does not invent Facebook numbers, and it is not a guaranteed outcome.
       </p>
       <div className="banner">{banner || "Analysis has not been run yet."}</div>
       {ai && !ai.analyticsLive ? (
-        <p className="muted">{ai.unavailableReason}</p>
+        <p className="muted">
+          Live AI analysis is unavailable. You can still compute the baseline. Open
+          Settings if you expected live AI.
+        </p>
       ) : null}
       <div className="panel form-grid">
         <label>
@@ -147,7 +151,8 @@ export default function IntelligencePage() {
           <Link href="/analytics">Open Analytics</Link>
         </div>
         <p className="muted">
-          Recommendations are advisory. ADE does not auto-approve or auto-publish.
+          Recommendations are advisory. ADE does not auto-approve or auto-publish, and
+          does not guarantee results.
         </p>
       </div>
       {recommendation ? (
@@ -175,8 +180,8 @@ export default function IntelligencePage() {
             <ul className="evidence-list">
               {recommendation.evidence.map((item) => (
                 <li key={`${item.publicationId}-${item.metric}`}>
-                  Publication #{item.publicationId} “{item.title}”: {item.metric} = {item.value} (
-                  {item.captureMethod})
+                  Publication #{item.publicationId} “{item.title}”: {metricDisplay(item.metric)} = {item.value} (
+                  {captureLabel(item.captureMethod)})
                 </li>
               ))}
             </ul>

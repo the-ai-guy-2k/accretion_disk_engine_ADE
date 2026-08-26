@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Provenance, WorkflowStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip, Provenance } from "@/components/WorkflowStrip";
+import { generationLabel } from "@/lib/labels";
 
 type Source = {
   id: number;
@@ -48,6 +49,7 @@ export default function CreatePage() {
 function CreateInner() {
   const params = useSearchParams();
   const preselect = params.get("sourceId") || "";
+  const preCampaign = params.get("campaignId") || "";
   const [sources, setSources] = useState<Source[]>([]);
   const [sourceId, setSourceId] = useState(preselect);
   const [goalId, setGoalId] = useState("");
@@ -105,7 +107,8 @@ function CreateInner() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         source_id: Number(sourceId),
-        goal_id: goalId ? Number(goalId) : undefined
+        goal_id: goalId ? Number(goalId) : undefined,
+        campaign_id: preCampaign ? Number(preCampaign) : undefined
       })
     });
     const data = await res.json();
@@ -115,7 +118,7 @@ function CreateInner() {
       return;
     }
     setError("");
-    setNotice("Mock/manual draft created. It is not live AI output. Continue to Review.");
+    setNotice("Manual draft created. This is not live AI output. Continue to Review.");
     await load();
   }
 
@@ -128,6 +131,7 @@ function CreateInner() {
       body: JSON.stringify({
         source_id: Number(sourceId),
         goal_id: goalId ? Number(goalId) : undefined,
+        campaign_id: preCampaign ? Number(preCampaign) : undefined,
         platform,
         purpose,
         tone,
@@ -152,12 +156,11 @@ function CreateInner() {
 
   return (
     <section>
-      <WorkflowStrip current="Draft" />
+      <JourneyStrip current="Draft" />
       <h1>Create</h1>
       <p className="lede">
-        Select a source and create a draft. Generate with AI uses ADE source
-        material and an AI provider. Every draft still needs human review before
-        it can enter the publishing queue.
+        Select a Source and create a Draft. Generate with AI stays inside that Source.
+        Every draft still needs your Review before it can enter Publishing.
       </p>
       <div className="panel form-grid">
         <label>
@@ -202,13 +205,13 @@ function CreateInner() {
         <h2>Generate with AI</h2>
         {ai?.ready ? (
           <div className="banner">
-            Live AI content generation is configured ({ai.provider} / {ai.model}).
-            The same credentials can be used on Intelligence for live AI analysis.
+            Live AI is available for drafts. You still approve or reject every draft in Review.
           </div>
         ) : (
           <div className="banner">
-            {ai?.unavailableReason ||
-              "Live AI is not ready. Set ADE_AI_API_KEY in .env.local and restart ADE."}
+            {ai?.unavailableReason
+              ? "Live AI is not available. You can still create a draft without AI, or open Settings."
+              : "Live AI is not ready. You can still create a draft without AI."}
           </div>
         )}
         <label>
@@ -260,7 +263,7 @@ function CreateInner() {
             {busy === "ai" ? "Generating…" : "Generate with AI"}
           </button>
           <button type="button" disabled={!sourceId || busy !== ""} onClick={() => void createDraft()}>
-            {busy === "mock" ? "Creating…" : "Create mock/manual draft"}
+            {busy === "mock" ? "Creating…" : "Create draft without AI"}
           </button>
           <Link href="/review">Go to Review</Link>
         </div>
@@ -290,7 +293,7 @@ function CreateInner() {
                 <tr key={item.id}>
                   <td>{item.title}</td>
                   <td>{item.status}</td>
-                  <td>{item.generation_mode || "mock_manual"}</td>
+                  <td>{generationLabel(item.generation_mode)}</td>
                   <td>
                     #{item.source_id} {item.source_title}
                     {item.goal_title || item.effective_goal_id

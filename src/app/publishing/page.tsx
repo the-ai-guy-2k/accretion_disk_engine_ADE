@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Provenance, WorkflowStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip, Provenance } from "@/components/WorkflowStrip";
 import { MOCK_FACEBOOK_BANNER } from "@/lib/channel-adapter";
+import { publicationStatusLabel } from "@/lib/labels";
 
 type Publication = {
   id: number;
@@ -61,7 +63,9 @@ export default function PublishingPage() {
       setError(data.error);
       return;
     }
-    setNotice(data.banner || `Manual results saved for publication #${resultFor}.`);
+    setNotice(
+      `${data.banner || `Manual results saved for publication #${resultFor}.`} Next: open Intelligence for a recommendation.`
+    );
     setResultFor(null);
     await load();
   }
@@ -76,7 +80,7 @@ export default function PublishingPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action,
-        reason: action === "fail" ? "Controlled ACI-004 mock adapter failure" : undefined
+        reason: action === "fail" ? "Simulated mock publish failure. Facebook was not contacted." : undefined
       })
     });
     const data = await res.json();
@@ -90,14 +94,19 @@ export default function PublishingPage() {
 
   return (
     <section>
-      <WorkflowStrip current="Queue" />
+      <JourneyStrip current="Publishing" />
       <h1>Publishing</h1>
       <p className="lede">
-        Approved content only. Channel 01 is Facebook via a manual/mock adapter.
+        Approved content only. This queue uses a mock Facebook adapter. It does not
+        publish to a real Facebook page.
       </p>
       <div className="banner">{MOCK_FACEBOOK_BANNER}</div>
       {error ? <p className="error">{error}</p> : null}
-      {notice ? <p className="status-ok">{notice}</p> : null}
+      {notice ? (
+        <p className="status-ok">
+          {notice} {notice.toLowerCase().includes("intelligence") ? <Link href="/intelligence">Open Intelligence</Link> : null}
+        </p>
+      ) : null}
       <div className="panel">
         <h2>Queue</h2>
         {items.length === 0 ? (
@@ -128,15 +137,15 @@ export default function PublishingPage() {
                       </p>
                     ) : null}
                     <p className="muted">
-                      Adapter: {item.adapter_id} · mock={item.is_mock ? "yes" : "no"}
-                      {item.external_post_id ? ` · ${item.external_post_id}` : ""}
+                      Mock Facebook adapter
+                      {item.external_post_id ? ` · id ${item.external_post_id}` : ""}
                       {item.failure_reason ? ` · ${item.failure_reason}` : ""}
                     </p>
                   </td>
                   <td>
-                    <strong>{item.status}</strong>
+                    <strong>{publicationStatusLabel(item.status)}</strong>
                     {item.status === "PUBLISHED" ? (
-                      <p className="muted">Mock published at {item.published_at}</p>
+                      <p className="muted">Recorded {item.published_at}. Not a live Facebook post.</p>
                     ) : null}
                   </td>
                   <td>
@@ -211,6 +220,7 @@ export default function PublishingPage() {
             <button type="button" onClick={() => setResultFor(null)}>
               Cancel
             </button>
+            <Link href="/intelligence">After saving: Intelligence</Link>
           </div>
         </div>
       ) : null}

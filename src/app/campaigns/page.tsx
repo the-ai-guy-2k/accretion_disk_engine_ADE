@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { LoopStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip } from "@/components/WorkflowStrip";
 
 type Campaign = {
   id: number;
@@ -29,8 +29,8 @@ function CampaignsInner() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: "ADE Awareness Campaign",
-    objective: "Turn selected source material into a small coordinated content plan that supports Audience Network growth.",
+    title: "",
+    objective: "",
     goal_id: preGoal,
     start_date: "",
     end_date: "",
@@ -81,11 +81,12 @@ function CampaignsInner() {
 
   return (
     <section>
-      <LoopStrip current="Campaigns" />
+      <JourneyStrip current="Campaign" />
       <h1>Campaigns</h1>
       <p className="lede">
-        Tell ADE what the Goal is, then generate a content plan and drafts from selected
-        Sources. Human review is still required before anything can be published.
+        Group Sources under a Goal, then create drafts. Human review is still required
+        before anything can be published. Campaign plan drafts are not live AI unless
+        you generate from Create.
       </p>
       <div className="split">
         <form className="panel form-grid" onSubmit={(event) => void create(event)}>
@@ -110,6 +111,7 @@ function CampaignsInner() {
             <input
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
+              placeholder="e.g. TAIG Facebook contacts — test campaign"
               required
             />
           </label>
@@ -118,6 +120,7 @@ function CampaignsInner() {
             <textarea
               value={form.objective}
               onChange={(e) => setForm({ ...form, objective: e.target.value })}
+              placeholder="What this Campaign should try, in operator language."
             />
           </label>
           <label>
@@ -154,7 +157,7 @@ function CampaignsInner() {
         <div className="panel">
           <h2>Stored Campaigns</h2>
           {campaigns.length === 0 ? (
-            <p className="muted">No campaigns yet. Create one from a Goal.</p>
+            <p className="muted">No campaigns yet. Create one from a Goal, then add Sources.</p>
           ) : (
             <table className="table">
               <thead>

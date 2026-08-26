@@ -1,16 +1,23 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 
-const STEPS = [
+export const JOURNEY = [
+  { href: "/goals", label: "Goal" },
+  { href: "/campaigns", label: "Campaign" },
   { href: "/sources", label: "Source" },
   { href: "/create", label: "Draft" },
   { href: "/review", label: "Review" },
-  { href: "/publishing", label: "Queue" }
+  { href: "/publishing", label: "Publishing" },
+  { href: "/analytics", label: "Results" },
+  { href: "/intelligence", label: "Intelligence" }
 ] as const;
 
-export function WorkflowStrip({ current }: { current: (typeof STEPS)[number]["label"] }) {
+export type JourneyLabel = (typeof JOURNEY)[number]["label"];
+
+export function JourneyStrip({ current }: { current?: JourneyLabel }) {
   return (
-    <div className="workflow-strip" aria-label="ADE workflow">
-      {STEPS.map((step, index) => (
+    <div className="workflow-strip" aria-label="ADE operator journey">
+      {JOURNEY.map((step, index) => (
         <span key={step.href} className={step.label === current ? "current" : undefined}>
           <Link href={step.href}>
             {index + 1}. {step.label}
@@ -21,25 +28,32 @@ export function WorkflowStrip({ current }: { current: (typeof STEPS)[number]["la
   );
 }
 
-const LOOP = [
-  { href: "/goals", label: "Goals" },
-  { href: "/campaigns", label: "Campaigns" },
-  { href: "/review", label: "Decisions" },
-  { href: "/analytics", label: "Results" }
-] as const;
+/** @deprecated Use JourneyStrip. Kept so existing pages can migrate without a redesign. */
+export function WorkflowStrip({
+  current
+}: {
+  current: "Source" | "Draft" | "Review" | "Queue";
+}) {
+  const mapped: JourneyLabel =
+    current === "Queue" ? "Publishing" : current === "Source" ? "Source" : current === "Draft" ? "Draft" : "Review";
+  return <JourneyStrip current={mapped} />;
+}
 
-export function LoopStrip({ current }: { current: (typeof LOOP)[number]["label"] }) {
-  return (
-    <div className="workflow-strip" aria-label="ADE operator loop">
-      {LOOP.map((step, index) => (
-        <span key={step.href} className={step.label === current ? "current" : undefined}>
-          <Link href={step.href}>
-            {index + 1}. {step.label}
-          </Link>
-        </span>
-      ))}
-    </div>
-  );
+/** @deprecated Use JourneyStrip. */
+export function LoopStrip({
+  current
+}: {
+  current: "Goals" | "Campaigns" | "Decisions" | "Results";
+}) {
+  const mapped: JourneyLabel =
+    current === "Goals"
+      ? "Goal"
+      : current === "Campaigns"
+        ? "Campaign"
+        : current === "Decisions"
+          ? "Review"
+          : "Results";
+  return <JourneyStrip current={mapped} />;
 }
 
 export function Provenance({
@@ -55,9 +69,17 @@ export function Provenance({
 }) {
   return (
     <p className="muted">
-      Provenance: source #{sourceId ?? "—"} — {sourceTitle || "(untitled)"}
-      {provenance ? ` · ${provenance}` : ""}
+      From source{sourceId ? ` #${sourceId}` : ""}: {sourceTitle || "(untitled)"}
       {isTest ? " · TEST DATA" : ""}
+      {provenance ? ` · ${provenance}` : ""}
+    </p>
+  );
+}
+
+export function NextStep({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <p className="next-step">
+      Next: <Link href={href}>{children}</Link>
     </p>
   );
 }

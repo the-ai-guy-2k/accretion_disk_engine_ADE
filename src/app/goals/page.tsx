@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LoopStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip } from "@/components/WorkflowStrip";
 
 type Goal = {
   id: number;
@@ -26,11 +26,11 @@ type Goal = {
 };
 
 const EMPTY_FORM = {
-  title: "Increase Audience Network by 10",
-  description: "Grow the operator Audience Network by 10 people from clearly labeled work.",
-  target_metric: "audience_network_gained",
+  title: "",
+  description: "",
+  target_metric: "leads_generated",
   starting_value: "0",
-  target_value: "10",
+  target_value: "2",
   target_date: "",
   status: "active",
   is_test: true
@@ -51,6 +51,7 @@ export default function GoalsPage() {
   const [statuses, setStatuses] = useState<string[]>([]);
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   async function load() {
     const res = await fetch("/api/goals");
@@ -85,6 +86,8 @@ export default function GoalsPage() {
       setError(data.error);
       return;
     }
+    setNotice("Goal saved. Next: create a Campaign for this Goal.");
+    setForm(EMPTY_FORM);
     await load();
   }
 
@@ -104,11 +107,11 @@ export default function GoalsPage() {
 
   return (
     <section>
-      <LoopStrip current="Goals" />
+      <JourneyStrip current="Goal" />
       <h1>Goals</h1>
       <p className="lede">
-        Define what social activity should accomplish. Progress is calculated from
-        operator-entered results on published content linked to the Goal.
+        State the social-media objective. Progress comes from operator-entered results
+        on published content linked to the Goal — not from Facebook analytics.
       </p>
       <div className="split">
         <form className="panel form-grid" onSubmit={(event) => void create(event)}>
@@ -118,6 +121,7 @@ export default function GoalsPage() {
             <input
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
+              placeholder="e.g. Increase TAIG client contacts through Facebook by 2"
               required
             />
           </label>
@@ -126,6 +130,7 @@ export default function GoalsPage() {
             <textarea
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="TEST DATA if this is a validation Goal. Do not treat ADE as having created real clients."
             />
           </label>
           <label>
@@ -191,10 +196,12 @@ export default function GoalsPage() {
             Mark as TEST DATA
           </label>
           {error ? <p className="error">{error}</p> : null}
+          {notice ? <p className="status-ok">{notice}</p> : null}
           <div className="actions">
             <button className="primary" type="submit">
               Save Goal
             </button>
+            {notice ? <Link href="/campaigns">Create Campaign</Link> : null}
           </div>
         </form>
         <div className="panel">
@@ -217,12 +224,14 @@ export default function GoalsPage() {
                 <ProgressBar percent={goal.progress.percent} />
                 <p className="muted">{goal.description}</p>
                 <div className="actions">
-                  <Link href={`/sources?goalId=${goal.id}`}>Associate a source</Link>
-                  <Link href={`/campaigns?goalId=${goal.id}`}>Create Campaign</Link>
-                  <Link href={`/analytics?goalId=${goal.id}`}>Analytics</Link>
-                  {statuses.map((status) => (
+                  <Link href={`/campaigns?goalId=${goal.id}`}>Next: create Campaign</Link>
+                  <Link href={`/sources?goalId=${goal.id}`}>Add a Source</Link>
+                  <Link href={`/analytics?goalId=${goal.id}`}>View results</Link>
+                  {statuses
+                    .filter((status) => status !== goal.status)
+                    .map((status) => (
                     <button key={status} type="button" onClick={() => void setStatus(goal.id, status)}>
-                      {status}
+                      Mark {status}
                     </button>
                   ))}
                 </div>

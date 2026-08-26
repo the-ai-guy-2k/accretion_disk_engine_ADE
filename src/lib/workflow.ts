@@ -234,7 +234,8 @@ export function createDraftFromSource(
 export async function createDraftFromLiveAi(
   sourceId: number,
   direction?: GenerationDirection,
-  goalId?: number | null
+  goalId?: number | null,
+  campaignId?: number | null
 ) {
   const source = getSource(sourceId);
   const generated = await generateLiveDraft({
@@ -252,6 +253,14 @@ export async function createDraftFromLiveAi(
   throwIfFailed(generated);
   const resolvedGoal =
     goalId === undefined ? resolveGoalId(source.goal_id) : resolveGoalId(goalId);
+  if (campaignId != null) {
+    const campaign = getDb()
+      .prepare("SELECT id FROM campaigns WHERE id = ?")
+      .get(campaignId) as { id?: number } | undefined;
+    if (!campaign?.id) {
+      throw new WorkflowError("Campaign not found", 404);
+    }
+  }
   const stamp = nowIso();
   const testPrefix = Number(source.is_test || 0) ? "[TEST DATA] " : "";
   const title = `${testPrefix}${generated.title}`.slice(0, 180);
@@ -263,7 +272,7 @@ export async function createDraftFromLiveAi(
     .run(
       sourceId,
       resolvedGoal,
-      null,
+      campaignId ?? null,
       title,
       generated.body,
       CONTENT_STATUS.draft,

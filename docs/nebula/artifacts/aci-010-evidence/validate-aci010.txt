@@ -1,0 +1,16 @@
+OK: health
+OK: live AI ready
+OK: operator screens return 200
+OK: goal 12 created
+OK: campaign 7
+OK: source 31 attached to campaign
+OK: live AI draft 35
+OK: approved into publishing 27
+OK: rejected AI draft cannot publish
+OK: mock Facebook confirm
+OK: manual results recorded; platform capture refused
+OK: goal progress 2/2 from TEST DATA results
+OK: deterministic analytics available
+OK: live AI recommendation 14 cites stored evidence
+OK: hub summary includes Goal and recommendation
+ACI-010 integrated journey validation passed against http://localhost:3000

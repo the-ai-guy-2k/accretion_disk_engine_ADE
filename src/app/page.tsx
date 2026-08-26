@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FoundationStatus } from "@/components/FoundationStatus";
-import { LoopStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip } from "@/components/WorkflowStrip";
 import { PRODUCT_NAME, PRODUCT_SHORT } from "@/lib/config";
+import { captureLabel, metricDisplay } from "@/lib/labels";
 
 type Goal = {
   id: number;
@@ -48,7 +48,56 @@ type Summary = {
   campaigns: number;
 };
 
-export default function DashboardPage() {
+function nextAction(summary: Summary | null): { href: string; label: string; why: string } {
+  if (!summary) {
+    return { href: "/goals", label: "Open Goals", why: "Start by stating what this work should accomplish." };
+  }
+  if (!summary.activeGoal) {
+    return { href: "/goals", label: "Create a Goal", why: "ADE needs an objective before it can judge results." };
+  }
+  if (summary.campaigns < 1) {
+    return {
+      href: `/campaigns?goalId=${summary.activeGoal.id}`,
+      label: "Create a Campaign",
+      why: "A Campaign groups the content that should move the Goal."
+    };
+  }
+  if (summary.sources < 1) {
+    return {
+      href: `/sources?goalId=${summary.activeGoal.id}`,
+      label: "Add a Source",
+      why: "Drafts are grounded in Source material you choose."
+    };
+  }
+  if (summary.pendingReview > 0) {
+    return {
+      href: "/review",
+      label: "Review drafts",
+      why: `${summary.pendingReview} item(s) need your approve or reject decision. AI cannot skip this.`
+    };
+  }
+  if (summary.queue.PENDING > 0 || summary.queue.READY > 0) {
+    return {
+      href: "/publishing",
+      label: "Continue Publishing",
+      why: "Approved items are waiting in the mock Facebook queue."
+    };
+  }
+  if (summary.queue.PUBLISHED > 0 && !summary.recentResults?.length) {
+    return {
+      href: "/publishing",
+      label: "Enter results",
+      why: "Mock publish is complete. Enter performance numbers manually — ADE does not collect Facebook metrics."
+    };
+  }
+  return {
+    href: "/intelligence",
+    label: "Open Intelligence",
+    why: "Ask ADE for an evidence-grounded recommendation, or compute the deterministic baseline."
+  };
+}
+
+export default function HubPage() {
   const [summary, setSummary] = useState<Summary | null>(null);
 
   useEffect(() => {
@@ -63,20 +112,28 @@ export default function DashboardPage() {
   const goal = summary?.activeGoal;
   const rec = summary?.latestRecommendation;
   const width = Math.min(100, Math.round((goal?.progress.percent ?? 0) * 100));
+  const action = nextAction(summary);
+  const needsDecision = (summary?.pendingReview || 0) + (summary?.queue.PENDING || 0) + (summary?.queue.READY || 0);
 
   return (
     <section>
-      <LoopStrip current="Goals" />
-      <h1>{PRODUCT_NAME}</h1>
+      <JourneyStrip />
+      <h1>{PRODUCT_SHORT} Hub</h1>
       <p className="lede">
-        <strong>{PRODUCT_SHORT}</strong> operator hub:{" "}
-        <strong>Goals → Campaigns → Decisions → Results</strong>. Publishing still follows Source →
-        Draft → Review → Queue.
+        <strong>{PRODUCT_NAME}</strong> helps you move one objective through content,
+        a human decision, mock publishing, measurement, and a recommendation.
+        AI assists. You decide.
       </p>
-      <FoundationStatus />
-      <div className="grid" style={{ marginTop: "1rem" }}>
+      <div className="panel" style={{ marginBottom: "1rem" }}>
+        <h2>Suggested next step</h2>
+        <p>{action.why}</p>
+        <p className="next-step">
+          <Link href={action.href}>{action.label}</Link>
+        </p>
+      </div>
+      <div className="grid">
         <article className="card">
-          <h2>Active Goal</h2>
+          <h2>What you are trying to accomplish</h2>
           {goal ? (
             <>
               <p>
@@ -87,9 +144,8 @@ export default function DashboardPage() {
                 <span style={{ width: `${width}%` }} />
               </div>
               <p className="muted">
-                {goal.progress.current}
-                {goal.progress.target != null ? ` / ${goal.progress.target}` : ""} · contributed{" "}
-                {goal.progress.contributed}
+                {metricDisplay(goal.target_metric)}: {goal.progress.current}
+                {goal.progress.target != null ? ` / ${goal.progress.target}` : ""}
               </p>
               <Link href="/goals">Open Goals</Link>
             </>
@@ -101,53 +157,74 @@ export default function DashboardPage() {
           )}
         </article>
         <article className="card">
-          <h2>Campaigns</h2>
-          <p>{summary ? `${summary.campaigns} stored` : "Loading…"}</p>
-          <Link href="/campaigns">Open Campaigns</Link>
+          <h2>What is happening now</h2>
+          {summary ? (
+            <p>
+              {summary.campaigns} campaign(s) · {summary.sources} source(s) · {summary.drafts}{" "}
+              draft(s) · queue {summary.queue.PENDING} waiting, {summary.queue.READY} ready,{" "}
+              {summary.queue.PUBLISHED} mock-published
+              {summary.queue.FAILED ? `, ${summary.queue.FAILED} failed` : ""}.
+            </p>
+          ) : (
+            <p className="muted">Loading…</p>
+          )}
+          <p className="muted">Publishing uses the mock Facebook adapter, not the Meta API.</p>
         </article>
         <article className="card">
-          <h2>Content awaiting decisions</h2>
-          <p>{summary ? `${summary.pendingReview} draft/rejected items` : "Loading…"}</p>
-          <Link href="/review">Open review</Link>
+          <h2>What needs your decision</h2>
+          {needsDecision ? (
+            <>
+              <p>
+                {summary?.pendingReview ? `${summary.pendingReview} draft(s) to review. ` : ""}
+                {(summary?.queue.PENDING || 0) + (summary?.queue.READY || 0)
+                  ? `${(summary?.queue.PENDING || 0) + (summary?.queue.READY || 0)} queue item(s) to move.`
+                  : ""}
+              </p>
+              <Link href={summary?.pendingReview ? "/review" : "/publishing"}>
+                {summary?.pendingReview ? "Open Review" : "Open Publishing"}
+              </Link>
+            </>
+          ) : (
+            <p className="muted">Nothing is waiting on a human decision right now.</p>
+          )}
         </article>
         <article className="card">
-          <h2>Recent publication results</h2>
+          <h2>What happened recently</h2>
           {summary?.recentResults?.length ? (
             <ul className="evidence-list">
               {summary.recentResults.slice(0, 4).map((row) => (
                 <li key={`${row.publication_id}-${row.metric_name}`}>
-                  {row.content_title}: {row.metric_name} {row.numeric_value} ({row.capture_method})
+                  {row.content_title}: {metricDisplay(row.metric_name)} {row.numeric_value} (
+                  {captureLabel(row.capture_method)})
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="muted">No operator-entered results yet.</p>
+            <p className="muted">No operator-entered results yet. These are not Facebook-collected metrics.</p>
           )}
           <p>
-            <Link href="/publishing">Open queue</Link>
+            <Link href="/publishing">Open Publishing</Link>
+            {" · "}
+            <Link href="/analytics">Open Analytics</Link>
           </p>
         </article>
         <article className="card">
-          <h2>Latest ADE recommendation</h2>
+          <h2>What ADE recommends</h2>
           {rec ? (
             <>
               <p>{rec.action_hint || rec.summary}</p>
-              <p className="muted">{rec.analysis_mode === "live_ai" ? "Live AI" : "Deterministic analysis"}</p>
+              <p className="muted">
+                {rec.analysis_mode === "live_ai" ? "Live AI interpretation" : "Deterministic baseline"}{" "}
+                — advisory, not a guaranteed outcome.
+              </p>
               <Link href="/intelligence">Open Intelligence</Link>
             </>
           ) : (
             <>
-              <p className="muted">No recommendation stored yet. Enter results, then analyze.</p>
+              <p className="muted">No recommendation yet. Enter results, then run analysis.</p>
               <Link href="/intelligence">Open Intelligence</Link>
             </>
           )}
-        </article>
-        <article className="card">
-          <p className="placeholder-flag">Mock adapter</p>
-          <h2>Facebook Channel 01</h2>
-          <p className="muted">
-            {summary?.adapter.label || "Manual / mock Facebook adapter"}. Not live Meta publishing.
-          </p>
         </article>
       </div>
     </section>

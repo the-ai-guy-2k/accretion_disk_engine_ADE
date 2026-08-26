@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AppShell } from "@/components/AppShell";
-import { FOUNDATION_STAGE, PRODUCT_NAME, PRODUCT_SHORT } from "@/lib/config";
+import { PRODUCT_NAME, PRODUCT_SHORT } from "@/lib/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: `${PRODUCT_NAME} (${PRODUCT_SHORT})`,
-  description: FOUNDATION_STAGE
+  description: "Operator hub for goals, content, review, mock publishing, and AI-assisted recommendations"
 };
 
 export default function RootLayout({

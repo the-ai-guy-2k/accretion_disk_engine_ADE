@@ -1,0 +1,22 @@
+{
+  "id": 14,
+  "goal_id": 12,
+  "campaign_id": 7,
+  "goal_title": "Increase TAIG client contacts through Facebook by 2",
+  "analysis_mode": "live_ai",
+  "liveAiUsed": true,
+  "is_test": 1,
+  "observed": "Content with publicationId 27 generated 2 leads, 3 reactions, and reached 40 views.",
+  "why_it_matters": "The goal is progressing as 2 leads have been generated, achieving the target of 2. This content ranks highest in business outcomes and visibility.",
+  "action_hint": "Enter additional results or publish more associated content to compare performance.",
+  "evidence": [
+    {
+      "publicationId": 27,
+      "contentId": 35,
+      "metric": "leads_generated",
+      "value": 2,
+      "captureMethod": "manual"
+    }
+  ],
+  "note": "leads_generated=2 is operator-entered TEST DATA. ADE did not create two real clients and did not collect Facebook metrics."
+}

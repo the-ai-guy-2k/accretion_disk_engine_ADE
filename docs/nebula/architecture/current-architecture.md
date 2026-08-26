@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** application code on `deployable` (product commit after ACI-009 live AI analytics).  
+**Authority:** application code on `deployable` (ACI-010 MVP integration).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -48,7 +48,7 @@ Manual / mock Facebook adapter
 
 | Route | Role |
 | --- | --- |
-| `/` | Dashboard / Hub |
+| `/` | Hub — next step, Goal, happening now, decisions, recent results, recommendation |
 | `/goals` | Goals |
 | `/campaigns`, `/campaigns/[id]` | Campaign workspace |
 | `/sources` | Sources |
@@ -57,7 +57,7 @@ Manual / mock Facebook adapter
 | `/publishing` | Queue + mock adapter actions |
 | `/analytics` | Goal/content results |
 | `/intelligence` | Deterministic baseline + live AI recommendation |
-| `/leads` | Placeholder (no lead capture) |
+| `/leads` | Placeholder (not in primary nav; post-MVP) |
 | `/settings` | Config names; no live keys required |
 
 ## Functional relationships through ACI-009

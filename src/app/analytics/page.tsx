@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { LoopStrip } from "@/components/WorkflowStrip";
+import { JourneyStrip } from "@/components/WorkflowStrip";
 
 type Scored = {
   publicationId: number;
@@ -88,12 +88,13 @@ function AnalyticsInner() {
 
   return (
     <section>
-      <LoopStrip current="Results" />
+      <JourneyStrip current="Results" />
       <h1>Analytics</h1>
       <p className="lede">
-        Decision support only. Rankings below are deterministic. Hierarchy:{" "}
+        Rankings and Goal progress are calculated from stored results. They are not live
+        AI. Hierarchy:{" "}
         <strong>Business Outcomes &gt; Meaningful Engagement &gt; Raw Visibility</strong>.
-        Use Intelligence to request live AI interpretation of the same stored results.
+        Use Intelligence for live AI interpretation of the same numbers.
       </p>
       {banner ? <div className="banner">{banner}</div> : null}
       <div className="panel form-grid" style={{ marginBottom: "1rem" }}>

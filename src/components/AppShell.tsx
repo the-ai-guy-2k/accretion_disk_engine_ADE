@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div>
           <p className="brand-kicker">{PRODUCT_SHORT}</p>
           <h1 className="brand-title">{PRODUCT_NAME}</h1>
-          <p className="brand-sub">Localhost operator hub</p>
+          <p className="brand-sub">Operator hub</p>
         </div>
         <nav className="nav" aria-label="ADE hub">
           {NAV_ITEMS.map((item) => {
@@ -34,8 +34,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="philosophy">
-          <strong>Goals → Decisions → Results</strong>
-          Operator philosophy for ADE. Goals → Campaigns → Decisions → Results.
+          <strong>Goal → Campaign → Source → Draft → Review → Publishing → Results → Intelligence</strong>
+          AI assists. You decide. ADE runs the approved workflow.
         </div>
       </aside>
       <div className="main">
