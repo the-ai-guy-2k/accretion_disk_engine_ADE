@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** application code on `deployable` (product commit `014835b`; current branch tip includes later governance docs).  
+**Authority:** application code on `deployable` (product commit after ACI-009 live AI analytics).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
@@ -24,6 +24,7 @@ ADE Hub / UI
 ADE-native workflow / application layer
   src/lib/workflow.ts
   src/lib/ai-generation.ts (live content generation)
+  src/lib/ai-analysis.ts (live performance analysis)
   src/lib/goals.ts
   src/lib/campaigns.ts
   src/lib/campaign-plan.ts
@@ -55,11 +56,11 @@ Manual / mock Facebook adapter
 | `/review` | Review / approve / reject |
 | `/publishing` | Queue + mock adapter actions |
 | `/analytics` | Goal/content results |
-| `/intelligence` | Deterministic recommendation |
+| `/intelligence` | Deterministic baseline + live AI recommendation |
 | `/leads` | Placeholder (no lead capture) |
 | `/settings` | Config names; no live keys required |
 
-## Functional relationships through ACI-006
+## Functional relationships through ACI-009
 
 **Loop A — Source → Draft → Review → Approval → Queue → mock Facebook**
 
@@ -75,8 +76,8 @@ Manual / mock Facebook adapter
 1. Operator creates a `goals` row.
 2. Content and/or sources may carry `goal_id`. Effective Goal is `COALESCE(content_items.goal_id, sources.goal_id)`.
 3. After mock publish, operator enters **manual** `metrics` on a publication.
-4. Intelligence `runAnalysis` stores a `recommendations` row with `analysis_mode = deterministic_mock`.
-5. `ADE_AI_API_KEY` being set does **not** mean live AI ran.
+4. Intelligence stores a `recommendations` row. Default analyze is `analysis_mode = deterministic_mock`. Operator-requested live AI analyze is `analysis_mode = live_ai`.
+5. `ADE_AI_API_KEY` being set does **not** by itself mean live AI ran; `analysis_mode` and `liveAiUsed` do.
 
 **Loop C — Goal → Campaign → Sources → Plan → Drafts → Human review**
 
@@ -100,12 +101,11 @@ Banners in the UI state that this is not real Facebook publishing.
 
 - Draft generation: `generation_mode = mock_manual` **or** `live_ai` (Create → Generate with AI)
 - Campaign plan: `plan_mode` deterministic
-- Analysis: `analysis_mode = deterministic_mock` (live AI analytics is **not** implemented)
+- Analysis: `analysis_mode = deterministic_mock` **or** `live_ai` (Intelligence → Analyze with AI)
 - Metrics capture: `capture_method = manual` only; platform collection is refused (409)
 
 ## Not implemented (do not treat as current)
 
-- Live AI analytics / recommendations (content generation is implemented)
 - Real Facebook / Meta Graph publishing
 - Calendar scheduling (queue only; plan timing is a hint)
 - Platform-collected analytics

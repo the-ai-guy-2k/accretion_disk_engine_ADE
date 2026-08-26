@@ -91,7 +91,9 @@ function AnalyticsInner() {
       <LoopStrip current="Results" />
       <h1>Analytics</h1>
       <p className="lede">
-        Decision support only. Hierarchy: <strong>Business Outcomes &gt; Meaningful Engagement &gt; Raw Visibility</strong>.
+        Decision support only. Rankings below are deterministic. Hierarchy:{" "}
+        <strong>Business Outcomes &gt; Meaningful Engagement &gt; Raw Visibility</strong>.
+        Use Intelligence to request live AI interpretation of the same stored results.
       </p>
       {banner ? <div className="banner">{banner}</div> : null}
       <div className="panel form-grid" style={{ marginBottom: "1rem" }}>
@@ -191,6 +193,8 @@ function AnalyticsInner() {
         )}
         <p>
           <Link href="/intelligence">Open Intelligence</Link>
+          {" · "}
+          <Link href="/intelligence">Analyze with AI</Link>
         </p>
       </div>
     </section>

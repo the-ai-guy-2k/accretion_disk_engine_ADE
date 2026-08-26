@@ -1,0 +1,15 @@
+OK: schema v5 health
+OK: AI analytics ready (openai / gpt-4o-mini)
+OK: goal 9 created
+OK: campaign 5 linked to goal 9
+OK: published stronger 20 and weaker 21
+OK: platform-collected metrics still refused
+OK: deterministic analytics rankings preserved
+OK: invalid analysis mode fails without storing a recommendation
+OK: default analyze remains deterministic (ACI-005 contract)
+OK: failed live AI analyze does not store a fake recommendation
+OK: live AI recommendation 11 stored
+OK: live recommendation evidence matches stored manual metrics
+OK: live recommendation references stored evidence rather than invented platform analytics
+OK: deterministic analytics snapshot still available after live AI
+ACI-009 HTTP validation passed against http://localhost:3000

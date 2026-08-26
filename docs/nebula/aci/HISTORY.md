@@ -19,6 +19,7 @@ ACI-001 was issued twice. The second (authoritative-path) instruction superseded
 | ACI-007 | [ACI-007.md](ACI-007.md) | Governance alignment | Stored during ACI-007 |
 | ACI-008 (Live AI) | [ACI-008.md](ACI-008.md) | Live AI content generation | Stored during the product slice |
 | ACI-008 (reconciliation) | [ACI-008_GOVERNANCE_RECONCILIATION.md](ACI-008_GOVERNANCE_RECONCILIATION.md) | Traceability reconciliation | Stored during reconciliation; does not replace Live AI ACI-008 |
+| ACI-009 | [ACI-009.md](ACI-009.md) | Live AI performance analysis/recommendations | Stored during the product slice |
 
 **Still missing (not fabricated):**
 

@@ -32,7 +32,7 @@ Effective Goal is `COALESCE(content_items.goal_id, sources.goal_id)`.
 | --- | --- |
 | `goals` | Name, metric, starting/target values, status. Progress is computed. |
 | `metrics` | Per-publication results. Manual in this product; platform collection refused. |
-| `recommendations` | Stored analysis with evidence JSON and analysis-mode boundary |
+| `recommendations` | Stored analysis with evidence JSON and analysis-mode boundary (`deterministic_mock` or `live_ai`) |
 
 ## Campaigns (ACI-006)
 
@@ -57,6 +57,5 @@ The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the 
 - Auth users/sessions
 - Encrypted secrets storage
 - Live Meta Graph payloads or platform analytics
-- Live AI planning or analysis (deterministic boundaries; content generation is separate)
 - Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics

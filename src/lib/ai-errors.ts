@@ -6,6 +6,13 @@ export type AiFailureCode =
   | "malformed"
   | "generation_failed";
 
+export type AiCompleteSuccess = {
+  ok: true;
+  text: string;
+  provider: string;
+  model: string;
+};
+
 export type AiGenerateSuccess = {
   ok: true;
   title: string;
@@ -21,6 +28,7 @@ export type AiGenerateFailure = {
   status: number;
 };
 
+export type AiCompleteResult = AiCompleteSuccess | AiGenerateFailure;
 export type AiGenerateResult = AiGenerateSuccess | AiGenerateFailure;
 
 export function failure(
@@ -50,7 +58,7 @@ export function classifyHttpFailure(status: number, providerLabel: string): AiGe
   }
   return failure(
     "generation_failed",
-    `${providerLabel} could not generate a draft (HTTP ${status}).`,
+    `${providerLabel} could not complete the AI request (HTTP ${status}).`,
     502
   );
 }

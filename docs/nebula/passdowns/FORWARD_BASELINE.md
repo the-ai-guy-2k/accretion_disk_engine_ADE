@@ -1,21 +1,21 @@
-# Forward baseline (post reconciliation)
+# Forward baseline (post ACI-009)
 
 **Date:** 2026-08-26  
-**Git:** last product-code commit `014835b` on `deployable` / `main` / `feature/aci-008`. Reconciliation documentation is committed after that tip; no further product-code change.
+**Git:** ACI-009 live AI analytics on `feature/aci-009`, merged to `deployable` after validation.
 
 ## Statement
 
-> **The validated ADE product and governance baseline from which the next product ACI will proceed is `deployable` at last product-code commit `014835b`, plus the governance reconciliation overlay: localhost ADE Hub with Source → Draft (mock/manual **and** live AI) → Review/Approval → mock Facebook queue, plus Goals, manual results, deterministic Intelligence, Campaigns/plans, SQLite schema v5, and the Nebula ACI/ACR overlay through ACI-007 plus the live-AI ACI-008 records.**
+> **The validated ADE product and governance baseline from which the next product ACI will proceed is `deployable` after ACI-009: localhost ADE Hub with Source → Draft (mock/manual and live AI) → Review/Approval → mock Facebook queue, plus Goals, Campaigns/plans, manual results, deterministic rankings, live AI analysis/recommendations, SQLite schema v5, and the Nebula ACI/ACR overlay through ACI-009.**
 
-This reconciliation did **not** add or remove product capability.
+Live AI content generation remains the ACI-008 product slice. ACI-009 added analysis/recommendations; it did not rebuild generation.
 
-## QEN numbering note
+## Numbering note
 
-QEN directed that the next product capability after this reconciliation would be **Live AI Content Generation as ACI-009**, and that it must not be implemented in this slice.
+Two QEN instructions used ACI-008 (Live AI generation, then governance reconciliation). Both records remain. QEN issued **ACI-009 as live AI analytics**, not a second generation ACI. That is not a numbering collision.
 
-That capability is **already present** on this baseline (prior ACI-008 product slice, live-validated). ACI-009, if issued, should confirm or delta that existing path. It should not rebuild ADE or treat live generation as unimplemented.
+Historical reconciliation text said QEN might number generation as ACI-009; that did not happen. Generation stays ACI-008.
 
 ## Next CAE default
 
-`feature/aci-009` → validation → `deployable`  
+`feature/aci-010` → validation → `deployable`  
 Do not treat unvalidated feature branches as release truth.

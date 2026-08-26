@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "ai": {
+    "configured": true,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "ready": true,
+    "purpose": "content_generation_and_analytics",
+    "analyticsLive": true,
+    "unavailableReason": null
+  }
+}

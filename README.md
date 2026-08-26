@@ -30,8 +30,8 @@ Implemented loop through ACI-006 also includes **Goals → Campaigns → Decisio
 | Content associated with a Goal | Working |
 | Campaigns (plan + multi-draft from sources) | Working |
 | Manual publication results | Working |
-| Analytics / Intelligence (deterministic) | Working |
-| Live AI-assisted analysis / recommendations | Not implemented (deterministic only) |
+| Analytics / Intelligence (deterministic rankings + Goal progress) | Working |
+| Live AI-assisted analysis / recommendations | Working |
 | Scheduling | Not implemented (queue only) |
 | Real Facebook/Meta publishing | Not implemented (mock adapter only) |
 | Platform-collected analytics | Not implemented (manual entry only) |
@@ -77,6 +77,7 @@ npm run validate:aci004
 npm run validate:aci005
 npm run validate:aci006
 npm run validate:aci008
+npm run validate:aci009
 ```
 
 Production-style local run after `npm run build`:
@@ -97,15 +98,15 @@ See [docs/data-model.md](docs/data-model.md) and the Nebula record [docs/nebula/
 
 Variable **names** are listed in `.env.example`. Do not put secrets in Git.
 
-**Live AI content generation** (Create → Generate with AI) uses:
+**Live AI content generation** (Create → Generate with AI) and **live AI analytics** (Intelligence → Analyze with AI) use the same server-side credentials:
 
 - `ADE_AI_PROVIDER` (default `openai`)
-- `ADE_AI_API_KEY` (required for live generation; OpenAI also accepts `OPENAI_API_KEY` if this is empty)
+- `ADE_AI_API_KEY` (required for live generation and live analysis; OpenAI also accepts `OPENAI_API_KEY` if this is empty)
 - `ADE_AI_MODEL` (default `gpt-4o-mini`)
 - `ADE_AI_BASE_URL` (default `https://api.openai.com/v1`)
 - `ADE_AI_TIMEOUT_MS` (default `45000`)
 
-Restart ADE after changing credentials. The Hub still starts without them; Generate with AI then shows an unconfigured state and mock/manual drafts still work. Meta variables are not required for the mock Facebook path. Intelligence/analytics do **not** use the live AI provider in this slice.
+Restart ADE after changing credentials. The Hub still starts without them; Generate with AI and Analyze with AI then show an unconfigured state. Mock/manual drafts and deterministic analytics still work. Meta variables are not required for the mock Facebook path. Publication results remain **manually entered**; ADE does not collect Facebook/Meta analytics.
 
 ## Directory structure
 
@@ -156,8 +157,8 @@ Do not treat unvalidated feature branches as the validated ADE state.
 
 - Localhost MVP, not the full product intent
 - No authentication
-- Live AI is for **content drafts only**; Intelligence/analytics remain deterministic
+- Live AI drafts (Create) and live AI analysis (Intelligence) when credentials are configured; deterministic analytics remain the ranking/progress baseline
 - No live Facebook publish, scheduling calendar, or platform analytics
-- Manual metrics and deterministic recommendations are local decision support only
+- Manual metrics are operator-entered; they are not Meta-supplied numbers
 - Requires Node with `node:sqlite` (22.5+)
 - Default bind is localhost port 3000

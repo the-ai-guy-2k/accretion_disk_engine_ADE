@@ -41,8 +41,8 @@ export function aiPublicStatus() {
     provider: configured ? aiProviderId() : aiProviderId(),
     model: configured ? aiModel() : aiModel(),
     ready: configured && aiProviderId() === "openai",
-    purpose: "content_generation" as const,
-    analyticsLive: false as const,
+    purpose: "content_generation_and_analytics" as const,
+    analyticsLive: configured && aiProviderId() === "openai",
     unavailableReason: configured
       ? aiProviderId() === "openai"
         ? null

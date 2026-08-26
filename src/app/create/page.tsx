@@ -203,7 +203,7 @@ function CreateInner() {
         {ai?.ready ? (
           <div className="banner">
             Live AI content generation is configured ({ai.provider} / {ai.model}).
-            Intelligence/analytics still use deterministic analysis, not live AI.
+            The same credentials can be used on Intelligence for live AI analysis.
           </div>
         ) : (
           <div className="banner">

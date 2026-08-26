@@ -1,0 +1,7 @@
+npm test
+15 passed, 0 failed (2026-08-26)
+
+Includes tests/ai-analysis.test.mjs:
+- analysis system prompt forbids invented metrics
+- parseAnalysisJson drops unknown publication ids
+- missing credentials detected without a live analysis call

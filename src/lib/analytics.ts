@@ -11,17 +11,20 @@ import {
 import { getPublication } from "@/lib/workflow";
 import {
   HIERARCHY,
+  buildDeterministicRecommendation,
   classifyMaterialKind,
   materialKindLabel,
   metricLabel,
   rankBy,
-  runAnalysis,
   scoreMetrics,
   towardGoalValue,
   type AnalysisInput,
   type MetricMap,
+  type RecommendationDraft,
   type ScoredPublication
 } from "@/lib/analytics-logic";
+import { analyzePerformanceWithAi } from "@/lib/ai-analysis";
+import { throwIfCompleteFailed } from "@/lib/ai-provider";
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -167,6 +170,8 @@ function scorePublicationRow(row: Record<string, unknown>, targetMetric?: string
     contentId: Number(row.content_id),
     sourceId: row.source_id == null ? null : Number(row.source_id),
     goalId: row.goal_id == null ? null : Number(row.goal_id),
+    campaignId: row.campaign_id == null ? null : Number(row.campaign_id),
+    campaignTitle: row.campaign_title == null ? null : String(row.campaign_title),
     title: String(row.content_title || ""),
     sourceTitle: String(row.source_title || ""),
     sourceType: String(row.source_type || ""),
@@ -186,11 +191,13 @@ export function analyticsSnapshot(goalId?: number | null) {
   const published = db
     .prepare(
       `SELECT p.*, c.title AS content_title, c.source_id AS source_id, c.is_test AS is_test,
+              c.campaign_id AS campaign_id, camp.title AS campaign_title,
               COALESCE(c.goal_id, s.goal_id) AS goal_id, s.title AS source_title,
               s.source_type AS source_type, s.is_test AS source_is_test
        FROM publications p
        JOIN content_items c ON c.id = p.content_id
        LEFT JOIN sources s ON s.id = c.source_id
+       LEFT JOIN campaigns camp ON camp.id = c.campaign_id
        WHERE p.status = ?
        ORDER BY p.id DESC`
     )
@@ -262,19 +269,42 @@ function analysisInputFromSnapshot(snapshot: ReturnType<typeof analyticsSnapshot
   };
 }
 
-export async function analyzeAndStore(goalId?: number | null, isTest = false) {
+export async function analyzeAndStore(
+  goalId?: number | null,
+  isTest = false,
+  mode: "deterministic" | "live_ai" = "deterministic"
+) {
   const snapshot = analyticsSnapshot(goalId);
-  const draft = await runAnalysis(analysisInputFromSnapshot(snapshot));
+  const input = analysisInputFromSnapshot(snapshot);
+  const baseline = buildDeterministicRecommendation(input);
+  let draft: RecommendationDraft = baseline;
+  if (mode === "live_ai") {
+    const live = await analyzePerformanceWithAi({ analysis: input, baseline });
+    throwIfCompleteFailed(live);
+    if (!live.draft) {
+      throw new WorkflowError("AI analysis did not return a recommendation. Deterministic analytics remain available.", 502);
+    }
+    draft = live.draft;
+  }
   const stamp = nowIso();
+  const campaignIds = [
+    ...new Set(
+      input.publications
+        .map((item) => item.campaignId)
+        .filter((id): id is number => typeof id === "number" && id > 0)
+    )
+  ];
+  const campaignId = campaignIds.length === 1 ? campaignIds[0] : null;
   const result = getDb()
     .prepare(
       `INSERT INTO recommendations (
-         goal_id, summary, action_hint, observed, why_it_matters, evidence_json,
+         goal_id, campaign_id, summary, action_hint, observed, why_it_matters, evidence_json,
          analysis_mode, analysis_boundary_note, is_test, created_at, updated_at
-       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       snapshot.goal ? Number(snapshot.goal.id) : null,
+      campaignId,
       draft.summary,
       draft.action,
       draft.observed,
@@ -288,7 +318,13 @@ export async function analyzeAndStore(goalId?: number | null, isTest = false) {
     );
   return {
     recommendation: getRecommendation(Number(result.lastInsertRowid)),
-    snapshot
+    snapshot,
+    deterministicBaseline: {
+      observed: baseline.observed,
+      whyItMatters: baseline.whyItMatters,
+      action: baseline.action,
+      mode: baseline.mode
+    }
   };
 }
 

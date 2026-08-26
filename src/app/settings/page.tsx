@@ -28,11 +28,11 @@ export default function SettingsPage() {
       <div className="panel" style={{ marginTop: "1rem" }}>
         <h2>Environment variable names</h2>
         <p className="muted">
-          AI content generation uses <code>ADE_AI_API_KEY</code> (or{" "}
-          <code>OPENAI_API_KEY</code> for the OpenAI provider). Secret values are
-          not displayed. Intelligence/analytics remain deterministic until a later
-          ACI. Copy <code>.env.example</code> to <code>.env.local</code> and restart
-          ADE after changing credentials.
+          Live AI content generation and live AI performance analysis both use{" "}
+          <code>ADE_AI_API_KEY</code> (or <code>OPENAI_API_KEY</code> for the OpenAI
+          provider). Secret values are not displayed. Deterministic analytics remain
+          available if live AI is not configured. Copy <code>.env.example</code> to{" "}
+          <code>.env.local</code> and restart ADE after changing credentials.
         </p>
         <ul>
           {ENV_NAMES.map((name) => (

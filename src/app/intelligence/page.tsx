@@ -22,17 +22,34 @@ type Recommendation = {
   analysis_mode: string;
   analysis_boundary_note: string;
   goal_id: number | null;
+  campaign_id: number | null;
   evidence: Evidence[];
   liveAiUsed: boolean;
   is_test: number;
+};
+
+type AiStatus = {
+  configured: boolean;
+  ready: boolean;
+  provider: string;
+  model: string;
+  analyticsLive: boolean;
+  unavailableReason: string | null;
 };
 
 export default function IntelligencePage() {
   const [goals, setGoals] = useState<{ id: number; title: string }[]>([]);
   const [goalId, setGoalId] = useState("");
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
+  const [baseline, setBaseline] = useState<{
+    observed: string;
+    whyItMatters: string;
+    action: string;
+  } | null>(null);
   const [banner, setBanner] = useState("");
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState<"deterministic" | "live_ai" | "">("");
+  const [ai, setAi] = useState<AiStatus | null>(null);
 
   async function load(id = goalId) {
     const query = id ? `?goal_id=${id}` : "";
@@ -53,6 +70,7 @@ export default function IntelligencePage() {
     setGoals(goalData.goals);
     setRecommendation(intelData.recommendation);
     setBanner(intelData.banner);
+    if (intelData.ai) setAi(intelData.ai);
     setError("");
   }
 
@@ -61,22 +79,26 @@ export default function IntelligencePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function analyze() {
+  async function analyze(mode: "deterministic" | "live_ai") {
+    setBusy(mode);
     const res = await fetch("/api/intelligence/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         goal_id: goalId ? Number(goalId) : undefined,
-        is_test: true
+        is_test: true,
+        mode
       })
     });
     const data = await res.json();
+    setBusy("");
     if (!data.ok) {
-      setError(data.error);
+      setError(data.error || "Analysis failed. Stored metrics and deterministic analytics were not changed.");
       return;
     }
     setRecommendation(data.recommendation);
     setBanner(data.banner);
+    setBaseline(data.deterministicBaseline || null);
     setError("");
   }
 
@@ -85,10 +107,14 @@ export default function IntelligencePage() {
       <LoopStrip current="Results" />
       <h1>Intelligence</h1>
       <p className="lede">
-        What ADE observed, why it matters, and the recommended next action — only from
-        persisted Goal, content, and result evidence.
+        Observed evidence, meaning, and recommended next action. Deterministic
+        rankings stay available. Live AI adds interpretation from the same stored
+        metrics — it does not invent platform analytics.
       </p>
       <div className="banner">{banner || "Analysis has not been run yet."}</div>
+      {ai && !ai.analyticsLive ? (
+        <p className="muted">{ai.unavailableReason}</p>
+      ) : null}
       <div className="panel form-grid">
         <label>
           Goal
@@ -103,25 +129,47 @@ export default function IntelligencePage() {
         </label>
         {error ? <p className="error">{error}</p> : null}
         <div className="actions">
-          <button className="primary" type="button" onClick={() => void analyze()}>
-            Analyze from persisted evidence
+          <button
+            type="button"
+            disabled={busy !== ""}
+            onClick={() => void analyze("deterministic")}
+          >
+            {busy === "deterministic" ? "Computing…" : "Compute baseline"}
+          </button>
+          <button
+            className="primary"
+            type="button"
+            disabled={busy !== "" || !ai?.analyticsLive}
+            onClick={() => void analyze("live_ai")}
+          >
+            {busy === "live_ai" ? "Analyzing…" : "Analyze with AI"}
           </button>
           <Link href="/analytics">Open Analytics</Link>
         </div>
+        <p className="muted">
+          Recommendations are advisory. ADE does not auto-approve or auto-publish.
+        </p>
       </div>
       {recommendation ? (
         <div className="panel" style={{ marginTop: "1rem" }}>
           <p className="placeholder-flag">
-            {recommendation.liveAiUsed ? "Live AI" : "Deterministic / mock analysis"}
+            {recommendation.liveAiUsed ? "Live AI analysis" : "Deterministic baseline"}
             {recommendation.is_test ? " · TEST DATA" : ""}
             {recommendation.goal_id ? ` · Goal #${recommendation.goal_id}` : ""}
+            {recommendation.campaign_id ? ` · Campaign #${recommendation.campaign_id}` : ""}
           </p>
           <h2>Observed</h2>
           <p>{recommendation.observed}</p>
-          <h2>Why it matters</h2>
+          <h2>Meaning</h2>
           <p>{recommendation.why_it_matters}</p>
           <h2>Recommended next action</h2>
           <p>{recommendation.action_hint}</p>
+          {baseline && recommendation.liveAiUsed ? (
+            <>
+              <h2>Deterministic baseline (preserved)</h2>
+              <p className="muted">{baseline.observed}</p>
+            </>
+          ) : null}
           <h2>Evidence</h2>
           {recommendation.evidence?.length ? (
             <ul className="evidence-list">

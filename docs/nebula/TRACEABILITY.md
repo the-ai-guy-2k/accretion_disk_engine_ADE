@@ -1,8 +1,8 @@
 # ADE ACI ↔ ACR traceability
 
 **Reconciled:** 2026-08-26  
-**Product code:** not modified in this reconciliation.  
-**Rule:** ACI-NNN ↔ ACR-NNN. A second QEN instruction also used number **008**; both records are kept.
+**Product code:** ACI-009 live AI analytics on `feature/aci-009` (merged to `deployable` after validation).  
+**Rule:** ACI-NNN ↔ ACR-NNN. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
 
 Classification of ACI files: **ARCHIVED** (stored at time of the slice) | **RECOVERED** (reconstructed later from CAE chat; not an original QEN package) | **PARTIAL** | **MISSING**.
 
@@ -20,6 +20,7 @@ Classification of ACR files: **COMPLETE** (written at slice completion with cont
 | ACI-007 | `docs/nebula/aci/ACI-007.md` | ARCHIVED | `docs/nebula/acr/ACR-007.md` | COMPLETE | Alignment report + `docs/nebula/artifacts/aci-007-evidence/` | Nebula tree, `deployable`, recovered ACI/ACR overlay. ACR-007 describes schema **v4** at that time |
 | ACI-008 (Live AI, earlier QEN slice) | `docs/nebula/aci/ACI-008.md` | ARCHIVED | `docs/nebula/acr/ACR-008.md` | COMPLETE | Live AI report + `docs/nebula/artifacts/aci-008-evidence/` + `validate:aci008` | Source-grounded live AI drafts; human review preserved |
 | ACI-008 (this reconciliation) | `docs/nebula/aci/ACI-008_GOVERNANCE_RECONCILIATION.md` | ARCHIVED | `docs/nebula/acr/ACR-008_RECONCILIATION.md` | COMPLETE | This matrix + `ADE_ACI_008_GOVERNANCE_RECONCILIATION_REPORT.md` | Governance truth; no product change |
+| ACI-009 | `docs/nebula/aci/ACI-009.md` | ARCHIVED | `docs/nebula/acr/ACR-009.md` | COMPLETE | Live AI analytics report + `docs/nebula/artifacts/aci-009-evidence/` + `validate:aci009` | Live AI analysis/recommendations on persisted manual metrics; deterministic analytics preserved |
 
 ## Holes
 
@@ -28,6 +29,6 @@ Classification of ACR files: **COMPLETE** (written at slice completion with cont
 3. QEN Operator Build Guide is not a file in this ADE repository. **KNOWN HISTORICAL EVIDENCE GAP.**
 4. ACI-005 has no separate remote commit. **KNOWN HISTORICAL EVIDENCE GAP** (git history only).
 5. Two different QEN instructions used ACI-008. Both are archived; neither is deleted.
-6. QEN’s intended next product ACI (**ACI-009 Live AI Content Generation**) is **already implemented** on `deployable` as the earlier ACI-008 product slice. Do not treat it as missing capability.
+6. QEN later issued **ACI-009 Live AI Performance Analytics** (this slice). It is **not** a second Live AI Content Generation ACI. Generation remains ACI-008 / ACR-008. Do not treat 009 as a numbering collision with generation.
 
 All listed product capabilities exist on `deployable` (and matching `main`). None exist only on a stray branch.

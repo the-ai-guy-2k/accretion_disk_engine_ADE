@@ -45,6 +45,8 @@ export type ScoredPublication = {
   contentId: number;
   sourceId: number | null;
   goalId: number | null;
+  campaignId: number | null;
+  campaignTitle: string | null;
   title: string;
   sourceTitle: string;
   sourceType: string;
@@ -276,21 +278,4 @@ export function buildDeterministicRecommendation(input: AnalysisInput): Recommen
 
 function capitalize(value: string): string {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
-}
-
-export function liveAiConfigured(): boolean {
-  return Boolean(process.env.ADE_AI_API_KEY?.trim());
-}
-
-export async function runAnalysis(input: AnalysisInput): Promise<RecommendationDraft> {
-  const draft = buildDeterministicRecommendation(input);
-  if (!liveAiConfigured()) {
-    return draft;
-  }
-  return {
-    ...draft,
-    mode: "deterministic_mock",
-    boundaryNote:
-      `${draft.boundaryNote} ADE_AI_API_KEY is set, but no live AI analyzer is wired in this slice; deterministic analysis was used.`
-  };
 }

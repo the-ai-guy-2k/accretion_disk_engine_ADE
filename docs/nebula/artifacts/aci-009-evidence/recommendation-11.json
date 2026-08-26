@@ -1,0 +1,32 @@
+{
+  "id": 11,
+  "goal_id": 9,
+  "campaign_id": 5,
+  "analysis_mode": "live_ai",
+  "liveAiUsed": true,
+  "is_test": 1,
+  "observed": "Client-result content gained 9 Audience Network; informational content gained 1 Audience Network.",
+  "why_it_matters": "Client-result content is significantly more effective in driving Audience Network growth compared to informational content.",
+  "action_hint": "Consider producing another piece based on similar source material to the stronger client-result content.",
+  "evidence": [
+    {
+      "publicationId": 21,
+      "contentId": 26,
+      "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source for AI analysis",
+      "metric": "audience_network_gained",
+      "value": 1,
+      "captureMethod": "manual"
+    },
+    {
+      "publicationId": 20,
+      "contentId": 25,
+      "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source for AI analysis",
+      "metric": "audience_network_gained",
+      "value": 9,
+      "captureMethod": "manual"
+    }
+  ],
+  "provider": "openai",
+  "model": "gpt-4o-mini-2024-07-18",
+  "note": "Stored metric values 9 and 1 match operator-entered TEST DATA. These are not Facebook/Meta-collected analytics."
+}

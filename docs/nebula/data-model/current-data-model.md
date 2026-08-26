@@ -42,7 +42,7 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 | `channels` | Seeded mock Facebook Channel 01 (`adapter_id = manual_facebook`) |
 | `publications` | Queue: `PENDING` / `READY` / `PUBLISHED` / `FAILED` |
 | `metrics` | Manual results on a publication (`capture_method = manual`) |
-| `recommendations` | Stored deterministic analysis |
+| `recommendations` | Stored analysis (`deterministic_mock` or `live_ai`) with evidence JSON and analysis-mode boundary |
 | `audience_network_events` | Placeholder — unused by workflow |
 | `leads` | Placeholder — unused by workflow |
 | `opportunities` | Placeholder — unused by workflow |
@@ -56,4 +56,4 @@ Effective Goal on content: `COALESCE(content_items.goal_id, sources.goal_id)`.
 
 ## Not in v5
 
-Auth, encrypted secrets, live Meta payloads, live AI plan/analysis, calendar schedule rows, fabricated audience/business metrics.
+Auth, encrypted secrets, live Meta payloads, calendar schedule rows, fabricated audience/business metrics. Live AI generation and analysis reuse existing `content_items` and `recommendations` columns; they are not extra tables.

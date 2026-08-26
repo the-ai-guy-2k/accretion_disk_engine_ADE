@@ -1,6 +1,9 @@
 export const LIVE_AI_BANNER =
   "ADE LIVE AI GENERATION — this draft was produced with an AI provider from ADE source material. It is a draft for human review, not established truth.";
 
+export const LIVE_AI_ANALYSIS_BANNER =
+  "ADE LIVE AI ANALYSIS — interpretation was produced by an AI provider from persisted ADE Goal, content, and operator-entered metrics. It is advisory. ADE did not invent missing metrics or platform analytics.";
+
 export const FORBIDDEN_INVENTIONS = [
   "customers",
   "results",
@@ -81,7 +84,7 @@ export function buildUserPrompt(source: SourceGrounding, direction: Required<Gen
   return lines.join("\n");
 }
 
-export function parseGeneratedJson(raw: string): { title: string; body: string } | null {
+export function extractJsonObject(raw: string): Record<string, unknown> | null {
   const trimmed = String(raw || "").trim();
   if (!trimmed) return null;
   const candidates = [trimmed];
@@ -91,13 +94,59 @@ export function parseGeneratedJson(raw: string): { title: string; body: string }
   if (objectMatch?.[0]) candidates.push(objectMatch[0]);
   for (const candidate of candidates) {
     try {
-      const parsed = JSON.parse(candidate) as { title?: unknown; body?: unknown };
-      const title = clip(parsed.title, 180);
-      const body = clip(parsed.body, 8000);
-      if (title && body) return { title, body };
+      const parsed = JSON.parse(candidate) as unknown;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>;
+      }
     } catch {
       // try next candidate
     }
   }
   return null;
+}
+
+export function parseGeneratedJson(raw: string): { title: string; body: string } | null {
+  const parsed = extractJsonObject(raw);
+  if (!parsed) return null;
+  const title = clip(parsed.title, 180);
+  const body = clip(parsed.body, 8000);
+  if (title && body) return { title, body };
+  return null;
+}
+
+export function buildAnalysisSystemPrompt(): string {
+  return [
+    "You analyze social-content performance for the Accretion Disk Engine (ADE).",
+    "You receive only persisted ADE evidence. Distinguish Observed (facts in the pack) from Meaning (interpretation).",
+    "Do not invent metrics, customers, revenue, endorsements, partnerships, or business outcomes that are not in the evidence pack.",
+    "Do not claim Facebook or Meta collected these numbers unless captureMethod is platform.",
+    "Recommendations are advisory. The operator decides.",
+    "Cite only publicationId values that appear in the evidence pack.",
+    "Respond with JSON only: {\"observed\": string, \"meaning\": string, \"action\": string, \"citedPublicationIds\": number[]}.",
+    "Keep each string concise and specific to the supplied content titles and metric values."
+  ].join(" ");
+}
+
+export function parseAnalysisJson(
+  raw: string,
+  allowedPublicationIds: Set<number>
+): { observed: string; meaning: string; action: string; citedPublicationIds: number[] } | null {
+  const parsed = extractJsonObject(raw);
+  if (!parsed) return null;
+  const observed = String(parsed.observed ?? "").trim();
+  const meaning = String(parsed.meaning ?? parsed.whyItMatters ?? "").trim();
+  const action = String(parsed.action ?? parsed.recommendedNextAction ?? "").trim();
+  if (!observed || !meaning || !action) return null;
+  const citedRaw = Array.isArray(parsed.citedPublicationIds)
+    ? parsed.citedPublicationIds
+    : [];
+  const citedPublicationIds = citedRaw
+    .map((value) => Number(value))
+    .filter((id) => Number.isInteger(id) && allowedPublicationIds.has(id));
+  return {
+    observed: observed.slice(0, 2000),
+    meaning: meaning.slice(0, 2000),
+    action: action.slice(0, 2000),
+    citedPublicationIds
+  };
 }
