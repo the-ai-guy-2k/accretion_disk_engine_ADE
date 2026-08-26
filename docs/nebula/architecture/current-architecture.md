@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** application code on `deployable` at `014835b` (through live AI content generation).  
+**Authority:** application code on `deployable` (product commit `014835b`; current branch tip includes later governance docs).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.

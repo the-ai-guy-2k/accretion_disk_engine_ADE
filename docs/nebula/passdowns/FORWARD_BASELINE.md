@@ -1,11 +1,11 @@
 # Forward baseline (post reconciliation)
 
 **Date:** 2026-08-26  
-**Git:** `deployable` = `main` = `feature/aci-008` = `014835b65333eaea6a3541cef923e39081bd1b65`
+**Git:** last product-code commit `014835b` on `deployable` / `main` / `feature/aci-008`. Reconciliation documentation is committed after that tip; no further product-code change.
 
 ## Statement
 
-> **The validated ADE product and governance baseline from which the next product ACI will proceed is commit `014835b` on `deployable`: localhost ADE Hub with Source → Draft (mock/manual **and** live AI) → Review/Approval → mock Facebook queue, plus Goals, manual results, deterministic Intelligence, Campaigns/plans, SQLite schema v5, and the Nebula ACI/ACR overlay through ACI-007 plus the live-AI ACI-008 records.**
+> **The validated ADE product and governance baseline from which the next product ACI will proceed is `deployable` at last product-code commit `014835b`, plus the governance reconciliation overlay: localhost ADE Hub with Source → Draft (mock/manual **and** live AI) → Review/Approval → mock Facebook queue, plus Goals, manual results, deterministic Intelligence, Campaigns/plans, SQLite schema v5, and the Nebula ACI/ACR overlay through ACI-007 plus the live-AI ACI-008 records.**
 
 This reconciliation did **not** add or remove product capability.
 

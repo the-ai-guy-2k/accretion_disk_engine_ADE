@@ -81,7 +81,8 @@ Every implemented capability above has a governance record. The hole is **qualit
 
 | Item | Value |
 | --- | --- |
-| Commit | `014835b65333eaea6a3541cef923e39081bd1b65` |
+| Commit (product) | `014835b65333eaea6a3541cef923e39081bd1b65` live AI |
+| Commit (this overlay) | reconciliation documentation on `deployable` after `014835b` (no `src/` change) |
 | Message | Add source-grounded live AI draft generation so operators can create reviewable posts without leaving ADE. |
 | Tracking | `origin/deployable` |
 
@@ -95,7 +96,7 @@ Git history was not rewritten.
 
 ## 5. `main` vs `deployable`
 
-`main` and `deployable` are the **same commit** `014835b`. `main` was fast-forwarded only. Neither was force-updated.
+`main` and `deployable` match. `main` was fast-forwarded only. Neither was force-updated.
 
 Going forward, **validated promotion truth is `deployable`**. `main` is the historical integration line and currently happens to match.
 
@@ -178,7 +179,7 @@ Governance and implementation **agreed** after correcting the architecture fileâ
 
 ## 11. Forward Baseline
 
-> **The validated ADE product and governance baseline from which the next product ACI will proceed is `014835b` on `deployable`.**
+> **The validated ADE product and governance baseline from which the next product ACI will proceed is `deployable` at last product-code commit `014835b`, with this reconciliation overlay applied.**
 
 That baseline includes Hub, sources, mock and live-AI drafts, review/approval, mock Facebook queue, goals, manual metrics, deterministic intelligence, campaigns/plans, provenance, SQLite v5, and Nebula ACI/ACR records.
 
