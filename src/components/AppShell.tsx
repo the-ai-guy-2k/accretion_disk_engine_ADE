@@ -69,11 +69,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           {pathname.startsWith("/dgix") ? (
             <>
               <strong>
-                Campaign Package → Review → Approval → Distribution → Measurement →
+                Campaign Package → Review → Authorization → Distribution → Measurement →
                 Intelligence → Results Package
               </strong>
-              DGIX uses the ADE engine. AI assists. You decide. Unimplemented stages
-              are labeled honestly.
+              Client QEN prepares. You authorize. DGIX executes later. AI assists. You decide.
             </>
           ) : (
             <>

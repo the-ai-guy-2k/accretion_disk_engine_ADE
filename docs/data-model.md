@@ -1,10 +1,12 @@
-# ADE data model (schema v6)
+# ADE data model (schema v7)
 
 Nebula copy: [`docs/nebula/data-model/current-data-model.md`](nebula/data-model/current-data-model.md). SQL source of truth remains `src/lib/schema.sql`.
 
 Engine: **SQLite** via Node `node:sqlite`.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
 SQL source of truth: `src/lib/schema.sql`. Runtime column upgrades: `src/lib/migrate.ts`.
+
+Schema v7 adds ACP authorization columns on `dgix_acp_intakes` (`acp_profile`, `execution_status`, `decision_at`, `decision_by`) and remaps review-state names. Original ACP JSON is not rewritten. Existing files are upgraded on startup. `initialized_at` is not reset.
 
 Schema v6 adds DGIX `dgix_missions` and `dgix_acp_intakes` for ACP v1 intake/review. Existing files are upgraded on startup. `initialized_at` is not reset.
 
@@ -54,16 +56,16 @@ Foreign keys are enabled. IDs are integers. Timestamps are ISO-8601 text.
 
 The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set. Campaigns, selected sources, plan items, drafts, Goal/content links, and imported Campaign Packages survive restart.
 
-## DGIX intake (ACI-DGIX-013, schema v6)
+## DGIX intake and authorization (ACI-DGIX-013/014, schema v7)
 
 | Table | Role |
 | --- | --- |
-| `dgix_missions` | Minimum Mission row for an imported ACP (title, business, platform, objective, intake review status). `goal_id` / `campaign_id` stay null until a later governed materialization. |
-| `dgix_acp_intakes` | Stored ACP v1 JSON, package identity, originating system, created/imported timestamps, review state. `execution_authorized` and `materialized` stay 0 on import. |
+| `dgix_missions` | Minimum Mission row for an imported ACP (title, business, platform, objective, intake/authorization status). `goal_id` / `campaign_id` stay null. |
+| `dgix_acp_intakes` | Stored ACP v1 JSON, package identity, originating system, created/imported timestamps, review state, Operator decision, execution-ready vs legacy profile. `execution_authorized` is set only by explicit authorize. `materialized` stays 0. |
 
-Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Import is not approval.
+Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Adapter boundary: [`docs/acp/ACP_ADAPTER_HANDOFF.md`](acp/ACP_ADAPTER_HANDOFF.md). Import is not approval. Authorization is not publishing.
 
-## Not in v6
+## Not in v7
 
 - Auth users/sessions
 - Encrypted secrets storage
@@ -71,4 +73,4 @@ Contract: [`docs/acp/ACP_V1.md`](acp/ACP_V1.md). Import is not approval.
 - Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics
 
-ACP materialization into ADE Goal/Campaign/Source/Draft records is not performed on import.
+ACP materialization into ADE Goal/Campaign/Source/Draft records is not performed on import or authorization.

@@ -1,11 +1,11 @@
-/** DGIX workspace orientation and ACP intake status. */
+/** DGIX workspace orientation, ACP intake, and Operator authorization status. */
 
 export const DGIX_SHORT = "DGIX";
 export const DGIX_FULL = "Distribution, Growth & Intelligence Exchange";
 export const DGIX_STATUS = "POST-MVP — IN DEVELOPMENT";
 
 export const DGIX_CONCEPT =
-  "Structured campaign/business intelligence enters ADE. The Operator reviews and authorizes execution. ADE distributes approved content through connected social platforms. ADE retrieves and evaluates performance evidence. ADE produces structured results intelligence that can be returned to the originating Client QEN or other intelligence source.";
+  "The Client QEN prepares an execution-ready Campaign Package. DGIX validates it, the Operator reviews exactly what will be sent and authorizes or rejects it, and a future platform adapter will execute and measure. DGIX does not regenerate the post and does not reconstruct the campaign as Standard ADE Goal, Campaign, Source, or Draft records.";
 
 export const DGIX_FLOW = [
   {
@@ -13,28 +13,28 @@ export const DGIX_FLOW = [
     label: "Campaign Package",
     availability: "implemented" as const,
     href: "/dgix#intake",
-    note: "ACP v1 intake is implemented. Import is Operator-controlled review, not approval or publishing."
+    note: "ACP v1 intake is implemented. Execution-ready packages carry publish-ready content. Import is not approval."
   },
   {
     id: "review",
     label: "Review",
-    availability: "ade_engine" as const,
-    href: "/review",
-    note: "Uses the existing ADE Review screen. Not a second review engine."
+    availability: "implemented" as const,
+    href: "/dgix#intake",
+    note: "DGIX Operator review of the imported ACP. The Operator sees destination, post type, final content, media/link, timing, objective, measurement, and provenance. ADE /review remains the Standard ADE engine."
   },
   {
     id: "approval",
     label: "Human Approval",
-    availability: "ade_engine" as const,
-    href: "/review",
-    note: "Mandatory. AI cannot skip this. ACP import does not approve content."
+    availability: "implemented" as const,
+    href: "/dgix#intake",
+    note: "Operator Authorization is implemented. Authorization means DGIX may later execute through a configured adapter. It is not Facebook publishing."
   },
   {
     id: "distribution",
     label: "Distribution",
     availability: "not_implemented" as const,
     href: "/publishing",
-    note: "Real platform distribution is not implemented. ADE currently has mock Facebook publishing only."
+    note: "Real platform distribution is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
   },
   {
     id: "measurement",
@@ -60,7 +60,10 @@ export const DGIX_FLOW = [
 ] as const;
 
 export const DGIX_IMPLEMENTED_CAPABILITIES = [
-  { name: "Campaign Package Intake", status: "IMPLEMENTED — Operator-controlled ACP v1 import and review" }
+  { name: "Campaign Package Intake", status: "IMPLEMENTED" },
+  { name: "ACP Validation", status: "IMPLEMENTED" },
+  { name: "Operator Review", status: "IMPLEMENTED" },
+  { name: "Operator Authorization", status: "IMPLEMENTED" }
 ] as const;
 
 export const DGIX_FUTURE_CAPABILITIES = [
@@ -92,19 +95,19 @@ export const DGIX_ORIENTATION = [
     key: "INPUT",
     question: "What campaign/business intelligence was supplied?",
     answer:
-      "ACP v1 intake is implemented. The Operator can import a structured Campaign Package. Automatic Client QEN connectivity is not implemented."
+      "ACP v1 intake is implemented. The Client QEN (or another producer) prepares the execution-ready package. Automatic Client QEN connectivity is not implemented."
   },
   {
     key: "DECISION",
     question: "What requires my approval?",
     answer:
-      "Imported packages require Operator review. Any later ADE content still requires approve/reject on Review. Import is not approval. DGIX does not auto-publish."
+      "The Operator reviews the final content and explicitly authorizes or rejects it. Import is not approval. Authorization is not Facebook publishing. DGIX does not ask the Operator to regenerate the post."
   },
   {
     key: "EXECUTION",
     question: "What approved activity is being distributed?",
     answer:
-      "Real Facebook distribution is not yet implemented. Approved items can still move through ADE's mock Facebook publishing workflow."
+      "Facebook Account Connection and real Facebook publishing are not yet implemented. An authorized ACP stops at AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
   },
   {
     key: "RESULT",
@@ -140,7 +143,7 @@ export const ADE_ENGINE_LINKS = [
 export const DGIX_MISSION_MODEL = {
   table: "dgix_missions",
   related: "dgix_acp_intakes",
-  schemaVersion: "6",
+  schemaVersion: "7",
   purpose:
-    "Minimum persistence for an imported ACP and its review state. Goal/Campaign FKs remain unused until a later governed materialization ACI."
+    "Persistence for an imported ACP, its review state, and Operator authorization. Goal/Campaign FKs remain unused. Authorization does not materialize Standard ADE records and does not call Facebook."
 } as const;

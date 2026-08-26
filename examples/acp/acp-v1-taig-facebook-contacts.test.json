@@ -9,10 +9,10 @@
   "objective": {
     "statement": "Generate 2 qualified TAIG client contacts through Facebook.",
     "measurementTarget": {
-      "metric": "leads_generated",
+      "metric": "qualified_client_contacts",
       "startingValue": 0,
       "targetValue": 2,
-      "unit": "qualified_contacts"
+      "unit": "contacts"
     },
     "intendedPlatforms": ["facebook"]
   },
@@ -38,24 +38,33 @@
     "originatingIntelligenceSource": "Social Engine Build QEN proving-scenario brief (TEST DATA)",
     "sourceEvidence": [
       {
-        "title": "ACI-DGIX-013 proving mission",
+        "title": "ACI-DGIX-014 execution-ready proving mission",
         "reference": "QEN instruction: Generate 2 qualified TAIG client contacts through Facebook",
-        "notes": "Demonstration artifact. Not Facebook insights. Not actual TAIG client records."
+        "notes": "Demonstration artifact. Not Facebook insights. Not actual TAIG client records. Objective is not achieved."
       }
     ],
-    "notes": "External artifact content. Not internally generated ADE evidence."
+    "notes": "External artifact content. Not internally generated ADE evidence. TEST DATA."
   },
   "executionIntent": {
-    "timingPreference": "Weekday morning if later executed. Timing is a preference only; ADE has no calendar scheduler.",
+    "timingPreference": "Publish when the Operator authorizes. Preference only; Facebook scheduling is not connected.",
     "restrictions": [
-      "Do not represent contacts as already generated.",
+      "TEST DATA. Do not represent contacts as already generated.",
       "Do not claim live Facebook distribution.",
-      "Human approval is required before any future publishing path."
+      "Human authorization is required. Authorization is not publishing."
     ],
-    "approvalRequirements": "human_approval_required"
+    "approvalRequirements": "human_authorization_required"
   },
   "measurementIntent": {
-    "signals": ["leads_generated", "meaningful_conversations"],
-    "notes": "Success is +2 qualified contacts, not vanity views. Platform-retrieved Facebook metrics are not part of this package."
+    "signals": ["qualified_client_contacts", "meaningful_conversations"],
+    "notes": "Success is +2 qualified client contacts, not vanity views. This target is not achieved. Platform-retrieved Facebook metrics are not part of this package."
+  },
+  "execution": {
+    "clientId": "TAIG",
+    "platform": "facebook",
+    "postType": "text",
+    "message": "TEST DATA. If you run a small operation and want a clear next step on using AI without the hype, TAIG can talk it through. Send a short note describing the problem you want help with. This is final publish-ready Facebook copy prepared by the originating system. It has not been posted.",
+    "link": "https://example.invalid/taig-test-contact",
+    "callToAction": "Send a short note describing the problem you want help with.",
+    "publishMode": "now"
   }
 }

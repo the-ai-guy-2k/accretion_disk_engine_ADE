@@ -24,6 +24,7 @@ ACI-001 was issued twice. The second (authoritative-path) instruction superseded
 | ACI-011 | [ACI-011.md](ACI-011.md) | MVP PAPEV and release baseline | Stored during PAPEV; **MVP PASS** |
 | ACI-DGIX-012 | [ACI-DGIX-012.md](ACI-DGIX-012.md) | DGIX Operator workspace foundation | Stored during the DGIX slice |
 | ACI-DGIX-013 | [ACI-DGIX-013.md](ACI-DGIX-013.md) | ACP v1 contract and intake | Stored during the DGIX slice |
+| ACI-DGIX-014 | [ACI-DGIX-014.md](ACI-DGIX-014.md) | Execution-ready ACP and Operator authorization | Stored during the DGIX slice |
 
 **Still missing (not fabricated):**
 

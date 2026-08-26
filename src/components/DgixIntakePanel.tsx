@@ -14,7 +14,9 @@ type IntakeSummary = {
   acpVersion: string;
   importedAt: string;
   reviewState: string;
+  reviewStateLabel: string;
   isTest: boolean;
+  executionReady: boolean;
   executionAuthorized: boolean;
   materializedIntoAde: boolean;
 };
@@ -100,9 +102,10 @@ export function DgixIntakePanel() {
     <div id="intake" className="panel" style={{ marginBottom: "1rem" }}>
       <h2>Campaign Package Intake</h2>
       <p>
-        Implemented. Paste ACP v1 JSON or choose a local <code>.json</code> file.
-        Automatic Client QEN connectivity is not implemented. Import is{" "}
-        <strong>not</strong> approval and does <strong>not</strong> publish.
+        Implemented. Paste an execution-ready ACP v1 JSON or choose a local{" "}
+        <code>.json</code> file. Automatic Client QEN connectivity is not implemented.
+        Import is <strong>not</strong> approval. Authorization is a later Operator
+        action and still does <strong>not</strong> publish.
       </p>
       <form className="form-grid" onSubmit={onSubmit}>
         <label>
@@ -143,7 +146,7 @@ export function DgixIntakePanel() {
             <tr>
               <th>Campaign</th>
               <th>Business</th>
-              <th>Review</th>
+              <th>State</th>
               <th>Authority</th>
             </tr>
           </thead>
@@ -158,9 +161,16 @@ export function DgixIntakePanel() {
                   </div>
                 </td>
                 <td>{item.clientBusinessId}</td>
-                <td>{item.reviewState.replaceAll("_", " ")}</td>
+                <td>
+                  {item.reviewStateLabel}
+                  <div className="muted">
+                    {item.executionReady ? "execution-ready" : "legacy ACP"}
+                  </div>
+                </td>
                 <td className="muted">
-                  {item.executionAuthorized ? "execution authorized" : "not approved for publishing"}
+                  {item.executionAuthorized
+                    ? "AUTHORIZED — PLATFORM EXECUTION NOT YET CONNECTED"
+                    : "not authorized"}
                   {item.materializedIntoAde ? " · ADE records created" : " · no ADE records created"}
                 </td>
               </tr>

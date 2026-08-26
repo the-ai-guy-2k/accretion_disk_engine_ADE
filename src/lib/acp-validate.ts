@@ -57,6 +57,24 @@ export type AcpSourceEvidence = {
   notes?: string;
 };
 
+export const ACP_POST_TYPES = ["text", "image"] as const;
+export const ACP_PUBLISH_MODES = ["now", "scheduled"] as const;
+
+export type AcpPostType = (typeof ACP_POST_TYPES)[number];
+export type AcpPublishMode = (typeof ACP_PUBLISH_MODES)[number];
+
+export type AcpExecution = {
+  clientId: string;
+  platform: string;
+  postType: AcpPostType;
+  message: string;
+  mediaReference?: AcpMediaRef;
+  link?: string;
+  callToAction?: string;
+  publishMode: AcpPublishMode;
+  scheduledAt?: string;
+};
+
 export type AcpPackage = {
   acpVersion: string;
   packageId: string;
@@ -90,6 +108,7 @@ export type AcpPackage = {
     signals: string[];
     notes?: string;
   };
+  execution?: AcpExecution;
 };
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -184,6 +203,86 @@ function stringList(value: unknown, path: string, issues: AcpIssue[], required: 
     issues.push({ path, message: `${path} must include at least one item.` });
   }
   return items;
+}
+
+function parseMediaRef(value: unknown, path: string, issues: AcpIssue[]): AcpMediaRef | undefined {
+  if (value == null || value === "") return undefined;
+  if (typeof value === "string" && value.trim()) {
+    return { kind: "description", value: value.trim() };
+  }
+  if (!isPlainObject(value)) {
+    issues.push({ path, message: `${path} must be text or { kind, value }.` });
+    return undefined;
+  }
+  const kind = reqString(value.kind, `${path}.kind`, issues) || "description";
+  const refValue = reqString(value.value, `${path}.value`, issues);
+  if (!refValue) return undefined;
+  return { kind, value: refValue };
+}
+
+function parseExecution(raw: unknown, issues: AcpIssue[]): AcpExecution | undefined {
+  if (raw == null) return undefined;
+  if (!isPlainObject(raw)) {
+    issues.push({
+      path: "execution",
+      message: "execution must be an object of publish-ready fields. DGIX will not infer it from other ACP sections."
+    });
+    return undefined;
+  }
+  const clientId = reqString(raw.clientId, "execution.clientId", issues);
+  const platform = reqString(raw.platform, "execution.platform", issues);
+  const postTypeRaw = reqString(raw.postType, "execution.postType", issues);
+  const postType = ACP_POST_TYPES.includes(postTypeRaw as AcpPostType)
+    ? (postTypeRaw as AcpPostType)
+    : null;
+  if (postTypeRaw && !postType) {
+    issues.push({
+      path: "execution.postType",
+      message: `execution.postType must be one of: ${ACP_POST_TYPES.join(", ")}. This is not a proven Meta Graph contract.`
+    });
+  }
+  const message = reqString(raw.message, "execution.message", issues);
+  const publishModeRaw = reqString(raw.publishMode, "execution.publishMode", issues);
+  const publishMode = ACP_PUBLISH_MODES.includes(publishModeRaw as AcpPublishMode)
+    ? (publishModeRaw as AcpPublishMode)
+    : null;
+  if (publishModeRaw && !publishMode) {
+    issues.push({
+      path: "execution.publishMode",
+      message: `execution.publishMode must be one of: ${ACP_PUBLISH_MODES.join(", ")}.`
+    });
+  }
+  const mediaReference = parseMediaRef(raw.mediaReference, "execution.mediaReference", issues);
+  if (postType === "image" && !mediaReference) {
+    issues.push({
+      path: "execution.mediaReference",
+      message: "An image post requires execution.mediaReference. ADE will not invent a media file."
+    });
+  }
+  const link = optString(raw.link, "execution.link", issues);
+  const callToAction = optString(raw.callToAction, "execution.callToAction", issues);
+  let scheduledAt: string | undefined;
+  if (publishMode === "scheduled") {
+    scheduledAt = isoTimestamp(raw.scheduledAt, "execution.scheduledAt", issues) || undefined;
+  } else if (raw.scheduledAt != null && raw.scheduledAt !== "") {
+    scheduledAt = isoTimestamp(raw.scheduledAt, "execution.scheduledAt", issues) || undefined;
+  }
+
+  if (!clientId || !platform || !postType || !message || !publishMode) return undefined;
+  if (postType === "image" && !mediaReference) return undefined;
+  if (publishMode === "scheduled" && !scheduledAt) return undefined;
+
+  return {
+    clientId,
+    platform,
+    postType,
+    message,
+    ...(mediaReference ? { mediaReference } : {}),
+    ...(link ? { link } : {}),
+    ...(callToAction ? { callToAction } : {}),
+    publishMode,
+    ...(scheduledAt ? { scheduledAt } : {})
+  };
 }
 
 export function validateAcp(input: unknown): { ok: true; value: AcpPackage } | { ok: false; issues: AcpIssue[] } {
@@ -395,6 +494,8 @@ export function validateAcp(input: unknown): { ok: true; value: AcpPackage } | {
   const signals = stringList(measurement.signals, "measurementIntent.signals", issues, true);
   const measurementNotes = optString(measurement.notes, "measurementIntent.notes", issues);
 
+  const executionBlock = parseExecution(input.execution, issues);
+
   let isTest: boolean | undefined;
   if (input.isTest != null) {
     if (typeof input.isTest !== "boolean") {
@@ -436,7 +537,8 @@ export function validateAcp(input: unknown): { ok: true; value: AcpPackage } | {
       measurementIntent: {
         signals,
         ...(measurementNotes ? { notes: measurementNotes } : {})
-      }
+      },
+      ...(executionBlock ? { execution: executionBlock } : {})
     }
   };
 }
@@ -449,6 +551,7 @@ export function assertValidAcp(input: unknown): AcpPackage {
 
 export function reviewView(pkg: AcpPackage) {
   const ctas = pkg.content.posts.map((post) => post.callToAction).filter(Boolean);
+  const execution = pkg.execution;
   return {
     OBJECTIVE: pkg.objective.statement,
     CAMPAIGN: pkg.campaignName,
@@ -476,13 +579,50 @@ export function reviewView(pkg: AcpPackage) {
       approvalRequirements: pkg.executionIntent.approvalRequirements,
       timingPreference: pkg.executionIntent.timingPreference || null,
       restrictions: pkg.executionIntent.restrictions
-    }
+    },
+    DESTINATION: execution
+      ? `${execution.platform} for client ${execution.clientId}`
+      : "Not execution-ready. No platform destination was supplied.",
+    POST_TYPE: execution?.postType || "not supplied",
+    FINAL_CONTENT: execution?.message || null,
+    MEDIA_LINK: {
+      media: execution?.mediaReference || null,
+      link: execution?.link || null,
+      callToAction: execution?.callToAction || null
+    },
+    TIMING: execution
+      ? execution.publishMode === "scheduled"
+        ? `scheduled ${execution.scheduledAt}`
+        : "now"
+      : "not supplied",
+    EXECUTION_READY: Boolean(execution)
+  };
+}
+
+export function adapterHandoff(pkg: AcpPackage) {
+  if (!pkg.execution) return null;
+  return {
+    clientId: pkg.execution.clientId,
+    platform: pkg.execution.platform,
+    postType: pkg.execution.postType,
+    message: pkg.execution.message,
+    mediaReference: pkg.execution.mediaReference || null,
+    link: pkg.execution.link || null,
+    callToAction: pkg.execution.callToAction || null,
+    publishMode: pkg.execution.publishMode,
+    scheduledAt: pkg.execution.scheduledAt || null,
+    packageId: pkg.packageId,
+    campaignName: pkg.campaignName,
+    isTest: pkg.isTest === true,
+    credentialBoundary:
+      "No access tokens or API secrets. Future DGIX resolves an ADE-held connection from clientId + platform."
   };
 }
 
 export const ACP_TO_ADE_MAPPING = [
-  { from: "ACP Objective", to: "Goal", note: "Not created automatically on import." },
-  { from: "ACP Campaign", to: "Campaign", note: "Not created automatically on import." },
-  { from: "ACP Source Evidence", to: "Source / Provenance", note: "Not created automatically on import." },
-  { from: "ACP Proposed Content", to: "Draft", note: "Not created automatically on import. Human approval still required later." }
+  {
+    from: "DGIX execution",
+    to: "Does not use Standard ADE Goal/Campaign/Source/Draft",
+    note: "The Client QEN prepares final content. DGIX does not reconstruct the campaign in Standard ADE before execution."
+  }
 ] as const;

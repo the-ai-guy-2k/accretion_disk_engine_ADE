@@ -108,10 +108,38 @@ export function ensureRuntimeSchema(db: DatabaseSync): void {
     execution_authorized INTEGER NOT NULL DEFAULT 0,
     materialized INTEGER NOT NULL DEFAULT 0,
     is_test INTEGER NOT NULL DEFAULT 0,
+    acp_profile TEXT,
+    execution_status TEXT,
+    decision_at TEXT,
+    decision_by TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL,
     FOREIGN KEY (mission_id) REFERENCES dgix_missions(id)
   )`);
+
+  addColumn(db, "dgix_acp_intakes", "acp_profile", "TEXT");
+  addColumn(db, "dgix_acp_intakes", "execution_status", "TEXT");
+  addColumn(db, "dgix_acp_intakes", "decision_at", "TEXT");
+  addColumn(db, "dgix_acp_intakes", "decision_by", "TEXT");
+
+  db.prepare(
+    "UPDATE dgix_acp_intakes SET review_state = ? WHERE review_state = ?"
+  ).run("imported", "pending_operator_review");
+  db.prepare(
+    "UPDATE dgix_acp_intakes SET review_state = ? WHERE review_state = ?"
+  ).run("ready_for_decision", "operator_reviewed");
+  db.prepare(
+    "UPDATE dgix_acp_intakes SET review_state = ? WHERE review_state = ?"
+  ).run("rejected", "declined");
+
+  db.exec(`
+    UPDATE dgix_acp_intakes
+    SET acp_profile = CASE
+      WHEN json_extract(raw_json, '$.execution') IS NOT NULL THEN 'execution_ready'
+      ELSE 'legacy'
+    END
+    WHERE acp_profile IS NULL OR acp_profile = ''
+  `);
 
   const stamp = nowIso();
   const existingChannel = db

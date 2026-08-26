@@ -18,7 +18,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       ok: true,
       intake,
       banner:
-        "Operator review recorded. This still does not approve content for publishing and does not create ADE Goal/Campaign/Draft records."
+        "Operator review recorded. This is not authorization and not Facebook publishing. Standard ADE Goal/Campaign/Draft records were not created."
     });
   } catch (error) {
     return handleError(error);

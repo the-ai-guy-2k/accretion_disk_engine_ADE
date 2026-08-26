@@ -248,6 +248,10 @@ CREATE TABLE IF NOT EXISTS dgix_acp_intakes (
   execution_authorized INTEGER NOT NULL DEFAULT 0,
   materialized INTEGER NOT NULL DEFAULT 0,
   is_test INTEGER NOT NULL DEFAULT 0,
+  acp_profile TEXT,
+  execution_status TEXT,
+  decision_at TEXT,
+  decision_by TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (mission_id) REFERENCES dgix_missions(id)

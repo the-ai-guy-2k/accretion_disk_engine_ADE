@@ -113,7 +113,7 @@ if (!intake?.id) fail("intake id missing");
 if (intake.executionAuthorized) fail("import authorized execution");
 if (intake.materializedIntoAde) fail("import materialized ADE records");
 if (intake.goalId || intake.campaignId) fail("import created Goal or Campaign");
-if (intake.reviewState !== "pending_operator_review") fail(`unexpected review state ${intake.reviewState}`);
+if (intake.reviewState !== "imported") fail(`unexpected review state ${intake.reviewState}`);
 if (!intake.isTest) fail("TEST ACP lost isTest");
 if (intake.review?.OBJECTIVE !== valid.objective.statement) fail("objective not shown in review");
 if (intake.review?.CAMPAIGN !== valid.campaignName) fail("campaign not shown in review");
@@ -138,7 +138,7 @@ const reviewed = await req("POST", `/api/dgix/acp/${intake.id}/review`, { decisi
 if (!reviewed.data.ok) fail(reviewed.data.error || "review POST failed");
 if (reviewed.data.intake.executionAuthorized) fail("review authorized execution");
 if (reviewed.data.intake.materializedIntoAde) fail("review created ADE records");
-if (reviewed.data.intake.reviewState !== "operator_reviewed") fail("review state not recorded");
+if (reviewed.data.intake.reviewState !== "ready_for_decision") fail("review state not recorded");
 ok("operator review is not approval");
 
 const reviewPage = await page(`/dgix/acp/${intake.id}`);

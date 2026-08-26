@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         ok: true,
         intake,
         banner:
-          "Imported for Operator review only. This is not approval, not ADE-generated evidence, and not Facebook publishing."
+          "Imported for Operator review. This is not approval, not authorization, not ADE-generated evidence, and not Facebook publishing."
       },
       { status: 201 }
     );

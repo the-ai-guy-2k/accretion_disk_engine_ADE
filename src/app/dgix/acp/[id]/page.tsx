@@ -16,6 +16,7 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
   }
 
   const view = intake.review;
+  const media = view.MEDIA_LINK;
 
   return (
     <section>
@@ -23,61 +24,97 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
       <h1>{intake.campaignName}</h1>
       <p className="lede">
         {intake.isTest ? "TEST DATA. " : ""}
-        This is an imported Campaign Package. It is not ADE-generated evidence and it is
-        not a Facebook result.
+        This Campaign Package is already prepared. DGIX will not regenerate the post.
+        The Operator reviews exactly what would be sent, then authorizes or rejects it.
       </p>
       <div className="banner">{intake.authorityNote}</div>
+      <p className={intake.executionAuthorized ? "status-nyet" : "muted"}>
+        State: {intake.reviewStateLabel}
+        {intake.decisionBy ? ` · decided by ${intake.decisionBy}` : ""}
+        {intake.decisionAt ? ` at ${intake.decisionAt}` : ""}
+      </p>
+
+      {!intake.executionReady ? (
+        <div className="banner">
+          Legacy ACP (ACI-DGIX-013 profile). Record and intelligence fields are preserved.
+          This package cannot be authorized until an execution-ready ACP is imported.
+        </div>
+      ) : (
+        <p className="status-ok">
+          EXECUTION-READY. The Client QEN already prepared the final content. DGIX is not
+          asking the Operator to rewrite it.
+        </p>
+      )}
 
       <div className="grid" style={{ marginBottom: "1rem" }}>
         <article className="card">
+          <h2>DESTINATION</h2>
+          <p>
+            <strong>Where is this intended to go?</strong>
+          </p>
+          <p>{view.DESTINATION}</p>
+        </article>
+        <article className="card">
+          <h2>POST TYPE</h2>
+          <p>
+            <strong>What kind of social content is being executed?</strong>
+          </p>
+          <p>{view.POST_TYPE}</p>
+        </article>
+        <article className="card">
+          <h2>FINAL CONTENT</h2>
+          <p>
+            <strong>Exactly what will be sent.</strong>
+          </p>
+          {view.FINAL_CONTENT ? (
+            <pre className="draft">{view.FINAL_CONTENT}</pre>
+          ) : (
+            <p className="muted">No execution message was supplied (legacy package).</p>
+          )}
+        </article>
+        <article className="card">
+          <h2>MEDIA / LINK</h2>
+          <p>
+            <strong>What external content accompanies it.</strong>
+          </p>
+          <p>{media.media ? `${media.media.kind}: ${media.media.value}` : "No media reference."}</p>
+          <p>{media.link ? `Link: ${media.link}` : "No link."}</p>
+          <p>{media.callToAction ? `CTA: ${media.callToAction}` : "No CTA."}</p>
+        </article>
+        <article className="card">
+          <h2>TIMING</h2>
+          <p>
+            <strong>Now or scheduled.</strong>
+          </p>
+          <p>{view.TIMING}</p>
+        </article>
+        <article className="card">
           <h2>OBJECTIVE</h2>
           <p>
-            <strong>What are we trying to accomplish?</strong>
+            <strong>Why are we doing this?</strong>
           </p>
           <p>{view.OBJECTIVE}</p>
+          <p className="muted">Campaign: {view.CAMPAIGN}</p>
         </article>
         <article className="card">
-          <h2>CAMPAIGN</h2>
+          <h2>MEASUREMENT</h2>
           <p>
-            <strong>What campaign is being proposed?</strong>
+            <strong>What outcome matters.</strong>
           </p>
-          <p>{view.CAMPAIGN}</p>
-          <p className="muted">Business: {intake.clientBusinessId}</p>
-        </article>
-        <article className="card">
-          <h2>AUDIENCE</h2>
           <p>
-            <strong>Who is it intended for?</strong>
+            {view.MEASUREMENT.metric}: target {view.MEASUREMENT.targetValue}
+            {view.MEASUREMENT.startingValue != null
+              ? ` (starting ${view.MEASUREMENT.startingValue})`
+              : ""}
+            {view.MEASUREMENT.unit ? ` ${view.MEASUREMENT.unit}` : ""}
           </p>
-          <p>{view.AUDIENCE}</p>
+          <p className="muted">Signals: {view.MEASUREMENT.signals.join(", ")}</p>
+          <p className="muted">This target is intent, not an achieved result.</p>
         </article>
         <article className="card">
-          <h2>CONTENT</h2>
+          <h2>PROVENANCE / SOURCE</h2>
           <p>
-            <strong>What does the package propose publishing?</strong>
-          </p>
-          {view.CONTENT.map((post, index) => (
-            <div key={`${post.title}-${index}`}>
-              <p>
-                <strong>{post.title}</strong>
-              </p>
-              <pre className="draft">{post.body}</pre>
-              {post.mediaReferences.length ? (
-                <ul className="evidence-list">
-                  {post.mediaReferences.map((ref) => (
-                    <li key={ref.value}>
-                      {ref.kind}: {ref.value}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ))}
-        </article>
-        <article className="card">
-          <h2>SOURCE</h2>
-          <p>
-            <strong>Where did this intelligence/content come from?</strong>
+            <strong>Who/what prepared the package.</strong>
           </p>
           <p>{view.SOURCE.originatingIntelligenceSource}</p>
           <ul className="evidence-list">
@@ -90,6 +127,27 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
           </ul>
         </article>
         <article className="card">
+          <h2>AUDIENCE</h2>
+          <p>
+            <strong>Who is it intended for?</strong>
+          </p>
+          <p>{view.AUDIENCE}</p>
+        </article>
+        <article className="card">
+          <h2>CONTENT</h2>
+          <p>
+            <strong>Record copy carried with the package (not regenerated by DGIX).</strong>
+          </p>
+          {view.CONTENT.map((post, index) => (
+            <div key={`${post.title}-${index}`}>
+              <p>
+                <strong>{post.title}</strong>
+              </p>
+              <pre className="draft">{post.body}</pre>
+            </div>
+          ))}
+        </article>
+        <article className="card">
           <h2>CTA</h2>
           <p>
             <strong>What action are we asking the audience to take?</strong>
@@ -99,20 +157,6 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
               <li key={cta}>{cta}</li>
             ))}
           </ul>
-        </article>
-        <article className="card">
-          <h2>MEASUREMENT</h2>
-          <p>
-            <strong>How will success be evaluated?</strong>
-          </p>
-          <p>
-            {view.MEASUREMENT.metric}: target {view.MEASUREMENT.targetValue}
-            {view.MEASUREMENT.startingValue != null
-              ? ` (starting ${view.MEASUREMENT.startingValue})`
-              : ""}
-            {view.MEASUREMENT.unit ? ` ${view.MEASUREMENT.unit}` : ""}
-          </p>
-          <p className="muted">Signals: {view.MEASUREMENT.signals.join(", ")}</p>
         </article>
         <article className="card">
           <h2>RESTRICTIONS</h2>
@@ -129,30 +173,50 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
             ))}
           </ul>
         </article>
+        <article className="card">
+          <h2>CAMPAIGN</h2>
+          <p>
+            <strong>What campaign is being proposed?</strong>
+          </p>
+          <p>{view.CAMPAIGN}</p>
+          <p className="muted">Business: {intake.clientBusinessId}</p>
+        </article>
       </div>
 
       <div className="panel" style={{ marginBottom: "1rem" }}>
-        <h2>Provenance</h2>
+        <h2>Provenance record</h2>
         <p>
           Package {intake.packageId} · ACP v{intake.acpVersion} · originated by{" "}
-          {intake.originatingSystem} · created {intake.packageCreatedAt} · imported{" "}
-          {intake.importedAt}
+          {intake.originatingSystem} · client {intake.clientBusinessId} · created{" "}
+          {intake.packageCreatedAt} · imported {intake.importedAt}
         </p>
         <p className="muted">
-          Review state: {String(intake.reviewState).replaceAll("_", " ")} · execution
-          authorized: {intake.executionAuthorized ? "yes" : "no"} · ADE Goal/Campaign/Draft
-          created: {intake.materializedIntoAde ? "yes" : "no"}
+          Review state: {intake.reviewStateLabel} · execution authorized:{" "}
+          {intake.executionAuthorized ? "yes" : "no"} · ADE Goal/Campaign/Draft created:{" "}
+          {intake.materializedIntoAde ? "yes" : "no"}
+          {intake.executionStatus ? ` · ${intake.executionStatus}` : ""}
         </p>
       </div>
 
+      {intake.platformHandoff ? (
+        <div className="panel" style={{ marginBottom: "1rem" }}>
+          <h2>Future adapter input (not sent)</h2>
+          <p className="muted">
+            AUTHORIZED ACP → Platform Resolver → Facebook Adapter → Meta API. This ACI
+            does not call Meta. No credentials are included.
+          </p>
+          <pre className="draft">{JSON.stringify(intake.platformHandoff, null, 2)}</pre>
+        </div>
+      ) : null}
+
       <div className="panel" style={{ marginBottom: "1rem" }}>
-        <h2>Existing ADE mapping (not performed)</h2>
+        <h2>Standard ADE vs DGIX</h2>
         <table className="table">
           <thead>
             <tr>
-              <th>ACP</th>
-              <th>ADE concept</th>
-              <th>This ACI</th>
+              <th>Boundary</th>
+              <th>This package</th>
+              <th>Note</th>
             </tr>
           </thead>
           <tbody>
@@ -167,11 +231,16 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
         </table>
       </div>
 
-      <AcpReviewActions intakeId={Number(intake.id)} />
+      <AcpReviewActions
+        intakeId={Number(intake.id)}
+        executionReady={intake.executionReady}
+        reviewState={String(intake.reviewState)}
+        executionAuthorized={intake.executionAuthorized}
+      />
       <p className="next-step">
         <Link href="/dgix">Back to DGIX</Link>
         {" · "}
-        <Link href="/review">ADE Review (separate)</Link>
+        <Link href="/review">ADE Review (Standard ADE, separate)</Link>
       </p>
     </section>
   );

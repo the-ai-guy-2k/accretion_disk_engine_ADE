@@ -1,7 +1,7 @@
 # ADE ACI ↔ ACR traceability
 
 **Reconciled:** 2026-08-26  
-**Product code:** ADE MVP baseline `deployable` @ `3c18176` (ACI-011 PAPEV); DGIX workspace ACI-DGIX-012; ACP v1 intake ACI-DGIX-013 on `deployable`.  
+**Product code:** ADE MVP baseline `deployable` @ `3c18176` (ACI-011 PAPEV); DGIX workspace ACI-DGIX-012; ACP v1 intake ACI-DGIX-013; execution-ready ACP + Operator authorization ACI-DGIX-014 on `deployable`.  
 **Rule:** ACI-NNN ↔ ACR-NNN for the MVP series. DGIX uses **ACI-DGIX-NNN ↔ ACR-DGIX-NNN**. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
 
 Classification of ACI files: **ARCHIVED** (stored at time of the slice) | **RECOVERED** (reconstructed later from CAE chat; not an original QEN package) | **PARTIAL** | **MISSING**.
@@ -34,6 +34,7 @@ DGIX is **POST-MVP — IN DEVELOPMENT**. It is not a completed product family.
 | --- | --- | --- | --- | --- | --- | --- |
 | ACI-DGIX-012 | `docs/nebula/aci/ACI-DGIX-012.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-012.md` | COMPLETE | Workspace report + `docs/nebula/artifacts/aci-dgix-012-evidence/` + `validate:aci-dgix-012` | DGIX Operator workspace in ADE Hub; engine reused; intake/Facebook/ACRP not implemented at that slice |
 | ACI-DGIX-013 | `docs/nebula/aci/ACI-DGIX-013.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-013.md` | COMPLETE | Intake report + `docs/nebula/artifacts/aci-dgix-013-evidence/` + `validate:aci-dgix-013` | ACP v1 contract + Operator-controlled intake/review; import is not approval |
+| ACI-DGIX-014 | `docs/nebula/aci/ACI-DGIX-014.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-014.md` | COMPLETE | Execution-ready ACP report + `docs/nebula/artifacts/aci-dgix-014-evidence/` + `validate:aci-dgix-014` | Execution-ready ACP + Operator authorization; not Facebook execution; no Standard ADE materialization |
 
 ## Holes
 

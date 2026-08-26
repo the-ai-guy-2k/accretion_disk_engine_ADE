@@ -35,9 +35,11 @@ export default function DgixWorkspacePage() {
       </p>
 
       <div className="banner">
-        DGIX is post-MVP and in development. Campaign Package Intake (ACP v1) is
-        implemented. Remaining Facebook and Results Package stages are labeled{" "}
-        <strong>NOT YET IMPLEMENTED</strong>. Import is not approval.
+        DGIX is post-MVP and in development. Campaign Package Intake, ACP
+        Validation, Operator Review, and Operator Authorization are implemented.
+        Facebook Account Connection, real Facebook publishing, metrics retrieval,
+        and Results Package export remain <strong>NOT YET IMPLEMENTED</strong>.
+        Authorization is not publishing.
       </div>
 
       <div className="workflow-strip" aria-label="DGIX operating flow">
@@ -61,8 +63,9 @@ export default function DgixWorkspacePage() {
         ))}
       </div>
       <p className="muted" style={{ marginTop: "-0.4rem", marginBottom: "1rem" }}>
-        Campaign Package → Review → Human Approval → Distribution → Measurement →
-        Intelligence → Results Package
+        Client QEN → Execution-Ready ACP → DGIX Validation → Operator Review →
+        Operator Authorization → Platform Adapter → Platform API. Human Approval
+        is Operator Authorization. Distribution is not yet connected.
       </p>
 
       <DgixIntakePanel />
@@ -159,8 +162,9 @@ export default function DgixWorkspacePage() {
             originating Client QEN/system.
           </p>
           <p className="muted">
-            ACP intake is implemented. Real Facebook and Results Package return
-            are not yet implemented. Both modes use the same ADE engine.
+            The Client QEN prepares. The Operator authorizes. DGIX will later
+            execute and measure. Real Facebook and Results Package return are not
+            yet implemented. DGIX does not reconstruct the campaign in Standard ADE.
           </p>
         </article>
       </div>
@@ -222,8 +226,8 @@ export default function DgixWorkspacePage() {
         <article className="panel">
           <h2>Client QEN boundary</h2>
           <p>
-            Working now: Client QEN (or another producer) → ADE Campaign Package
-            file → Operator-controlled DGIX intake → Operator review.
+            Working now: Client QEN (or another producer) → execution-ready ACP →
+            DGIX validation → Operator review → Operator authorization.
           </p>
           <p className="muted">
             Automatic Client QEN connectivity and Results Package export are not
@@ -235,8 +239,9 @@ export default function DgixWorkspacePage() {
         <article className="panel">
           <h2>Human authority</h2>
           <p>
-            ACP → Intake → Operator Review → Human Approval → future execution.
-            Importing a package does not approve it and does not publish it.
+            Client QEN prepares → Operator authorizes → DGIX executes later.
+            Importing a package does not approve it. Authorizing it does not
+            publish it.
           </p>
           <p>
             <Link href="/review">Open ADE Review / Approval</Link>
