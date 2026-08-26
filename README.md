@@ -13,6 +13,8 @@ TAIG is the **initial user and test environment**. ADE itself is a general produ
 # Accretion Disk Engine
 **ADE**
 
+**MVP baseline:** PAPEV ACI-011 **MVP PASS** on `deployable` (product commit `3c18176`).
+
 Operator philosophy: **Goal → Campaign → Source → Draft → Review → Publishing → Results → Intelligence**  
 AI assists. The operator decides. ADE runs the approved workflow.
 
@@ -90,6 +92,7 @@ npm run validate:aci006
 npm run validate:aci008
 npm run validate:aci009
 npm run validate:aci010
+npm run validate:aci011
 ```
 
 Production-style local run after `npm run build`:

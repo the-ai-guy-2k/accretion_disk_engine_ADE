@@ -1,0 +1,8 @@
+npm test — 15 passed
+validate:aci004 PASS
+validate:aci005 PASS
+validate:aci006 PASS
+validate:aci008 PASS
+validate:aci009 PASS
+validate:aci010 PASS
+validate:aci011 PASS

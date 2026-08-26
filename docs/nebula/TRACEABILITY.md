@@ -1,7 +1,7 @@
 # ADE ACI ↔ ACR traceability
 
 **Reconciled:** 2026-08-26  
-**Product code:** ACI-010 MVP integration on `feature/aci-010` (merged to `deployable` after validation).  
+**Product code:** ADE MVP baseline `deployable` @ `3c18176`; ACI-011 PAPEV acceptance overlay.  
 **Rule:** ACI-NNN ↔ ACR-NNN. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
 
 Classification of ACI files: **ARCHIVED** (stored at time of the slice) | **RECOVERED** (reconstructed later from CAE chat; not an original QEN package) | **PARTIAL** | **MISSING**.
@@ -22,6 +22,7 @@ Classification of ACR files: **COMPLETE** (written at slice completion with cont
 | ACI-008 (this reconciliation) | `docs/nebula/aci/ACI-008_GOVERNANCE_RECONCILIATION.md` | ARCHIVED | `docs/nebula/acr/ACR-008_RECONCILIATION.md` | COMPLETE | This matrix + `ADE_ACI_008_GOVERNANCE_RECONCILIATION_REPORT.md` | Governance truth; no product change |
 | ACI-009 | `docs/nebula/aci/ACI-009.md` | ARCHIVED | `docs/nebula/acr/ACR-009.md` | COMPLETE | Live AI analytics report + `docs/nebula/artifacts/aci-009-evidence/` + `validate:aci009` | Live AI analysis/recommendations on persisted manual metrics; deterministic analytics preserved |
 | ACI-010 | `docs/nebula/aci/ACI-010.md` | ARCHIVED | `docs/nebula/acr/ACR-010.md` | COMPLETE | Integration report + `docs/nebula/artifacts/aci-010-evidence/` + `validate:aci010` | MVP journey UX/integration; no new major capability |
+| ACI-011 | `docs/nebula/aci/ACI-011.md` | ARCHIVED | `docs/nebula/acr/ACR-011.md` | COMPLETE | PAPEV report + `docs/nebula/artifacts/aci-011-evidence/` + `validate:aci011` | **MVP PASS** — ADE MVP baseline on `deployable` @ `3c18176` |
 
 ## Holes
 

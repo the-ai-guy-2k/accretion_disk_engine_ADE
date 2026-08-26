@@ -1,15 +1,15 @@
-# Forward baseline (post ACI-010)
+# Forward baseline (ADE MVP — post ACI-011 PAPEV)
 
 **Date:** 2026-08-26  
-**Git:** ACI-010 MVP integration on `feature/aci-010`, merged to `deployable` after validation.
+**PAPEV:** **MVP PASS**  
+**Product SHA:** `3c18176` on `deployable`  
+**This overlay:** ACI-011 acceptance records (no major product capability)
 
 ## Statement
 
-> **The validated ADE product baseline is `deployable` after ACI-010: localhost ADE Hub with one operator journey Goal → Campaign → Source → Draft (manual and live AI) → Review/Approval → mock Facebook publishing → manual results → deterministic Analytics and live AI Intelligence, SQLite schema v5, and Nebula ACI/ACR through ACI-010.**
-
-No new major capability was added in ACI-010. DGIX and real Facebook remain post-MVP.
+> **The ADE MVP baseline is `deployable` at product commit `3c18176`, accepted by ACI-011 PAPEV: localhost Hub with Goal → Campaign → Source → Draft (manual and live AI) → Review/Approval → mock Facebook publishing → manual results → deterministic Analytics and live AI Intelligence. Human approval is mandatory. Metrics are operator-entered. Facebook is mock. DGIX is post-MVP.**
 
 ## Next CAE default
 
-Wait for QEN to issue **ACI-011 PAPEV**. Do not start ACI-011 until that instruction exists.  
-Do not treat unvalidated feature branches as release truth.
+Do **not** begin DGIX until the Social Engine Build QEN authorizes post-MVP work.  
+Do not treat unvalidated feature branches as the MVP baseline.

@@ -22,7 +22,7 @@ feature/aci-###  →  validation  →  deployable
 
 Do not treat unvalidated feature branches as release truth.
 
-`deployable` was created during ACI-007 from commit `f219fce` (completed work through ACI-006), then fast-forwarded through ACI-007 docs, ACI-008 live-AI generation (`014835b`), reconciliation docs, ACI-009 live AI analytics, and ACI-010 MVP integration. Current promotion truth is `deployable`, not an unvalidated feature branch.
+`deployable` was created during ACI-007 from commit `f219fce` (completed work through ACI-006), then fast-forwarded through ACI-007 docs, ACI-008 live-AI generation (`014835b`), reconciliation docs, ACI-009 live AI analytics, ACI-010 MVP integration (`3c18176`), and ACI-011 PAPEV acceptance. Current promotion truth is `deployable`. ACI-011 established **`3c18176` as the ADE MVP product baseline**.
 
 ## CAE execution path
 

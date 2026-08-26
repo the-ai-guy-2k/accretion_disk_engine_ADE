@@ -1,6 +1,6 @@
 # ADE current architecture (implemented)
 
-**Authority:** application code on `deployable` (ACI-010 MVP integration).  
+**Authority:** ADE MVP baseline on `deployable` (product commit `3c18176`; ACI-011 PAPEV **MVP PASS**).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
 Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.

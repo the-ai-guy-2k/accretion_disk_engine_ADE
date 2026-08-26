@@ -1,0 +1,13 @@
+OK: health Local MVP
+OK: live AI ready; credentials not leaked
+OK: goal 16
+OK: campaign 10 + source 40
+OK: live AI draft 47 grounded in source 40
+OK: human reject blocks publishing
+OK: mock Facebook path identified; no real API implied
+OK: manual metrics stored; platform retrieval refused
+OK: Goal progress is +2 contacts from entered leads, not from views
+OK: Goal-oriented ranking prefers +2 leads over 500 views
+OK: live AI recommendation 19 cites stored leads=2
+OK: Hub summary carries Goal, recommendation, mock adapter
+ACI-011 PAPEV validation passed against http://localhost:3000

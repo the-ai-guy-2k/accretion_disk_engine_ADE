@@ -1,0 +1,16 @@
+{
+  "id": 19,
+  "goal_id": 16,
+  "campaign_id": 10,
+  "goal_title": "Increase TAIG client contacts through Facebook by 2",
+  "analysis_mode": "live_ai",
+  "is_test": 1,
+  "observed": "Update on TAIG Activity generated 2 Leads, while Draft from source generated 0 Leads.",
+  "why_it_matters": "Goal is fully achieved with 2 Leads generated, indicating effective content performance. Engagement is low overall, but the Update content directly contributed to the goal.",
+  "action_hint": "Consider producing another piece based on similar source material.",
+  "contrast": {
+    "goal_publication": { "id": 35, "leads_generated": 2, "views_reach": 40 },
+    "vanity_publication": { "id": 36, "leads_generated": 0, "views_reach": 500 }
+  },
+  "note": "Values are operator-entered TEST DATA. ADE did not create two real clients and did not collect Facebook metrics. Ranking preferred leads=2 over views=500."
+}
