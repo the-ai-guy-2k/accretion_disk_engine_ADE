@@ -1,15 +1,15 @@
 # ADE current architecture (implemented)
 
-**Authority:** application code as of ACI-006 (validated product commit `f219fce`), documented during ACI-007.  
+**Authority:** application code on `deployable` at `014835b` (through live AI content generation).  
 **This is current truth.** Future intent is listed only as *not implemented*.
 
-Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Use this file for architecture after ACI-004 through ACI-006.
+Stale bootstrap note: `docs/architecture.md` describes the ACI-002 shell (schema v1, health-only). Do not treat it as current product truth.
 
 ## Runtime stack
 
 - **Node.js** 22.5+ (`node:sqlite`)
 - **Next.js** App Router + **React** + **TypeScript**
-- **SQLite** file `data/ade.sqlite` (schema **v4**)
+- **SQLite** file `data/ade.sqlite` (schema **v5**)
 - Single process: Hub UI and JSON APIs in the same Next.js server
 - Local run: `npm run dev` → http://localhost:3000
 

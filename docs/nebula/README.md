@@ -8,6 +8,8 @@ Application code remains under `src/`. Do not treat this folder as a second ADE 
 | --- | --- |
 | [aci/](aci/) | ACI instructions (recovered/current) |
 | [acr/](acr/) | Acceptance / completion records |
+| [TRACEABILITY.md](TRACEABILITY.md) | ACI ↔ ACR matrix (reconciled 2026-08-26) |
+| [passdowns/FORWARD_BASELINE.md](passdowns/FORWARD_BASELINE.md) | Validated baseline for the next product ACI |
 | [artifacts/](artifacts/) | Pointers to validation evidence |
 | [architecture/](architecture/) | Implemented architecture (current truth) |
 | [data-model/](data-model/) | Implemented SQLite model (current truth) |
