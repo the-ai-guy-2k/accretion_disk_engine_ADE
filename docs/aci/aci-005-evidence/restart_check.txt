@@ -1,0 +1,12 @@
+Restart validation: PASS
+Note: next dev was intentionally stopped to validate persistence. That stop is not an ADE startup failure.
+initialized_at before=2026-08-26T00:24:40.643Z
+initialized_at after=2026-08-26T00:24:40.643Z
+schema before=3 after=3
+goal id=1 title=[TEST DATA] Increase Audience Network by 10
+contributed before=15 after=15
+current before=15 after=15
+content2 source_id before=2 after=2
+content2 effective_goal_id=1
+stored_recommendation=2
+provenance_ok=true

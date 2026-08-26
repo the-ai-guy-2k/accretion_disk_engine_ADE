@@ -24,14 +24,20 @@ Operator philosophy: **Goals → Decisions → Results**
 | Draft from source (mock/manual generation) | Working |
 | Review / edit / approve / reject | Working |
 | Publishing queue + mock Facebook adapter | Working |
+| Goals (create, progress, Hub) | Working |
+| Content associated with a Goal | Working |
+| Campaigns (plan + multi-draft from sources) | Working |
+| Manual publication results | Working |
+| Analytics / Intelligence (deterministic) | Working |
 | Live AI generation | Not implemented (mock/manual boundary) |
 | Scheduling | Not implemented (queue only) |
 | Real Facebook/Meta publishing | Not implemented (mock adapter only) |
-| Measurement / AI-assisted analytics | Not implemented |
-| Leads / intelligence | Not implemented |
+| Platform-collected analytics | Not implemented (manual entry only) |
+| Live AI-assisted analysis | Not implemented (deterministic boundary; replaceable later) |
+| Leads | Not implemented |
 | Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 
-The Hub does **not** display live social metrics or fabricated audience/business results.
+The Hub does **not** display live social metrics or fabricated audience/business results. Operator-entered results are labeled as manual.
 
 ## Technology stack
 
@@ -67,6 +73,8 @@ copy .env.example .env.local
 npm test
 npm run db:init
 npm run validate:aci004
+npm run validate:aci005
+npm run validate:aci006
 ```
 
 Production-style local run after `npm run build`:
@@ -79,7 +87,7 @@ npm start
 
 ## Persistence
 
-On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v2** for the ACI-004 workflow). Restarting the app keeps stored sources, drafts, approvals, and publications.
+On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v4** for ACI-006 campaigns, content plans, and multi-draft generation). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, and recommendations.
 
 See [docs/data-model.md](docs/data-model.md).
 
@@ -111,6 +119,7 @@ The local folder name `Accretion_disk_engin_ADE` is the workstation path; the Gi
 
 - Localhost MVP, not the full product intent
 - No authentication
-- No live AI, live Facebook publish, scheduling calendar, or analytics
+- No live AI, live Facebook publish, scheduling calendar, or platform analytics
+- Manual metrics and deterministic recommendations are local decision support only
 - Requires Node with `node:sqlite` (22.5+)
 - Default bind is localhost port 3000

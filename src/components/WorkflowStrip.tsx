@@ -21,6 +21,27 @@ export function WorkflowStrip({ current }: { current: (typeof STEPS)[number]["la
   );
 }
 
+const LOOP = [
+  { href: "/goals", label: "Goals" },
+  { href: "/campaigns", label: "Campaigns" },
+  { href: "/review", label: "Decisions" },
+  { href: "/analytics", label: "Results" }
+] as const;
+
+export function LoopStrip({ current }: { current: (typeof LOOP)[number]["label"] }) {
+  return (
+    <div className="workflow-strip" aria-label="ADE operator loop">
+      {LOOP.map((step, index) => (
+        <span key={step.href} className={step.label === current ? "current" : undefined}>
+          <Link href={step.href}>
+            {index + 1}. {step.label}
+          </Link>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function Provenance({
   sourceId,
   sourceTitle,

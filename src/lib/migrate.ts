@@ -44,6 +44,36 @@ export function ensureRuntimeSchema(db: DatabaseSync): void {
   addColumn(db, "publications", "is_mock", "INTEGER NOT NULL DEFAULT 1");
   addColumn(db, "publications", "attempt_id", "TEXT");
 
+  addColumn(db, "goals", "starting_value", "REAL NOT NULL DEFAULT 0");
+  addColumn(db, "goals", "target_value", "REAL");
+  addColumn(db, "goals", "target_date", "TEXT");
+  addColumn(db, "goals", "is_test", "INTEGER NOT NULL DEFAULT 0");
+  addColumn(db, "goals", "notes", "TEXT");
+
+  addColumn(db, "sources", "goal_id", "INTEGER");
+  addColumn(db, "content_items", "goal_id", "INTEGER");
+
+  addColumn(db, "metrics", "numeric_value", "REAL");
+  addColumn(db, "metrics", "capture_method", "TEXT");
+  addColumn(db, "metrics", "captured_by", "TEXT");
+  addColumn(db, "metrics", "notes", "TEXT");
+
+  addColumn(db, "recommendations", "observed", "TEXT");
+  addColumn(db, "recommendations", "why_it_matters", "TEXT");
+  addColumn(db, "recommendations", "evidence_json", "TEXT");
+  addColumn(db, "recommendations", "analysis_mode", "TEXT");
+  addColumn(db, "recommendations", "analysis_boundary_note", "TEXT");
+  addColumn(db, "recommendations", "is_test", "INTEGER NOT NULL DEFAULT 0");
+
+  addColumn(db, "campaigns", "start_date", "TEXT");
+  addColumn(db, "campaigns", "end_date", "TEXT");
+  addColumn(db, "campaigns", "is_test", "INTEGER NOT NULL DEFAULT 0");
+  addColumn(db, "campaigns", "notes", "TEXT");
+  addColumn(db, "campaigns", "plan_summary", "TEXT");
+  addColumn(db, "campaigns", "plan_mode", "TEXT");
+  addColumn(db, "campaigns", "plan_boundary_note", "TEXT");
+  addColumn(db, "campaigns", "plan_generated_at", "TEXT");
+
   const stamp = nowIso();
   const existingChannel = db
     .prepare("SELECT id FROM channels WHERE channel_type = ? LIMIT 1")

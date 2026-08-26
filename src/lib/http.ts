@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { WorkflowError } from "@/lib/workflow";
+import { WorkflowError } from "@/lib/errors";
 
 export const dynamic = "force-dynamic";
 

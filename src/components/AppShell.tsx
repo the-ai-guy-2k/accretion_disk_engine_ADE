@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
         <div className="philosophy">
           <strong>Goals → Decisions → Results</strong>
-          Operator philosophy for ADE. ACI-004: Source → Draft → Review → Queue.
+          Operator philosophy for ADE. Goals → Campaigns → Decisions → Results.
         </div>
       </aside>
       <div className="main">

@@ -14,6 +14,8 @@ type Publication = {
   source_title: string;
   source_provenance: string;
   source_is_test: number;
+  goal_id: number | null;
+  goal_title: string | null;
   is_mock: number;
   adapter_id: string;
   failure_reason: string | null;
@@ -25,16 +27,43 @@ export default function PublishingPage() {
   const [items, setItems] = useState<Publication[]>([]);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [resultFor, setResultFor] = useState<number | null>(null);
+  const [metricLabels, setMetricLabels] = useState<Record<string, string>>({});
+  const [resultForm, setResultForm] = useState<Record<string, string>>({});
 
   async function load() {
-    const res = await fetch("/api/publications");
+    const [res, goalRes] = await Promise.all([fetch("/api/publications"), fetch("/api/goals")]);
     const data = await res.json();
+    const goalData = await goalRes.json();
     if (!data.ok) {
       setError(data.error);
       return;
     }
     setItems(data.publications);
+    if (goalData.ok) setMetricLabels(goalData.metricLabels || {});
     setError("");
+  }
+
+  async function saveResults() {
+    if (resultFor == null) return;
+    const metrics: Record<string, number> = {};
+    for (const [key, value] of Object.entries(resultForm)) {
+      if (value === "") continue;
+      metrics[key] = Number(value);
+    }
+    const res = await fetch(`/api/publications/${resultFor}/results`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ metrics, capture_method: "manual", is_test: true })
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      setError(data.error);
+      return;
+    }
+    setNotice(data.banner || `Manual results saved for publication #${resultFor}.`);
+    setResultFor(null);
+    await load();
   }
 
   useEffect(() => {
@@ -93,6 +122,11 @@ export default function PublishingPage() {
                       provenance={item.source_provenance}
                       isTest={item.source_is_test}
                     />
+                    {item.goal_id ? (
+                      <p className="muted">
+                        Goal #{item.goal_id} {item.goal_title}
+                      </p>
+                    ) : null}
                     <p className="muted">
                       Adapter: {item.adapter_id} · mock={item.is_mock ? "yes" : "no"}
                       {item.external_post_id ? ` · ${item.external_post_id}` : ""}
@@ -133,7 +167,15 @@ export default function PublishingPage() {
                         </button>
                       ) : null}
                       {item.status === "PUBLISHED" ? (
-                        <span className="muted">Terminal mock success</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setResultFor(item.id);
+                            setResultForm({});
+                          }}
+                        >
+                          Enter results
+                        </button>
                       ) : null}
                     </div>
                   </td>
@@ -143,6 +185,35 @@ export default function PublishingPage() {
           </table>
         )}
       </div>
+      {resultFor ? (
+        <div className="panel" style={{ marginTop: "1rem" }}>
+          <h2>Manual results for publication #{resultFor}</h2>
+          <p className="muted">
+            Manually entered metrics. ADE has not collected these from Facebook or any
+            other platform. Leave a field blank to skip it.
+          </p>
+          <div className="metric-grid">
+            {Object.entries(metricLabels).map(([key, label]) => (
+              <label key={key}>
+                {label}
+                <input
+                  type="number"
+                  value={resultForm[key] || ""}
+                  onChange={(e) => setResultForm({ ...resultForm, [key]: e.target.value })}
+                />
+              </label>
+            ))}
+          </div>
+          <div className="actions">
+            <button className="primary" type="button" onClick={() => void saveResults()}>
+              Save manual results
+            </button>
+            <button type="button" onClick={() => setResultFor(null)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

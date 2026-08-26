@@ -32,7 +32,13 @@ export async function PATCH(
     const body = await readJson(request);
     const content = updateDraft(asId(id), {
       title: body.title == null ? undefined : String(body.title),
-      body: body.body == null ? undefined : String(body.body)
+      body: body.body == null ? undefined : String(body.body),
+      goal_id:
+        body.goal_id === undefined
+          ? undefined
+          : body.goal_id == null || body.goal_id === ""
+            ? null
+            : asId(String(body.goal_id))
     });
     return NextResponse.json({ ok: true, content });
   } catch (error) {

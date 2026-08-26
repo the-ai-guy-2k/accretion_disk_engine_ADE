@@ -16,6 +16,10 @@ type Content = {
   source_provenance: string;
   source_is_test: number;
   generation_note: string;
+  effective_goal_id: number | null;
+  goal_title: string | null;
+  campaign_id: number | null;
+  campaign_title: string | null;
   publication: { id: number; status: string } | null;
 };
 
@@ -26,12 +30,17 @@ function ReviewInner() {
   const [current, setCurrent] = useState<Content | null>(null);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [goalId, setGoalId] = useState("");
+  const [goals, setGoals] = useState<{ id: number; title: string }[]>([]);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
   async function load(id?: string | null) {
     const listRes = await fetch("/api/content");
     const listData = await listRes.json();
+    const goalRes = await fetch("/api/goals");
+    const goalData = await goalRes.json();
+    if (goalData.ok) setGoals(goalData.goals);
     if (!listData.ok) {
       setError(listData.error);
       return;
@@ -51,6 +60,7 @@ function ReviewInner() {
     setCurrent(data.content);
     setTitle(data.content.title);
     setBody(data.content.body);
+    setGoalId(data.content.effective_goal_id ? String(data.content.effective_goal_id) : "");
     setError("");
   }
 
@@ -137,6 +147,38 @@ function ReviewInner() {
               provenance={current.source_provenance}
               isTest={current.source_is_test}
             />
+            <p className="muted">
+              Goal: {current.goal_title || (current.effective_goal_id ? `#${current.effective_goal_id}` : "none")}
+              {current.campaign_id
+                ? ` · Campaign #${current.campaign_id} ${current.campaign_title || ""}`
+                : ""}
+            </p>
+            <label>
+              Associate with Goal
+              <select
+                value={goalId}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setGoalId(value);
+                  void fetch(`/api/content/${current.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ goal_id: value ? Number(value) : null })
+                  }).then(async (res) => {
+                    const data = await res.json();
+                    if (!data.ok) setError(data.error);
+                    else await load(String(current.id));
+                  });
+                }}
+              >
+                <option value="">None</option>
+                {goals.map((goal) => (
+                  <option key={goal.id} value={goal.id}>
+                    #{goal.id} {goal.title}
+                  </option>
+                ))}
+              </select>
+            </label>
             <h2>Source</h2>
             <pre className="draft">{current.source_body || "(empty source body)"}</pre>
             <h2>Draft</h2>

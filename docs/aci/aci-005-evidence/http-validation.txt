@@ -1,0 +1,20 @@
+ACI-005 HTTP validation: PASS (npm run validate:aci005)
+ACI-004 regression: PASS (npm run validate:aci004)
+Unit tests: PASS (npm test, 6 tests)
+
+Goal #1 [TEST DATA] Increase Audience Network by 10
+  starting=0 target=10
+  after first results: contributed=8 (client-result 7 + informational 1)
+  after flip: contributed=15 (client-result 7 + informational 8)
+
+Publications:
+  #2 client_result source_id=2  audience_network_gained=7 (manual)
+  #3 informational source_id=3  audience_network_gained=8 (manual)
+
+First recommendation preferred client-result content.
+Second recommendation preferred general informational content after the metric flip.
+
+Platform capture_method=platform returned 409.
+Results on non-PUBLISHED publications returned 409.
+Live AI was not claimed (analysis_mode=deterministic_mock).
+ACI-004 provenance preserved (content.source_id).

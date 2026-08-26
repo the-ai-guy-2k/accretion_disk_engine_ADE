@@ -13,6 +13,8 @@ type Source = {
   provenance: string;
   notes: string;
   is_test: number;
+  goal_id: number | null;
+  goal_title: string | null;
 };
 
 const TEST_SOURCE = {
@@ -27,6 +29,7 @@ const TEST_SOURCE = {
 
 export default function SourcesPage() {
   const [sources, setSources] = useState<Source[]>([]);
+  const [goals, setGoals] = useState<{ id: number; title: string }[]>([]);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "",
@@ -35,22 +38,33 @@ export default function SourcesPage() {
     activity_date: new Date().toISOString().slice(0, 10),
     provenance: "",
     notes: "",
-    is_test: false
+    is_test: false,
+    goal_id: ""
   });
 
   async function load() {
-    const res = await fetch("/api/sources");
-    const data = await res.json();
+    const [sourceRes, goalRes] = await Promise.all([fetch("/api/sources"), fetch("/api/goals")]);
+    const data = await sourceRes.json();
+    const goalData = await goalRes.json();
     if (!data.ok) {
       setError(data.error || "Failed to load sources");
       return;
     }
     setSources(data.sources);
+    if (goalData.ok) setGoals(goalData.goals);
     setError("");
   }
 
   useEffect(() => {
     void load();
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const goalId = params.get("goalId");
+    if (goalId) {
+      setForm((current) => ({ ...current, goal_id: goalId }));
+    }
   }, []);
 
   async function create(payload: Record<string, unknown>) {
@@ -72,15 +86,18 @@ export default function SourcesPage() {
       <WorkflowStrip current="Source" />
       <h1>Sources</h1>
       <p className="lede">
-        Real TAIG activity that may later become content. Creating a source does not
-        publish anything. Select a source, then continue to Create.
+        Real activity that may later become content. Optionally associate a source with a
+        Goal so later drafts and publications stay on that objective.
       </p>
       <div className="split">
         <form
           className="panel form-grid"
           onSubmit={(event) => {
             event.preventDefault();
-            void create(form);
+            void create({
+              ...form,
+              goal_id: form.goal_id ? Number(form.goal_id) : null
+            });
           }}
         >
           <h2>New source</h2>
@@ -101,10 +118,28 @@ export default function SourcesPage() {
           </label>
           <label>
             Source type
-            <input
+            <select
               value={form.source_type}
               onChange={(e) => setForm({ ...form, source_type: e.target.value })}
-            />
+            >
+              <option value="taig_activity">taig_activity</option>
+              <option value="client_result">client_result</option>
+              <option value="informational">informational</option>
+            </select>
+          </label>
+          <label>
+            Goal (optional)
+            <select
+              value={form.goal_id}
+              onChange={(e) => setForm({ ...form, goal_id: e.target.value })}
+            >
+              <option value="">None</option>
+              {goals.map((goal) => (
+                <option key={goal.id} value={goal.id}>
+                  #{goal.id} {goal.title}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             Date
@@ -172,6 +207,13 @@ export default function SourcesPage() {
                         provenance={source.provenance}
                         isTest={source.is_test}
                       />
+                      {source.goal_id ? (
+                        <p className="muted">
+                          Goal #{source.goal_id} {source.goal_title}
+                        </p>
+                      ) : (
+                        <p className="muted">No Goal linked</p>
+                      )}
                     </td>
                     <td>
                       <Link href={`/create?sourceId=${source.id}`}>Create draft</Link>

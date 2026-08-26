@@ -1,0 +1,15 @@
+ACI-006 HTTP validation: PASS (npm run validate:aci006)
+ACI-004 regression: PASS
+ACI-005 regression: PASS (schema check accepts v3+)
+Unit tests: PASS (8 tests)
+
+Campaign #1 [TEST DATA] ADE Awareness Campaign
+  Goal #2 Increase Audience Network by 10
+  Sources: #5 client_result, #6 informational
+  Plan items: 2
+  Drafts: 2 (source_id + campaign_id + goal_id preserved)
+  Approved draft entered PENDING queue
+  Rejected draft enqueue = 409
+
+Restart: PASS (goal, sources, plan, drafts, approval counts persisted)
+initialized_at unchanged: 2026-08-26T00:24:40.643Z

@@ -1,34 +1,56 @@
-# ADE data model (schema v2)
+# ADE data model (schema v4)
 
 Engine: **SQLite** via Node `node:sqlite`.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
 SQL source of truth: `src/lib/schema.sql`. Runtime column upgrades: `src/lib/migrate.ts`.
 
-Schema v2 adds the ACI-004 workflow fields. Existing v1 files are upgraded on startup. `initialized_at` is not reset.
+Schema v4 adds ACI-006 campaigns, selected sources, content-plan items, and campaign-linked drafts. Existing files are upgraded on startup. `initialized_at` is not reset.
 
-## Workflow tables (ACI-004)
+## Workflow tables (ACI-004, preserved)
 
 | Table | Role |
 | --- | --- |
-| `sources` | Title, body, type, activity_date, provenance, notes, `is_test` |
-| `content_items` | Drafts. `source_id` required for the vertical slice. Status `draft` / `rejected` / `approved`. Mock generation metadata. |
+| `sources` | Title, body, type, activity_date, provenance, notes, `is_test`, optional `goal_id` |
+| `content_items` | Drafts. `source_id` required. Optional `goal_id` and `campaign_id`. Status `draft` / `rejected` / `approved`. |
 | `approvals` | Decision history (approve / reject / return_to_draft) |
 | `channels` | Facebook Channel 01 seeded as mock `manual_facebook` |
-| `publications` | Queue: `PENDING` / `READY` / `PUBLISHED` / `FAILED`. `is_mock`, `adapter_id`, `failure_reason`, `attempt_id` |
+| `publications` | Queue: `PENDING` / `READY` / `PUBLISHED` / `FAILED` |
 
-Only **approved** content may receive a `PENDING` publication. FAILED is never stored as PUBLISHED.
+Only **approved** content may receive a `PENDING` publication.
 
-Other tables (goals, campaigns, metrics, leads, …) remain empty placeholders.
+Effective Goal is `COALESCE(content_items.goal_id, sources.goal_id)`.
+
+## Goals, results, intelligence (ACI-005)
+
+| Table | Role |
+| --- | --- |
+| `goals` | Name, metric, starting/target values, status. Progress is computed. |
+| `metrics` | Per-publication results. Manual in this product; platform collection refused. |
+| `recommendations` | Stored analysis with evidence JSON and analysis-mode boundary |
+
+## Campaigns (ACI-006)
+
+| Table | Role |
+| --- | --- |
+| `campaigns` | Name, objective, `goal_id`, optional period, status, plan summary/mode/boundary |
+| `campaign_sources` | Selected sources ADE may use for the campaign |
+| `campaign_plan_items` | Lightweight planned posts: purpose, format, audience, suggested timing, linked `source_id` and later `content_id` |
+
+Relationship: **Goal → Campaign → Source → Content → Publication → Results**. Campaign totals reuse `metrics` via `content_items.campaign_id`.
+
+Leads, opportunities, and audience_network_events remain unused placeholders.
 
 Foreign keys are enabled. IDs are integers. Timestamps are ISO-8601 text.
 
 ## Restart behavior
 
-The SQLite file remains on disk. WAL files may appear next to it and are gitignored. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set.
+The SQLite file remains on disk. Stopping and starting `npm run dev` reuses the same file; `initialized_at` is not overwritten if already set. Campaigns, selected sources, plan items, drafts, and Goal/content links survive restart.
 
-## Not in v2
+## Not in v4
 
 - Auth users/sessions
 - Encrypted secrets storage
-- Live Meta Graph payloads
+- Live Meta Graph payloads or platform analytics
+- Live AI planning or analysis (deterministic boundaries)
+- Calendar scheduling (suggested timing is a plan hint only)
 - Fabricated clients, revenue, or audience metrics

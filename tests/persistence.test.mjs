@@ -15,6 +15,8 @@ const REQUIRED_TABLES = [
   "goals",
   "content_items",
   "campaigns",
+  "campaign_sources",
+  "campaign_plan_items",
   "approvals",
   "publications",
   "channels",
@@ -44,7 +46,7 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "2");
+  assert.equal(version.value, "4");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
@@ -56,8 +58,20 @@ test("SQLite foundation creates required tables and schema version", () => {
   );
 
   const sourceCols = db.prepare("PRAGMA table_info(sources)").all().map((row) => row.name);
-  for (const col of ["body", "activity_date", "provenance", "is_test"]) {
+  for (const col of ["body", "activity_date", "provenance", "is_test", "goal_id"]) {
     assert.ok(sourceCols.includes(col), `sources missing ${col}`);
+  }
+  const goalCols = db.prepare("PRAGMA table_info(goals)").all().map((row) => row.name);
+  for (const col of ["starting_value", "target_value", "target_date", "is_test", "target_metric"]) {
+    assert.ok(goalCols.includes(col), `goals missing ${col}`);
+  }
+  const metricCols = db.prepare("PRAGMA table_info(metrics)").all().map((row) => row.name);
+  for (const col of ["numeric_value", "capture_method", "captured_by"]) {
+    assert.ok(metricCols.includes(col), `metrics missing ${col}`);
+  }
+  const campaignCols = db.prepare("PRAGMA table_info(campaigns)").all().map((row) => row.name);
+  for (const col of ["goal_id", "objective", "start_date", "end_date", "plan_summary", "is_test"]) {
+    assert.ok(campaignCols.includes(col), `campaigns missing ${col}`);
   }
   db.close();
 });

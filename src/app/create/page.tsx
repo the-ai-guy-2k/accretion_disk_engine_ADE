@@ -10,6 +10,8 @@ type Source = {
   title: string;
   provenance: string;
   is_test: number;
+  goal_id: number | null;
+  goal_title: string | null;
 };
 
 type Content = {
@@ -20,6 +22,9 @@ type Content = {
   source_title: string;
   generation_mode: string;
   is_test: number;
+  goal_id: number | null;
+  goal_title: string | null;
+  effective_goal_id: number | null;
 };
 
 export default function CreatePage() {
@@ -35,6 +40,8 @@ function CreateInner() {
   const preselect = params.get("sourceId") || "";
   const [sources, setSources] = useState<Source[]>([]);
   const [sourceId, setSourceId] = useState(preselect);
+  const [goalId, setGoalId] = useState("");
+  const [goals, setGoals] = useState<{ id: number; title: string }[]>([]);
   const [drafts, setDrafts] = useState<Content[]>([]);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -45,18 +52,21 @@ function CreateInner() {
   );
 
   async function load() {
-    const [sourceRes, contentRes] = await Promise.all([
+    const [sourceRes, contentRes, goalRes] = await Promise.all([
       fetch("/api/sources"),
-      fetch("/api/content")
+      fetch("/api/content"),
+      fetch("/api/goals")
     ]);
     const sourceData = await sourceRes.json();
     const contentData = await contentRes.json();
+    const goalData = await goalRes.json();
     if (!sourceData.ok) {
       setError(sourceData.error);
       return;
     }
     setSources(sourceData.sources);
     setDrafts(contentData.content || []);
+    if (goalData.ok) setGoals(goalData.goals);
     if (!sourceId && sourceData.sources[0]) {
       setSourceId(String(sourceData.sources[0].id));
     }
@@ -72,7 +82,10 @@ function CreateInner() {
     const res = await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source_id: Number(sourceId) })
+      body: JSON.stringify({
+        source_id: Number(sourceId),
+        goal_id: goalId ? Number(goalId) : undefined
+      })
     });
     const data = await res.json();
     if (!data.ok) {
@@ -119,6 +132,17 @@ function CreateInner() {
             No source selected. <Link href="/sources">Create one first</Link>.
           </p>
         )}
+        <label>
+          Goal (optional; defaults from source)
+          <select value={goalId} onChange={(e) => setGoalId(e.target.value)}>
+            <option value="">Use source Goal</option>
+            {goals.map((goal) => (
+              <option key={goal.id} value={goal.id}>
+                #{goal.id} {goal.title}
+              </option>
+            ))}
+          </select>
+        </label>
         {error ? <p className="error">{error}</p> : null}
         {notice ? <p className="status-ok">{notice}</p> : null}
         <div className="actions">
@@ -149,6 +173,9 @@ function CreateInner() {
                   <td>{item.status}</td>
                   <td>
                     #{item.source_id} {item.source_title}
+                    {item.goal_title || item.effective_goal_id
+                      ? ` · Goal ${item.goal_title || "#" + item.effective_goal_id}`
+                      : ""}
                   </td>
                   <td>
                     <Link href={`/review?id=${item.id}`}>Review</Link>

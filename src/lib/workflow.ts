@@ -5,6 +5,8 @@ import {
   manualFacebookAdapter,
   type ChannelPublishInput
 } from "@/lib/channel-adapter";
+import { WorkflowError } from "@/lib/errors";
+import { activeGoal, resolveGoalId } from "@/lib/goals";
 import {
   CONTENT_STATUS,
   FACEBOOK_CHANNEL_TYPE,
@@ -17,15 +19,7 @@ import {
   isTerminalPublished
 } from "@/lib/schema";
 
-export class WorkflowError extends Error {
-  constructor(
-    message: string,
-    readonly status = 400
-  ) {
-    super(message);
-    this.name = "WorkflowError";
-  }
-}
+export { WorkflowError } from "@/lib/errors";
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -43,13 +37,23 @@ function facebookChannel() {
 
 export function listSources() {
   return getDb()
-    .prepare("SELECT * FROM sources ORDER BY id DESC")
+    .prepare(
+      `SELECT s.*, g.title AS goal_title, g.target_metric AS goal_metric
+       FROM sources s
+       LEFT JOIN goals g ON g.id = s.goal_id
+       ORDER BY s.id DESC`
+    )
     .all() as Record<string, unknown>[];
 }
 
 export function getSource(id: number) {
   const row = getDb()
-    .prepare("SELECT * FROM sources WHERE id = ?")
+    .prepare(
+      `SELECT s.*, g.title AS goal_title, g.target_metric AS goal_metric
+       FROM sources s
+       LEFT JOIN goals g ON g.id = s.goal_id
+       WHERE s.id = ?`
+    )
     .get(id) as Record<string, unknown> | undefined;
   if (!row) {
     throw new WorkflowError("Source not found", 404);
@@ -65,16 +69,18 @@ export function createSource(input: {
   provenance?: string;
   notes?: string;
   is_test?: boolean;
+  goal_id?: number | null;
 }) {
   const title = input.title?.trim();
   if (!title) {
     throw new WorkflowError("Source title is required");
   }
   const stamp = nowIso();
+  const goalId = resolveGoalId(input.goal_id);
   const result = getDb()
     .prepare(
-      `INSERT INTO sources (title, body, source_type, activity_date, provenance, origin, notes, is_test, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO sources (title, body, source_type, activity_date, provenance, origin, notes, is_test, goal_id, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       title,
@@ -85,17 +91,38 @@ export function createSource(input: {
       input.provenance?.trim() || "",
       input.notes?.trim() || "",
       input.is_test ? 1 : 0,
+      goalId,
       stamp,
       stamp
     );
   return getSource(Number(result.lastInsertRowid));
 }
 
-export function listContent(filter?: { status?: string; source_id?: number }) {
+export function updateSource(id: number, input: { goal_id?: number | null }) {
+  getSource(id);
+  if (input.goal_id !== undefined) {
+    getDb()
+      .prepare("UPDATE sources SET goal_id = ?, updated_at = ? WHERE id = ?")
+      .run(resolveGoalId(input.goal_id), nowIso(), id);
+  }
+  return getSource(id);
+}
+
+export function listContent(filter?: {
+  status?: string;
+  source_id?: number;
+  goal_id?: number;
+  campaign_id?: number;
+}) {
   const db = getDb();
-  let sql = `SELECT c.*, s.title AS source_title, s.provenance AS source_provenance, s.is_test AS source_is_test
+  let sql = `SELECT c.*, s.title AS source_title, s.provenance AS source_provenance, s.is_test AS source_is_test,
+              s.source_type AS source_type, s.goal_id AS source_goal_id,
+              COALESCE(c.goal_id, s.goal_id) AS effective_goal_id,
+              g.title AS goal_title, camp.title AS campaign_title
      FROM content_items c
-     LEFT JOIN sources s ON s.id = c.source_id`;
+     LEFT JOIN sources s ON s.id = c.source_id
+     LEFT JOIN goals g ON g.id = COALESCE(c.goal_id, s.goal_id)
+     LEFT JOIN campaigns camp ON camp.id = c.campaign_id`;
   const params: (string | number)[] = [];
   const where: string[] = [];
   if (filter?.status) {
@@ -105,6 +132,14 @@ export function listContent(filter?: { status?: string; source_id?: number }) {
   if (filter?.source_id) {
     where.push("c.source_id = ?");
     params.push(filter.source_id);
+  }
+  if (filter?.goal_id) {
+    where.push("COALESCE(c.goal_id, s.goal_id) = ?");
+    params.push(filter.goal_id);
+  }
+  if (filter?.campaign_id) {
+    where.push("c.campaign_id = ?");
+    params.push(filter.campaign_id);
   }
   if (where.length) {
     sql += ` WHERE ${where.join(" AND ")}`;
@@ -118,9 +153,13 @@ export function getContent(id: number) {
     .prepare(
       `SELECT c.*, s.title AS source_title, s.body AS source_body, s.source_type AS source_type,
               s.activity_date AS source_activity_date, s.provenance AS source_provenance,
-              s.notes AS source_notes, s.is_test AS source_is_test
+              s.notes AS source_notes, s.is_test AS source_is_test, s.goal_id AS source_goal_id,
+              COALESCE(c.goal_id, s.goal_id) AS effective_goal_id, g.title AS goal_title,
+              camp.title AS campaign_title
        FROM content_items c
        LEFT JOIN sources s ON s.id = c.source_id
+       LEFT JOIN goals g ON g.id = COALESCE(c.goal_id, s.goal_id)
+       LEFT JOIN campaigns camp ON camp.id = c.campaign_id
        WHERE c.id = ?`
     )
     .get(id) as Record<string, unknown> | undefined;
@@ -138,7 +177,11 @@ export function getContent(id: number) {
   return { ...row, publication: publication ?? null, approvals };
 }
 
-export function createDraftFromSource(sourceId: number) {
+export function createDraftFromSource(
+  sourceId: number,
+  goalId?: number | null,
+  campaignId?: number | null
+) {
   const source = getSource(sourceId);
   const draft = buildMockDraft({
     id: Number(source.id),
@@ -147,14 +190,26 @@ export function createDraftFromSource(sourceId: number) {
     provenance: (source.provenance || source.origin) as string,
     is_test: Number(source.is_test || 0)
   });
+  const resolvedGoal =
+    goalId === undefined ? resolveGoalId(source.goal_id) : resolveGoalId(goalId);
+  if (campaignId != null) {
+    const campaign = getDb()
+      .prepare("SELECT id FROM campaigns WHERE id = ?")
+      .get(campaignId) as { id?: number } | undefined;
+    if (!campaign?.id) {
+      throw new WorkflowError("Campaign not found", 404);
+    }
+  }
   const stamp = nowIso();
   const result = getDb()
     .prepare(
-      `INSERT INTO content_items (source_id, title, body, status, channel_hint, generation_mode, generation_note, is_test, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO content_items (source_id, goal_id, campaign_id, title, body, status, channel_hint, generation_mode, generation_note, is_test, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       sourceId,
+      resolvedGoal,
+      campaignId ?? null,
       draft.title,
       draft.body,
       CONTENT_STATUS.draft,
@@ -170,27 +225,35 @@ export function createDraftFromSource(sourceId: number) {
 
 export function updateDraft(
   id: number,
-  input: { title?: string; body?: string }
+  input: { title?: string; body?: string; goal_id?: number | null }
 ) {
   const current = getContent(id);
-  if (current.status === CONTENT_STATUS.approved) {
-    const pub = current.publication as { status?: string } | null;
-    if (pub && isTerminalPublished(pub.status)) {
-      throw new WorkflowError("Published mock items cannot be edited", 409);
-    }
-    throw new WorkflowError("Approved drafts cannot be edited until returned to draft", 409);
-  }
   const stamp = nowIso();
-  getDb()
-    .prepare(
-      "UPDATE content_items SET title = ?, body = ?, updated_at = ? WHERE id = ?"
-    )
-    .run(
-      input.title?.trim() || String(current.title),
-      input.body ?? String(current.body || ""),
-      stamp,
-      id
-    );
+  if (input.goal_id !== undefined) {
+    getDb()
+      .prepare("UPDATE content_items SET goal_id = ?, updated_at = ? WHERE id = ?")
+      .run(resolveGoalId(input.goal_id), stamp, id);
+  }
+  const wantsCopy = input.title !== undefined || input.body !== undefined;
+  if (wantsCopy) {
+    if (current.status === CONTENT_STATUS.approved) {
+      const pub = current.publication as { status?: string } | null;
+      if (pub && isTerminalPublished(pub.status)) {
+        throw new WorkflowError("Published mock items cannot be edited", 409);
+      }
+      throw new WorkflowError("Approved drafts cannot be edited until returned to draft", 409);
+    }
+    getDb()
+      .prepare(
+        "UPDATE content_items SET title = ?, body = ?, updated_at = ? WHERE id = ?"
+      )
+      .run(
+        input.title?.trim() || String(current.title),
+        input.body ?? String(current.body || ""),
+        stamp,
+        id
+      );
+  }
   return getContent(id);
 }
 
@@ -320,11 +383,15 @@ export function listPublications() {
   return getDb()
     .prepare(
       `SELECT p.*, c.title AS content_title, c.status AS content_status, c.source_id AS source_id,
+              COALESCE(c.goal_id, s.goal_id) AS goal_id, g.title AS goal_title,
+              c.campaign_id AS campaign_id, camp.title AS campaign_title,
               s.title AS source_title, s.provenance AS source_provenance, s.is_test AS source_is_test,
-              ch.name AS channel_name
+              s.source_type AS source_type, ch.name AS channel_name
        FROM publications p
        JOIN content_items c ON c.id = p.content_id
        LEFT JOIN sources s ON s.id = c.source_id
+       LEFT JOIN goals g ON g.id = COALESCE(c.goal_id, s.goal_id)
+       LEFT JOIN campaigns camp ON camp.id = c.campaign_id
        LEFT JOIN channels ch ON ch.id = p.channel_id
        ORDER BY p.id DESC`
     )
@@ -335,10 +402,13 @@ export function getPublication(id: number) {
   const row = getDb()
     .prepare(
       `SELECT p.*, c.title AS content_title, c.status AS content_status, c.source_id AS source_id,
-              c.body AS content_body, s.title AS source_title, s.provenance AS source_provenance
+              c.body AS content_body, COALESCE(c.goal_id, s.goal_id) AS goal_id, g.title AS goal_title,
+              s.title AS source_title, s.provenance AS source_provenance, s.source_type AS source_type,
+              s.is_test AS source_is_test
        FROM publications p
        JOIN content_items c ON c.id = p.content_id
        LEFT JOIN sources s ON s.id = c.source_id
+       LEFT JOIN goals g ON g.id = COALESCE(c.goal_id, s.goal_id)
        WHERE p.id = ?`
     )
     .get(id) as Record<string, unknown> | undefined;
@@ -470,6 +540,21 @@ export function workflowSummary() {
     const row = db.prepare(sql).get(...params) as { n: number };
     return row.n;
   };
+  const latestRecommendation = db
+    .prepare("SELECT * FROM recommendations ORDER BY id DESC LIMIT 1")
+    .get() as Record<string, unknown> | undefined;
+  const recentResults = db
+    .prepare(
+      `SELECT m.id, m.publication_id, m.metric_name, m.numeric_value, m.capture_method, m.is_simulated,
+              p.content_id, c.title AS content_title, COALESCE(c.goal_id, s.goal_id) AS goal_id
+       FROM metrics m
+       JOIN publications p ON p.id = m.publication_id
+       JOIN content_items c ON c.id = p.content_id
+       LEFT JOIN sources s ON s.id = c.source_id
+       ORDER BY m.id DESC
+       LIMIT 12`
+    )
+    .all() as Record<string, unknown>[];
   return {
     sources: count("SELECT COUNT(*) AS n FROM sources"),
     drafts: count("SELECT COUNT(*) AS n FROM content_items WHERE status = ?", CONTENT_STATUS.draft),
@@ -492,6 +577,10 @@ export function workflowSummary() {
       id: MANUAL_FACEBOOK_ADAPTER_ID,
       isMock: true,
       label: manualFacebookAdapter.label
-    }
+    },
+    activeGoal: activeGoal(),
+    latestRecommendation: latestRecommendation ?? null,
+    recentResults,
+    campaigns: count("SELECT COUNT(*) AS n FROM campaigns")
   };
 }

@@ -4,6 +4,21 @@ CREATE TABLE IF NOT EXISTS app_meta (
   updated_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS goals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL DEFAULT '',
+  description TEXT,
+  status TEXT,
+  target_metric TEXT,
+  starting_value REAL NOT NULL DEFAULT 0,
+  target_value REAL,
+  target_date TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
+  notes TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS sources (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL DEFAULT '',
@@ -15,18 +30,10 @@ CREATE TABLE IF NOT EXISTS sources (
   marketing_eligibility TEXT,
   notes TEXT,
   is_test INTEGER NOT NULL DEFAULT 0,
+  goal_id INTEGER,
   created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS goals (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT NOT NULL DEFAULT '',
-  description TEXT,
-  status TEXT,
-  target_metric TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (goal_id) REFERENCES goals(id)
 );
 
 CREATE TABLE IF NOT EXISTS campaigns (
@@ -35,15 +42,33 @@ CREATE TABLE IF NOT EXISTS campaigns (
   title TEXT NOT NULL DEFAULT '',
   objective TEXT,
   status TEXT,
+  start_date TEXT,
+  end_date TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
+  notes TEXT,
+  plan_summary TEXT,
+  plan_mode TEXT,
+  plan_boundary_note TEXT,
+  plan_generated_at TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (goal_id) REFERENCES goals(id)
+);
+
+CREATE TABLE IF NOT EXISTS campaign_sources (
+  campaign_id INTEGER NOT NULL,
+  source_id INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (campaign_id, source_id),
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id),
+  FOREIGN KEY (source_id) REFERENCES sources(id)
 );
 
 CREATE TABLE IF NOT EXISTS content_items (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   source_id INTEGER,
   campaign_id INTEGER,
+  goal_id INTEGER,
   title TEXT NOT NULL DEFAULT '',
   body TEXT,
   status TEXT,
@@ -54,7 +79,28 @@ CREATE TABLE IF NOT EXISTS content_items (
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (source_id) REFERENCES sources(id),
-  FOREIGN KEY (campaign_id) REFERENCES campaigns(id)
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id),
+  FOREIGN KEY (goal_id) REFERENCES goals(id)
+);
+
+CREATE TABLE IF NOT EXISTS campaign_plan_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  campaign_id INTEGER NOT NULL,
+  source_id INTEGER,
+  content_id INTEGER,
+  sequence INTEGER NOT NULL DEFAULT 1,
+  title TEXT,
+  purpose TEXT,
+  format TEXT,
+  intended_audience TEXT,
+  suggested_timing TEXT,
+  status TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id),
+  FOREIGN KEY (source_id) REFERENCES sources(id),
+  FOREIGN KEY (content_id) REFERENCES content_items(id)
 );
 
 CREATE TABLE IF NOT EXISTS approvals (
@@ -103,7 +149,11 @@ CREATE TABLE IF NOT EXISTS metrics (
   publication_id INTEGER,
   metric_name TEXT,
   metric_value TEXT,
+  numeric_value REAL,
   captured_at TEXT,
+  capture_method TEXT,
+  captured_by TEXT,
+  notes TEXT,
   is_simulated INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
@@ -151,6 +201,12 @@ CREATE TABLE IF NOT EXISTS recommendations (
   campaign_id INTEGER,
   summary TEXT,
   action_hint TEXT,
+  observed TEXT,
+  why_it_matters TEXT,
+  evidence_json TEXT,
+  analysis_mode TEXT,
+  analysis_boundary_note TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (goal_id) REFERENCES goals(id),

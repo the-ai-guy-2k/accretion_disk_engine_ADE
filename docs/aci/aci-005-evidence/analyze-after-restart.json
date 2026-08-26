@@ -1,0 +1,697 @@
+{
+  "ok": true,
+  "banner": "ADE DETERMINISTIC / MOCK ANALYSIS BOUNDARY — live AI was not used. This recommendation is produced from persisted Goal, content, and operator-entered metrics only.",
+  "recommendation": {
+    "id": 3,
+    "goal_id": 1,
+    "campaign_id": null,
+    "summary": "General informational content is contributing more Audience Network growth than client-result content (8 vs 7 on this Goal). Consider producing another piece based on similar source material to the stronger general informational content.",
+    "action_hint": "Consider producing another piece based on similar source material to the stronger general informational content.",
+    "created_at": "2026-08-26T18:17:12.616Z",
+    "updated_at": "2026-08-26T18:17:12.616Z",
+    "observed": "General informational content is contributing more Audience Network growth than client-result content (8 vs 7 on this Goal).",
+    "why_it_matters": "Goal progress is 15 of 10 Audience Network growth (starting 0, contributed 15). ADE ranks usefulness by Business Outcomes, then Meaningful Engagement, then Raw Visibility. These figures are operator-entered unless a row is marked as platform-collected.",
+    "evidence_json": "[{\"publicationId\":3,\"contentId\":3,\"title\":\"[TEST DATA] Draft from source: [TEST DATA] Informational source\",\"metric\":\"audience_network_gained\",\"value\":8,\"captureMethod\":\"manual\"},{\"publicationId\":2,\"contentId\":2,\"title\":\"[TEST DATA] Draft from source: [TEST DATA] Client-result source\",\"metric\":\"audience_network_gained\",\"value\":7,\"captureMethod\":\"manual\"}]",
+    "analysis_mode": "deterministic_mock",
+    "analysis_boundary_note": "ADE DETERMINISTIC / MOCK ANALYSIS BOUNDARY — live AI was not used. This recommendation is produced from persisted Goal, content, and operator-entered metrics only.",
+    "is_test": 1,
+    "evidence": [
+      {
+        "publicationId": 3,
+        "contentId": 3,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "metric": "audience_network_gained",
+        "value": 8,
+        "captureMethod": "manual"
+      },
+      {
+        "publicationId": 2,
+        "contentId": 2,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+        "metric": "audience_network_gained",
+        "value": 7,
+        "captureMethod": "manual"
+      }
+    ],
+    "liveAiUsed": false
+  },
+  "snapshot": {
+    "hierarchy": "Business Outcomes > Meaningful Engagement > Raw Visibility",
+    "metricKeys": [
+      "views_reach",
+      "reactions",
+      "comments",
+      "shares",
+      "clicks",
+      "audience_network_gained",
+      "meaningful_conversations",
+      "leads_generated"
+    ],
+    "metricLabels": {
+      "views_reach": "Views / reach",
+      "reactions": "Reactions",
+      "comments": "Comments",
+      "shares": "Shares",
+      "clicks": "Clicks",
+      "audience_network_gained": "Audience Network gained",
+      "meaningful_conversations": "Meaningful conversations",
+      "leads_generated": "Leads generated"
+    },
+    "goal": {
+      "id": 1,
+      "title": "[TEST DATA] Increase Audience Network by 10",
+      "description": "ACI-005 validation goal. TEST DATA. No fabricated audience claim.",
+      "status": "active",
+      "target_metric": "audience_network_gained",
+      "created_at": "2026-08-26T18:14:12.733Z",
+      "updated_at": "2026-08-26T18:14:12.733Z",
+      "starting_value": 0,
+      "target_value": 10,
+      "target_date": null,
+      "is_test": 1,
+      "notes": "",
+      "contributed": 15,
+      "progress": {
+        "starting": 0,
+        "target": 10,
+        "contributed": 15,
+        "current": 15,
+        "remaining": 0,
+        "percent": 1.5,
+        "achieved": true
+      }
+    },
+    "publications": [
+      {
+        "publicationId": 4,
+        "contentId": 4,
+        "sourceId": 4,
+        "goalId": null,
+        "title": "[TEST DATA] Edited draft title",
+        "sourceTitle": "[TEST DATA] ADE ACI-004 validation source",
+        "sourceType": "taig_activity",
+        "materialKind": "other",
+        "materialKindLabel": "other content",
+        "isTest": true,
+        "captureMethod": "none",
+        "hasResults": false,
+        "metrics": {},
+        "scores": {
+          "business": 0,
+          "engagement": 0,
+          "visibility": 0,
+          "towardGoal": 0
+        }
+      },
+      {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      },
+      {
+        "publicationId": 2,
+        "contentId": 2,
+        "sourceId": 2,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+        "sourceTitle": "[TEST DATA] Client-result source",
+        "sourceType": "client_result",
+        "materialKind": "client_result",
+        "materialKindLabel": "client-result content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 7,
+          "clicks": 4,
+          "comments": 2,
+          "leads_generated": 0,
+          "meaningful_conversations": 3,
+          "reactions": 6,
+          "shares": 1,
+          "views_reach": 40
+        },
+        "scores": {
+          "business": 35,
+          "engagement": 26,
+          "visibility": 44,
+          "towardGoal": 7
+        }
+      },
+      {
+        "publicationId": 1,
+        "contentId": 1,
+        "sourceId": 1,
+        "goalId": null,
+        "title": "[TEST DATA] Edited draft title",
+        "sourceTitle": "[TEST DATA] ADE ACI-004 validation source",
+        "sourceType": "taig_activity",
+        "materialKind": "other",
+        "materialKindLabel": "other content",
+        "isTest": true,
+        "captureMethod": "none",
+        "hasResults": false,
+        "metrics": {},
+        "scores": {
+          "business": 0,
+          "engagement": 0,
+          "visibility": 0,
+          "towardGoal": 0
+        }
+      }
+    ],
+    "goalPublications": [
+      {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      },
+      {
+        "publicationId": 2,
+        "contentId": 2,
+        "sourceId": 2,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+        "sourceTitle": "[TEST DATA] Client-result source",
+        "sourceType": "client_result",
+        "materialKind": "client_result",
+        "materialKindLabel": "client-result content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 7,
+          "clicks": 4,
+          "comments": 2,
+          "leads_generated": 0,
+          "meaningful_conversations": 3,
+          "reactions": 6,
+          "shares": 1,
+          "views_reach": 40
+        },
+        "scores": {
+          "business": 35,
+          "engagement": 26,
+          "visibility": 44,
+          "towardGoal": 7
+        }
+      }
+    ],
+    "answers": {
+      "mostVisibility": {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      },
+      "mostEngagement": {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      },
+      "mostAudienceNetwork": {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      },
+      "goalProgressing": {
+        "yes": true,
+        "progress": {
+          "starting": 0,
+          "target": 10,
+          "contributed": 15,
+          "current": 15,
+          "remaining": 0,
+          "percent": 1.5,
+          "achieved": true
+        }
+      },
+      "mostUsefulTowardGoal": {
+        "publicationId": 3,
+        "contentId": 3,
+        "sourceId": 3,
+        "goalId": 1,
+        "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+        "sourceTitle": "[TEST DATA] Informational source",
+        "sourceType": "informational",
+        "materialKind": "informational",
+        "materialKindLabel": "general informational content",
+        "isTest": true,
+        "captureMethod": "manual",
+        "hasResults": true,
+        "metrics": {
+          "audience_network_gained": 8,
+          "clicks": 30,
+          "comments": 1,
+          "leads_generated": 0,
+          "meaningful_conversations": 0,
+          "reactions": 20,
+          "shares": 4,
+          "views_reach": 200
+        },
+        "scores": {
+          "business": 40,
+          "engagement": 31,
+          "visibility": 230,
+          "towardGoal": 8
+        }
+      }
+    },
+    "rankings": {
+      "visibility": [
+        {
+          "publicationId": 3,
+          "contentId": 3,
+          "sourceId": 3,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+          "sourceTitle": "[TEST DATA] Informational source",
+          "sourceType": "informational",
+          "materialKind": "informational",
+          "materialKindLabel": "general informational content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 8,
+            "clicks": 30,
+            "comments": 1,
+            "leads_generated": 0,
+            "meaningful_conversations": 0,
+            "reactions": 20,
+            "shares": 4,
+            "views_reach": 200
+          },
+          "scores": {
+            "business": 40,
+            "engagement": 31,
+            "visibility": 230,
+            "towardGoal": 8
+          }
+        },
+        {
+          "publicationId": 2,
+          "contentId": 2,
+          "sourceId": 2,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+          "sourceTitle": "[TEST DATA] Client-result source",
+          "sourceType": "client_result",
+          "materialKind": "client_result",
+          "materialKindLabel": "client-result content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 7,
+            "clicks": 4,
+            "comments": 2,
+            "leads_generated": 0,
+            "meaningful_conversations": 3,
+            "reactions": 6,
+            "shares": 1,
+            "views_reach": 40
+          },
+          "scores": {
+            "business": 35,
+            "engagement": 26,
+            "visibility": 44,
+            "towardGoal": 7
+          }
+        }
+      ],
+      "engagement": [
+        {
+          "publicationId": 3,
+          "contentId": 3,
+          "sourceId": 3,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+          "sourceTitle": "[TEST DATA] Informational source",
+          "sourceType": "informational",
+          "materialKind": "informational",
+          "materialKindLabel": "general informational content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 8,
+            "clicks": 30,
+            "comments": 1,
+            "leads_generated": 0,
+            "meaningful_conversations": 0,
+            "reactions": 20,
+            "shares": 4,
+            "views_reach": 200
+          },
+          "scores": {
+            "business": 40,
+            "engagement": 31,
+            "visibility": 230,
+            "towardGoal": 8
+          }
+        },
+        {
+          "publicationId": 2,
+          "contentId": 2,
+          "sourceId": 2,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+          "sourceTitle": "[TEST DATA] Client-result source",
+          "sourceType": "client_result",
+          "materialKind": "client_result",
+          "materialKindLabel": "client-result content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 7,
+            "clicks": 4,
+            "comments": 2,
+            "leads_generated": 0,
+            "meaningful_conversations": 3,
+            "reactions": 6,
+            "shares": 1,
+            "views_reach": 40
+          },
+          "scores": {
+            "business": 35,
+            "engagement": 26,
+            "visibility": 44,
+            "towardGoal": 7
+          }
+        }
+      ],
+      "audienceNetwork": [
+        {
+          "publicationId": 3,
+          "contentId": 3,
+          "sourceId": 3,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+          "sourceTitle": "[TEST DATA] Informational source",
+          "sourceType": "informational",
+          "materialKind": "informational",
+          "materialKindLabel": "general informational content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 8,
+            "clicks": 30,
+            "comments": 1,
+            "leads_generated": 0,
+            "meaningful_conversations": 0,
+            "reactions": 20,
+            "shares": 4,
+            "views_reach": 200
+          },
+          "scores": {
+            "business": 40,
+            "engagement": 31,
+            "visibility": 230,
+            "towardGoal": 8
+          }
+        },
+        {
+          "publicationId": 2,
+          "contentId": 2,
+          "sourceId": 2,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+          "sourceTitle": "[TEST DATA] Client-result source",
+          "sourceType": "client_result",
+          "materialKind": "client_result",
+          "materialKindLabel": "client-result content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 7,
+            "clicks": 4,
+            "comments": 2,
+            "leads_generated": 0,
+            "meaningful_conversations": 3,
+            "reactions": 6,
+            "shares": 1,
+            "views_reach": 40
+          },
+          "scores": {
+            "business": 35,
+            "engagement": 26,
+            "visibility": 44,
+            "towardGoal": 7
+          }
+        }
+      ],
+      "towardGoal": [
+        {
+          "publicationId": 3,
+          "contentId": 3,
+          "sourceId": 3,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+          "sourceTitle": "[TEST DATA] Informational source",
+          "sourceType": "informational",
+          "materialKind": "informational",
+          "materialKindLabel": "general informational content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 8,
+            "clicks": 30,
+            "comments": 1,
+            "leads_generated": 0,
+            "meaningful_conversations": 0,
+            "reactions": 20,
+            "shares": 4,
+            "views_reach": 200
+          },
+          "scores": {
+            "business": 40,
+            "engagement": 31,
+            "visibility": 230,
+            "towardGoal": 8
+          }
+        },
+        {
+          "publicationId": 2,
+          "contentId": 2,
+          "sourceId": 2,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+          "sourceTitle": "[TEST DATA] Client-result source",
+          "sourceType": "client_result",
+          "materialKind": "client_result",
+          "materialKindLabel": "client-result content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 7,
+            "clicks": 4,
+            "comments": 2,
+            "leads_generated": 0,
+            "meaningful_conversations": 3,
+            "reactions": 6,
+            "shares": 1,
+            "views_reach": 40
+          },
+          "scores": {
+            "business": 35,
+            "engagement": 26,
+            "visibility": 44,
+            "towardGoal": 7
+          }
+        }
+      ],
+      "usefulTowardGoal": [
+        {
+          "publicationId": 3,
+          "contentId": 3,
+          "sourceId": 3,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Informational source",
+          "sourceTitle": "[TEST DATA] Informational source",
+          "sourceType": "informational",
+          "materialKind": "informational",
+          "materialKindLabel": "general informational content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 8,
+            "clicks": 30,
+            "comments": 1,
+            "leads_generated": 0,
+            "meaningful_conversations": 0,
+            "reactions": 20,
+            "shares": 4,
+            "views_reach": 200
+          },
+          "scores": {
+            "business": 40,
+            "engagement": 31,
+            "visibility": 230,
+            "towardGoal": 8
+          }
+        },
+        {
+          "publicationId": 2,
+          "contentId": 2,
+          "sourceId": 2,
+          "goalId": 1,
+          "title": "[TEST DATA] Draft from source: [TEST DATA] Client-result source",
+          "sourceTitle": "[TEST DATA] Client-result source",
+          "sourceType": "client_result",
+          "materialKind": "client_result",
+          "materialKindLabel": "client-result content",
+          "isTest": true,
+          "captureMethod": "manual",
+          "hasResults": true,
+          "metrics": {
+            "audience_network_gained": 7,
+            "clicks": 4,
+            "comments": 2,
+            "leads_generated": 0,
+            "meaningful_conversations": 3,
+            "reactions": 6,
+            "shares": 1,
+            "views_reach": 40
+          },
+          "scores": {
+            "business": 35,
+            "engagement": 26,
+            "visibility": 44,
+            "towardGoal": 7
+          }
+        }
+      ]
+    }
+  }
+}

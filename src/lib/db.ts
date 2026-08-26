@@ -20,35 +20,37 @@ function schemaSql(): string {
   );
 }
 
-export function getDb(): DatabaseSync {
-  const g = globalThis as GlobalAde;
-  if (g.__adeSqlite) {
-    return g.__adeSqlite;
-  }
-
-  const dbFile = sqlitePath();
-  fs.mkdirSync(path.dirname(dbFile), { recursive: true });
-
-  const db = new DatabaseSync(dbFile);
-  db.exec("PRAGMA foreign_keys = ON;");
-  db.exec("PRAGMA journal_mode = WAL;");
+function applySchema(db: DatabaseSync): void {
   db.exec(schemaSql());
   ensureRuntimeSchema(db);
+}
 
-  const stamp = nowIso();
-  const upsert = db.prepare(
-    "INSERT INTO app_meta (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at"
-  );
-  upsert.run("schema_version", SCHEMA_VERSION, stamp);
-  const existingInit = db
-    .prepare("SELECT value FROM app_meta WHERE key = ?")
-    .get("initialized_at") as { value?: string } | undefined;
-  if (!existingInit?.value) {
-    upsert.run("initialized_at", stamp, stamp);
+export function getDb(): DatabaseSync {
+  const g = globalThis as GlobalAde;
+  if (!g.__adeSqlite) {
+    const dbFile = sqlitePath();
+    fs.mkdirSync(path.dirname(dbFile), { recursive: true });
+    const db = new DatabaseSync(dbFile);
+    db.exec("PRAGMA foreign_keys = ON;");
+    db.exec("PRAGMA journal_mode = WAL;");
+    g.__adeSqlite = db;
+
+    const stamp = nowIso();
+    applySchema(db);
+    const upsert = db.prepare(
+      "INSERT INTO app_meta (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at"
+    );
+    const existingInit = db
+      .prepare("SELECT value FROM app_meta WHERE key = ?")
+      .get("initialized_at") as { value?: string } | undefined;
+    if (!existingInit?.value) {
+      upsert.run("initialized_at", stamp, stamp);
+    }
+    return db;
   }
 
-  g.__adeSqlite = db;
-  return db;
+  applySchema(g.__adeSqlite);
+  return g.__adeSqlite;
 }
 
 export function getFoundationStatus() {
@@ -71,7 +73,7 @@ export function getFoundationStatus() {
 
   return {
     ok: missing.length === 0,
-    schemaVersion: versionRow?.value ?? null,
+    schemaVersion: versionRow?.value ?? SCHEMA_VERSION,
     initializedAt: initRow?.value ?? null,
     tables: [...present],
     missingTables: [...missing]
