@@ -1,0 +1,20 @@
+
+> accretion-disk-engine@0.1.0 test
+> node --test tests/persistence.test.mjs tests/workflow-gates.test.mjs tests/analytics-logic.test.mjs tests/campaign-plan.test.mjs
+
+Γ£ö goal progress uses starting value plus contributed results (1.4749ms)
+Γ£ö business outcomes outrank meaningful engagement and raw visibility (0.2902ms)
+Γ£ö recommendation comparison flips when the leading metric flips (0.2199ms)
+Γ£ö campaign plan orders result-proof sources before informational sources (2.0582ms)
+Γ£ö campaign plan purpose follows source type (0.5244ms)
+Γ£ö SQLite foundation creates required tables and schema version (109.7663ms)
+Γ£ö only approved content may enter the publish queue (1.2192ms)
+Γ£ö adapter and confirm transitions refuse duplicates and published terminals (0.2965ms)
+Γä╣ tests 8
+Γä╣ suites 0
+Γä╣ pass 8
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 240.5176

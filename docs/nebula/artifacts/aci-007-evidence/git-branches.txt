@@ -1,0 +1,3 @@
+  deployable      f219fce Add Goal analytics and campaign planning so operators can generate multiple drafts from a Goal without building each post by hand.
+* feature/aci-007 f219fce Add Goal analytics and campaign planning so operators can generate multiple drafts from a Goal without building each post by hand.
+  main            f219fce [origin/main] Add Goal analytics and campaign planning so operators can generate multiple drafts from a Goal without building each post by hand.

@@ -1,0 +1,16 @@
+
+> accretion-disk-engine@0.1.0 validate:aci006
+> node scripts/validate-aci006.mjs
+
+OK: schema v4 health
+OK: goal 6 created
+OK: sources 15 and 16 created
+OK: campaign 2 linked to goal 6
+OK: two sources attached to campaign
+OK: content plan has 2 items
+OK: multiple drafts generated with goal, campaign, and source provenance
+OK: approved draft 15 entered publishing queue
+OK: rejected campaign draft cannot enter publishing queue
+OK: campaign workspace shows plan, drafts, approvals, and publishing state
+OK: campaign results endpoint reuses ACI-005 metrics primitives
+ACI-006 HTTP validation passed against http://localhost:3000

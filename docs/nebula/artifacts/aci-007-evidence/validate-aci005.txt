@@ -1,0 +1,15 @@
+
+> accretion-disk-engine@0.1.0 validate:aci005
+> node scripts/validate-aci005.mjs
+
+OK: schema v3 health
+OK: goal 5 created
+OK: published client 12 and informational 13
+OK: platform-collected metrics refused
+OK: manual results recorded for both publications
+OK: goal progress 8/10 from entered results
+OK: analytics rankings follow outcomes > engagement > visibility
+OK: first recommendation prefers client-result content
+OK: recommendation changed after results were updated
+OK: source ΓåÆ draft provenance preserved
+ACI-005 HTTP validation passed against http://localhost:3000

@@ -1,0 +1,17 @@
+
+> accretion-disk-engine@0.1.0 validate:aci004
+> node scripts/validate-aci004.mjs
+
+OK: source 12 persisted
+OK: draft 12 linked to source 12
+OK: draft edited
+OK: unapproved content cannot enter queue
+OK: rejected content cannot enter queue
+OK: approved content entered queue as publication 11
+OK: failure path sets FAILED and not PUBLISHED
+OK: mock adapter hand-off identified as not real Facebook
+OK: duplicate adapter hand-off blocked
+OK: mock publish success path
+OK: published mock item is terminal
+OK: source ΓåÆ draft provenance survived
+ACI-004 HTTP validation passed against http://localhost:3000

@@ -1,5 +1,7 @@
 # ADE data model (schema v4)
 
+Nebula copy: [`docs/nebula/data-model/current-data-model.md`](nebula/data-model/current-data-model.md). SQL source of truth remains `src/lib/schema.sql`.
+
 Engine: **SQLite** via Node `node:sqlite`.  
 File: `./data/ade.sqlite` unless `ADE_SQLITE_PATH` is set.  
 SQL source of truth: `src/lib/schema.sql`. Runtime column upgrades: `src/lib/migrate.ts`.

@@ -1,0 +1,15 @@
+Restart validation: PASS
+Note: next dev was intentionally stopped to validate persistence. That stop is not an ADE startup failure.
+initialized_at before=2026-08-26T00:24:40.643Z
+initialized_at after=2026-08-26T00:24:40.643Z
+schema before=4 after=4
+campaign id=2 title=[TEST DATA] ADE Awareness Campaign
+goal_id=6
+sources=2
+plan items=2
+drafts=2
+approved=1
+rejected=1
+publications=1
+initialized_at_ok=true
+campaign_survived=true

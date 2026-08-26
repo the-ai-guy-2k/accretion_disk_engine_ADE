@@ -13,7 +13,8 @@ TAIG is the **initial user and test environment**. ADE itself is a general produ
 # Accretion Disk Engine
 **ADE**
 
-Operator philosophy: **Goals → Decisions → Results**
+Operator philosophy: **Goals → Decisions → Results**  
+Implemented loop through ACI-006 also includes **Goals → Campaigns → Decisions → Results**. That is current capability, not a rename of the product.
 
 ## Current capabilities (honest)
 
@@ -89,7 +90,7 @@ npm start
 
 On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v4** for ACI-006 campaigns, content plans, and multi-draft generation). Restarting the app keeps stored sources, drafts, approvals, publications, goals, campaigns, metrics, and recommendations.
 
-See [docs/data-model.md](docs/data-model.md).
+See [docs/data-model.md](docs/data-model.md) and the Nebula record [docs/nebula/data-model/current-data-model.md](docs/nebula/data-model/current-data-model.md).
 
 ## Configuration
 
@@ -103,9 +104,20 @@ src/components     App shell and workflow UI
 src/lib            Config, SQLite, workflow, channel adapter
 data               Runtime SQLite (gitignored)
 docs               Architecture, data model, ACI reports
+docs/nebula        Governance: ACI/ACR, architecture, data model, workflow
 tests              Schema and workflow-gate tests
-scripts            DB init and ACI-004 HTTP validation
+scripts            DB init and ACI HTTP validation
 ```
+
+## Engineering documentation (Nebula)
+
+Governance overlay (does not replace the app):
+
+- [docs/nebula/README.md](docs/nebula/README.md)
+- Architecture (current truth): [docs/nebula/architecture/current-architecture.md](docs/nebula/architecture/current-architecture.md)
+- Branch workflow: [docs/nebula/passdowns/engineering-workflow.md](docs/nebula/passdowns/engineering-workflow.md)
+- ACI archive: [docs/nebula/aci/HISTORY.md](docs/nebula/aci/HISTORY.md)
+- ACR index: [docs/nebula/acr/INDEX.md](docs/nebula/acr/INDEX.md)
 
 ## Git
 
@@ -114,6 +126,20 @@ Authoritative remote:
 `https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE.git`
 
 The local folder name `Accretion_disk_engin_ADE` is the workstation path; the GitHub repository name uses `engine`.
+
+### Branches
+
+| Branch | Role |
+| --- | --- |
+| `feature/aci-###` | Work for one ACI. Not release truth. |
+| `deployable` | Validated promotion / release line. |
+| `main` | Historical integration line. Do not destroy or rewrite. |
+
+Workflow:
+
+**QEN → ACI → feature/aci-### → CAE implementation → validation → ACR → merge to deployable → remote checkpoint**
+
+Do not treat unvalidated feature branches as the validated ADE state.
 
 ## Limitations
 

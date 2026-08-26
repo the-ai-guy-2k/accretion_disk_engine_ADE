@@ -1,5 +1,7 @@
 # ADE architecture (ACI-002)
 
+> **Current implemented architecture (ACI-004 through ACI-006)** is documented in [`docs/nebula/architecture/current-architecture.md`](nebula/architecture/current-architecture.md). This file is the ACI-002 bootstrap snapshot (schema v1, health-only). Do not treat it as current product truth.
+
 ADE is a **single-operator localhost MVP**. One Next.js process serves the Hub UI and a small health API. There is no microservice split, message bus, or cloud dependency in this foundation.
 
 ```text
