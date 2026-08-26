@@ -184,17 +184,16 @@ Stage string in health remains `ACI-006 campaign planning` because product code 
 
 ## 12. Git/Remote State
 
-Recorded at the end of this ACI (after commit / merge / push):
-
 | Ref | Role |
 | --- | --- |
-| Starting product commit | `f219fce` |
+| Starting product commit | `f219fce48165bf9d242c9795542a0b1b57cebd31` |
+| ACI-007 documentation commit | `47579ee` (feature/aci-007) |
 | Work branch | `feature/aci-007` |
-| Validated promotion | `deployable` |
-| Historical line | `main` (not rewritten) |
+| Validated promotion | `deployable` (fast-forwarded to include ACI-007) |
+| Historical line | `main` (fast-forward only; not rewritten) |
 | Remote | `https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE` |
 
-Exact post-commit SHAs are filled after the git checkpoint in this same slice (see evidence `git-branches.txt` after push).
+Remote SHAs after push are recorded in the checkpoint of this slice.
 
 ---
 
