@@ -1,0 +1,9 @@
+﻿Captured: 2026-08-25 local
+Path: C:\Users\tim\Documents\business_related\The_AI_Guy\nebula\2 - TAIG2K_SOFTWARE\Accretion_disk_engin_ADE
+Exists: True
+CreationTime: 2026-08-25T20:01:31.7507752-04:00
+LastWriteTime: 2026-08-25T20:10:50.1059635-04:00
+IsGitRepository: False
+FileCountIncludingHidden: 2
+cmd dir /a:
+ Volume in drive C is Windows  Volume Serial Number is 544E-21BB   Directory of C:\Users\tim\Documents\business_related\The_AI_Guy\nebula\2 - TAIG2K_SOFTWARE\Accretion_disk_engin_ADE  08/25/2026  08:10 PM    <DIR>          . 08/25/2026  08:01 PM    <DIR>          .. 08/25/2026  08:10 PM    <DIR>          ACI-001_SANITIZED_PACKAGE                0 File(s)              0 bytes                3 Dir(s)  359,638,421,504 bytes free

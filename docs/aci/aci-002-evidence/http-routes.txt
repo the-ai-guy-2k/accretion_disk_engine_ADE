@@ -1,0 +1,13 @@
+GET / -> 200 (contains Accretion Disk Engine)
+GET /sources -> 200
+GET /create -> 200
+GET /review -> 200
+GET /publishing -> 200
+GET /analytics -> 200
+GET /leads -> 200
+GET /intelligence -> 200
+GET /settings -> 200
+GET /api/health -> 200 ok=true schemaVersion=1 tables=13
+Restart: initializedAt 2026-08-26T00:24:40.643Z unchanged
+Startup: npm run dev
+URL: http://localhost:3000

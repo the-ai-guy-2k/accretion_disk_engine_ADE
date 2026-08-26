@@ -1,0 +1,10 @@
+﻿Command: git ls-remote https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE.git
+ExitCode: 0
+Stdout/Stderr:
+
+
+Command: git ls-remote --heads --tags --exit-code https://github.com/the-ai-guy-2k/accretion_disk_engine_ADE.git
+ExitCode: 2
+Note: git ls-remote --exit-code returns 2 when the remote has no matching refs.
+Stdout/Stderr:
+

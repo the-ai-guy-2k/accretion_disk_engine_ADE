@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# next
+.next/
+out/
+
+# env / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# persistence
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+data/*.json
+!data/.gitkeep
+
+# logs / caches
+npm-debug.log*
+.DS_Store
+Thumbs.db
+*.log
+.turbo
+
+# typescript
+tsconfig.tsbuildinfo
