@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { sqlitePath } from "@/lib/config";
+import { ensureRuntimeSchema } from "@/lib/migrate";
 import { FOUNDATION_TABLES, SCHEMA_VERSION } from "@/lib/schema";
 
 type GlobalAde = typeof globalThis & {
@@ -32,6 +33,7 @@ export function getDb(): DatabaseSync {
   db.exec("PRAGMA foreign_keys = ON;");
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec(schemaSql());
+  ensureRuntimeSchema(db);
 
   const stamp = nowIso();
   const upsert = db.prepare(

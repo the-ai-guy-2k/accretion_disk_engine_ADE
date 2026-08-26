@@ -1,10 +1,12 @@
 # Accretion Disk Engine (ADE)
 
-Localhost MVP **foundation** for TAIG’s Accretion Disk Engine.
+The **Accretion Disk Engine (ADE)** is designed to increase a user's social media viewership and online presence by automating repetitive content-management tasks and using AI-assisted analytics to evaluate performance and improve future content. ADE helps users create, review, schedule, publish, measure, and continuously improve social media content from one centralized hub.
 
-ADE is intended to turn real TAIG work into approved content, measure what that content produces, and feed evidence back into better business decisions. **This repository is not that full product yet.**
+**Short intent:** Automate the manual work of social media management and use AI-assisted analytics to continuously improve content, viewership, and online presence.
 
-This tree is the ACI-002 bootstrap: a runnable ADE Hub shell, local SQLite persistence, and Git connection. It does **not** generate content, publish to Facebook, schedule posts, ingest analytics, or embed AI.
+That is the **product intent**. This repository is an early localhost MVP. Features named above that are not in the capability table below are **not yet implemented**.
+
+TAIG is the **initial user and test environment**. ADE itself is a general product for its users, not a TAIG-only tool.
 
 ## Product identity
 
@@ -18,15 +20,18 @@ Operator philosophy: **Goals → Decisions → Results**
 | Area | Status |
 | --- | --- |
 | ADE Hub shell in the browser | Working |
-| Navigation to Dashboard, Sources, Create, Review, Publishing, Analytics, Leads, Intelligence, Settings | Working (shell pages) |
-| Local SQLite schema for future entities | Working (empty tables) |
-| AI generation | Not implemented |
-| Human approval workflow | Not implemented |
-| Publishing / scheduling / Facebook | Not implemented |
-| Analytics / leads / intelligence | Not implemented |
-| Postiz / Mixpost | Not integrated (deferred to later ACI) |
+| Sources (create, list, select) | Working |
+| Draft from source (mock/manual generation) | Working |
+| Review / edit / approve / reject | Working |
+| Publishing queue + mock Facebook adapter | Working |
+| Live AI generation | Not implemented (mock/manual boundary) |
+| Scheduling | Not implemented (queue only) |
+| Real Facebook/Meta publishing | Not implemented (mock adapter only) |
+| Measurement / AI-assisted analytics | Not implemented |
+| Leads / intelligence | Not implemented |
+| Postiz / Mixpost | Not imported (patterns only, ACI-003) |
 
-Dashboard cards are **placeholders**. They do not display real campaigns, metrics, or recommendations.
+The Hub does **not** display live social metrics or fabricated audience/business results.
 
 ## Technology stack
 
@@ -61,6 +66,7 @@ Optional:
 copy .env.example .env.local
 npm test
 npm run db:init
+npm run validate:aci004
 ```
 
 Production-style local run after `npm run build`:
@@ -73,26 +79,24 @@ npm start
 
 ## Persistence
 
-On first `/api/health` request (and when the Dashboard/Settings pages load that endpoint), ADE creates `data/ade.sqlite` and schema version `1`.
-
-Restarting the app keeps data in that file. ACI-002 does not write business records; tables start empty except `app_meta`.
+On first health/workflow use, ADE creates or upgrades `data/ade.sqlite` (schema **v2** for the ACI-004 workflow). Restarting the app keeps stored sources, drafts, approvals, and publications.
 
 See [docs/data-model.md](docs/data-model.md).
 
 ## Configuration
 
-Variable **names** are listed in `.env.example`. Do not put secrets in Git. None of the AI or Meta variables are required to start the Hub.
+Variable **names** are listed in `.env.example`. Do not put secrets in Git. None of the AI or Meta variables are required to start the Hub or complete the mock Facebook path.
 
 ## Directory structure
 
 ```text
-src/app            Hub routes and /api/health
-src/components     App shell, placeholders, status
-src/lib            Config, SQLite access, schema
+src/app            Hub routes and APIs
+src/components     App shell and workflow UI
+src/lib            Config, SQLite, workflow, channel adapter
 data               Runtime SQLite (gitignored)
 docs               Architecture, data model, ACI reports
-tests              Persistence foundation test
-scripts            Standalone DB init
+tests              Schema and workflow-gate tests
+scripts            DB init and ACI-004 HTTP validation
 ```
 
 ## Git
@@ -105,8 +109,8 @@ The local folder name `Accretion_disk_engin_ADE` is the workstation path; the Gi
 
 ## Limitations
 
-- Foundation / shell only
+- Localhost MVP, not the full product intent
 - No authentication
-- No hybrid Postiz/Mixpost harvest
+- No live AI, live Facebook publish, scheduling calendar, or analytics
 - Requires Node with `node:sqlite` (22.5+)
 - Default bind is localhost port 3000

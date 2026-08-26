@@ -44,15 +44,20 @@ test("SQLite foundation creates required tables and schema version", () => {
   }
 
   const version = db.prepare("SELECT value FROM app_meta WHERE key = ?").get("schema_version");
-  assert.equal(version.value, "1");
+  assert.equal(version.value, "2");
 
   const counts = REQUIRED_TABLES.filter((name) => name !== "app_meta").map((name) => {
     const row = db.prepare(`SELECT COUNT(*) AS n FROM ${name}`).get();
-    return row.n;
+    return { name, n: row.n };
   });
   assert.ok(
-    counts.every((n) => n === 0),
+    counts.every((row) => row.n === 0),
     "foundation tables must start empty (no fabricated business data)"
   );
+
+  const sourceCols = db.prepare("PRAGMA table_info(sources)").all().map((row) => row.name);
+  for (const col of ["body", "activity_date", "provenance", "is_test"]) {
+    assert.ok(sourceCols.includes(col), `sources missing ${col}`);
+  }
   db.close();
 });

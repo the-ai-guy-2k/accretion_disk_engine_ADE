@@ -7,10 +7,14 @@ CREATE TABLE IF NOT EXISTS app_meta (
 CREATE TABLE IF NOT EXISTS sources (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL DEFAULT '',
+  body TEXT,
   source_type TEXT,
+  activity_date TEXT,
+  provenance TEXT,
   origin TEXT,
   marketing_eligibility TEXT,
   notes TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
@@ -44,6 +48,9 @@ CREATE TABLE IF NOT EXISTS content_items (
   body TEXT,
   status TEXT,
   channel_hint TEXT,
+  generation_mode TEXT,
+  generation_note TEXT,
+  is_test INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (source_id) REFERENCES sources(id),
@@ -66,7 +73,9 @@ CREATE TABLE IF NOT EXISTS channels (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL DEFAULT '',
   channel_type TEXT,
+  adapter_id TEXT,
   status TEXT,
+  is_mock INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );
@@ -79,6 +88,10 @@ CREATE TABLE IF NOT EXISTS publications (
   scheduled_at TEXT,
   published_at TEXT,
   external_post_id TEXT,
+  failure_reason TEXT,
+  adapter_id TEXT,
+  is_mock INTEGER NOT NULL DEFAULT 1,
+  attempt_id TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   FOREIGN KEY (content_id) REFERENCES content_items(id),

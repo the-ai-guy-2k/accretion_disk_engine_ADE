@@ -2,7 +2,7 @@ import path from "node:path";
 
 export const PRODUCT_NAME = "Accretion Disk Engine";
 export const PRODUCT_SHORT = "ADE";
-export const FOUNDATION_STAGE = "ACI-002 localhost MVP foundation";
+export const FOUNDATION_STAGE = "ACI-004 vertical slice";
 
 export function sqlitePath(): string {
   const configured = process.env.ADE_SQLITE_PATH?.trim();

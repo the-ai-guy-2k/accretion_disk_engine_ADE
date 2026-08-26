@@ -1,58 +1,74 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FoundationStatus } from "@/components/FoundationStatus";
+import { WorkflowStrip } from "@/components/WorkflowStrip";
 import { PRODUCT_NAME, PRODUCT_SHORT } from "@/lib/config";
 
-const DASHBOARD_CARDS = [
-  {
-    title: "Active goals",
-    body: "No goals stored. This card is a placeholder for later goal tracking."
-  },
-  {
-    title: "Campaigns",
-    body: "No campaigns stored. Campaign workflow is not implemented in this foundation."
-  },
-  {
-    title: "Pending approvals",
-    body: "No approval queue. Human review is not implemented yet."
-  },
-  {
-    title: "Publishing status",
-    body: "No publications. Scheduling and publishing are out of scope for ACI-002."
-  },
-  {
-    title: "Recent performance",
-    body: "No metrics. This is not live analytics."
-  },
-  {
-    title: "Audience Network",
-    body: "No audience events recorded."
-  },
-  {
-    title: "ADE recommendations",
-    body: "No recommendations. Intelligence is not implemented yet."
-  }
-];
+type Summary = {
+  sources: number;
+  drafts: number;
+  pendingReview: number;
+  approved: number;
+  queue: { PENDING: number; READY: number; PUBLISHED: number; FAILED: number };
+  adapter: { id: string; isMock: boolean; label: string };
+};
 
 export default function DashboardPage() {
+  const [summary, setSummary] = useState<Summary | null>(null);
+
+  useEffect(() => {
+    fetch("/api/workflow/summary")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.ok) setSummary(data.summary);
+      })
+      .catch(() => undefined);
+  }, []);
+
   return (
     <section>
+      <WorkflowStrip current="Source" />
       <h1>{PRODUCT_NAME}</h1>
       <p className="lede">
-        <strong>{PRODUCT_SHORT}</strong> is an early localhost MVP foundation.
-        The Hub frame is real. The cards below are placeholders and do not
-        represent live TAIG results.
-      </p>
-      <p className="lede">
-        Operator loop: <strong>Goals → Decisions → Results</strong>
+        <strong>{PRODUCT_SHORT}</strong> localhost vertical slice: Source → Draft →
+        Review → Publishing queue. Operator loop:{" "}
+        <strong>Goals → Decisions → Results</strong>
       </p>
       <FoundationStatus />
       <div className="grid" style={{ marginTop: "1rem" }}>
-        {DASHBOARD_CARDS.map((card) => (
-          <article className="card" key={card.title}>
-            <p className="placeholder-flag">Placeholder</p>
-            <h2>{card.title}</h2>
-            <p className="muted">{card.body}</p>
-          </article>
-        ))}
+        <article className="card">
+          <h2>Sources</h2>
+          <p>{summary ? `${summary.sources} stored` : "Loading…"}</p>
+          <Link href="/sources">Open sources</Link>
+        </article>
+        <article className="card">
+          <h2>Pending decisions</h2>
+          <p>{summary ? `${summary.pendingReview} draft/rejected items` : "Loading…"}</p>
+          <Link href="/review">Open review</Link>
+        </article>
+        <article className="card">
+          <h2>Publishing queue</h2>
+          <p>
+            {summary
+              ? `PENDING ${summary.queue.PENDING} · READY ${summary.queue.READY} · PUBLISHED ${summary.queue.PUBLISHED} · FAILED ${summary.queue.FAILED}`
+              : "Loading…"}
+          </p>
+          <Link href="/publishing">Open queue</Link>
+        </article>
+        <article className="card">
+          <p className="placeholder-flag">Mock adapter</p>
+          <h2>Facebook Channel 01</h2>
+          <p className="muted">
+            {summary?.adapter.label || "Manual / mock Facebook adapter"}. Not live Meta publishing.
+          </p>
+        </article>
+        <article className="card">
+          <p className="placeholder-flag">Placeholder</p>
+          <h2>Audience / leads / intelligence</h2>
+          <p className="muted">Not part of ACI-004. No fabricated metrics.</p>
+        </article>
       </div>
     </section>
   );

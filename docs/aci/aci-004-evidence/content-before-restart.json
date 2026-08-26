@@ -1,0 +1,71 @@
+﻿{
+    "ok":  true,
+    "content":  {
+                    "id":  1,
+                    "source_id":  1,
+                    "campaign_id":  null,
+                    "title":  "[TEST DATA] Edited draft title",
+                    "body":  "ADE MOCK / MANUAL GENERATION BOUNDARY â this draft was not produced by a live AI provider.\n\nSource id: 1\nSource title: [TEST DATA] ADE ACI-004 validation source\nProvenance: scripts/validate-aci004.mjs\n\nOperator-editable draft based on the source (not a live model output):\nTAIG localhost Hub vertical slice check. TEST DATA. No client, revenue, or audience claim.\n\nOperator edit recorded.",
+                    "status":  "approved",
+                    "channel_hint":  "facebook",
+                    "created_at":  "2026-08-26T17:47:20.185Z",
+                    "updated_at":  "2026-08-26T17:47:21.824Z",
+                    "generation_mode":  "mock_manual",
+                    "generation_note":  "ADE MOCK / MANUAL GENERATION BOUNDARY â this draft was not produced by a live AI provider.",
+                    "is_test":  1,
+                    "source_title":  "[TEST DATA] ADE ACI-004 validation source",
+                    "source_body":  "TAIG localhost Hub vertical slice check. TEST DATA. No client, revenue, or audience claim.",
+                    "source_type":  "taig_activity",
+                    "source_activity_date":  "2026-08-26",
+                    "source_provenance":  "scripts/validate-aci004.mjs",
+                    "source_notes":  "TEST DATA",
+                    "source_is_test":  1,
+                    "publication":  {
+                                        "id":  1,
+                                        "content_id":  1,
+                                        "channel_id":  1,
+                                        "status":  "PUBLISHED",
+                                        "scheduled_at":  null,
+                                        "published_at":  "2026-08-26T17:47:23.306Z",
+                                        "external_post_id":  "mock-fb-1-1787766443306",
+                                        "created_at":  "2026-08-26T17:47:21.828Z",
+                                        "updated_at":  "2026-08-26T17:47:23.306Z",
+                                        "failure_reason":  null,
+                                        "adapter_id":  "manual_facebook",
+                                        "is_mock":  1,
+                                        "attempt_id":  "68b758b7-f8c6-4a76-9850-9dbfebdbdd07"
+                                    },
+                    "approvals":  [
+                                      {
+                                          "id":  3,
+                                          "content_id":  1,
+                                          "decision":  "approved",
+                                          "decided_by":  "operator",
+                                          "notes":  "",
+                                          "decided_at":  "2026-08-26T17:47:21.826Z",
+                                          "created_at":  "2026-08-26T17:47:21.826Z",
+                                          "updated_at":  "2026-08-26T17:47:21.826Z"
+                                      },
+                                      {
+                                          "id":  2,
+                                          "content_id":  1,
+                                          "decision":  "returned_to_draft",
+                                          "decided_by":  "operator",
+                                          "notes":  "",
+                                          "decided_at":  "2026-08-26T17:47:21.770Z",
+                                          "created_at":  "2026-08-26T17:47:21.770Z",
+                                          "updated_at":  "2026-08-26T17:47:21.770Z"
+                                      },
+                                      {
+                                          "id":  1,
+                                          "content_id":  1,
+                                          "decision":  "rejected",
+                                          "decided_by":  "operator",
+                                          "notes":  "",
+                                          "decided_at":  "2026-08-26T17:47:21.660Z",
+                                          "created_at":  "2026-08-26T17:47:21.660Z",
+                                          "updated_at":  "2026-08-26T17:47:21.660Z"
+                                      }
+                                  ]
+                }
+}

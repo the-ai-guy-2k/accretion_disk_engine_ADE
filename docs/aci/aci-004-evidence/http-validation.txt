@@ -1,0 +1,17 @@
+HTTP validation (scripts/validate-aci004.mjs) against http://localhost:3000
+
+OK: source 1 persisted
+OK: draft 1 linked to source 1
+OK: draft edited
+OK: unapproved content cannot enter queue
+OK: rejected content cannot enter queue
+OK: approved content entered queue as publication 1
+OK: failure path sets FAILED and not PUBLISHED
+OK: mock adapter hand-off identified as not real Facebook
+OK: duplicate adapter hand-off blocked
+OK: mock publish success path
+OK: published mock item is terminal
+OK: source → draft provenance survived
+
+Restart: source_id=1 publication=PUBLISHED provenance_ok=True
+Health schemaVersion=2 initializedAt=2026-08-26T00:24:40.643Z (unchanged from ACI-002 first init)
