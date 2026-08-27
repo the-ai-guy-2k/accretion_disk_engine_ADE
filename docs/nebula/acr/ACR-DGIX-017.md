@@ -22,12 +22,16 @@ After Operator-supplied `.env.local` (not committed):
 
 ## Publication (not yet authorized)
 
-CAE imported execution-ready ACP intake **#42** (`acp-taig-real-017-1787868307489`) in state **imported**. CAE did **not** authorize and did **not** execute.
+Intake **#42** was rejected. Nothing was published.
 
-**REAL FACEBOOK PUBLISHING remains IMPLEMENTED BUT REAL VALIDATION PENDING** until the Operator explicitly authorizes this post and Meta returns an object id.
+CAE imported replacement execution-ready ACP intake **#43** (`acp-taig-real-017-operator-1787869168564`) in state **imported**. CAE did **not** authorize and did **not** execute.
+
+Final message (verbatim): `... one giant leap for mankind; a larger one for humanity...`
+
+**REAL FACEBOOK PUBLISHING remains IMPLEMENTED BUT REAL VALIDATION PENDING** until the Operator explicitly authorizes intake #43 and Meta returns an object id.
 
 ## Operator action required
 
-Authorize the exact Facebook Page text post below for live publication to the TAIG Solutions Page, or reject it and supply replacement execution-ready copy.
+Authorize the exact Facebook Page text post on intake **#43** for live publication to the TAIG Solutions Page, or reject it.
 
 Do not treat this ACR as PASS.

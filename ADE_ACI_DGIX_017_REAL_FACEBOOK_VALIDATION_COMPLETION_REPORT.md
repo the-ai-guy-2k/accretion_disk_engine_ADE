@@ -21,9 +21,9 @@ First CAE pass stopped because `.env.local` was absent. The Operator then config
 
 DGIX `POST /api/dgix/facebook/validate` then succeeded: client **TAIG**, Facebook **CONNECTED**, Organic Page Operations **AVAILABLE**, Page name **TAIG Solutions**. Connection validation created **no** post and **no** ad. Tokens were not exposed.
 
-CAE imported the approved proving ACP as intake **#42** and stopped. Import is not authorization. Authorization is not execution.
+CAE imported proving ACP intake **#42**. The Operator rejected it. CAE imported replacement intake **#43** with Operator-supplied verbatim copy and **stopped**. Import is not authorization. Authorization is not execution.
 
-**Current block:** Operator must explicitly authorize the exact Facebook Page text post before DGIX may execute it.
+**Current block:** Operator must explicitly authorize intake **#43** before DGIX may execute.
 
 ## 2. TAIG Connection Status
 
@@ -43,25 +43,24 @@ Meta accepted the configured Page authorization for organic identity (`GET /{pag
 
 ## 4. ACP Used
 
-Source artifact: `examples/acp/acp-v1-taig-facebook-contacts.test.json` (QEN proving copy; not CAE-generated).
+Intake **#42** (prior TEST DATA / `example.invalid` proving artifact) was **rejected**. Nothing was published.
 
-Imported as:
+Replacement (Operator-supplied; DGIX did not rewrite the Facebook message):
 
-- intake **#42**
-- packageId `acp-taig-real-017-1787868307489`
-- `platform = facebook`, `postType = text`, `publishMode = now`, `clientId = TAIG`
-- `distributionType` defaults to **organic**
+- intake **#43**
+- packageId `acp-taig-real-017-operator-1787869168564`
+- destination: TAIG Solutions Facebook Page
+- `platform = facebook`, `distributionType = organic`, `postType = text`, `publishMode = now`, `clientId = TAIG`
 - routed to `facebook_organic_page` (`executed: false`)
+- no link, no CTA
 
 Final message (verbatim):
 
-> TEST DATA. If you run a small operation and want a clear next step on using AI without the hype, TAIG can talk it through. Send a short note describing the problem you want help with. This is final publish-ready Facebook copy prepared by the originating system. It has not been posted.
-
-Link on the ACP: `https://example.invalid/taig-test-contact`
+> ... one giant leap for mankind; a larger one for humanity...
 
 ## 5. Operator Authorization
 
-**Not performed.** CAE did not auto-authorize or auto-publish. Review state remains **imported**.
+Intake **#42** was rejected. Intake **#43** remains **imported** and is **not** authorized. CAE did not auto-authorize or auto-publish.
 
 ## 6. Real Execution Result
 
@@ -85,7 +84,7 @@ Not yet exercised against a live succeeded post.
 | --- | --- |
 | First pass: missing `.env.local` | Operator supplied TAIG client id, Page ID, and Page token |
 | Paid missing Ad Account | Expected; organic path independent; paid not executed |
-| Live post not yet authorized | **BLOCKED** pending explicit Operator authorization of intake #42 |
+| Live post not yet authorized | **BLOCKED** pending explicit Operator authorization of intake **#43** |
 
 ## 11. Regression
 
@@ -113,8 +112,7 @@ Unchanged from ACI-DGIX-016 until a real EXECUTED object id exists:
 ## 13. Known Limitations
 
 - Live TAIG Facebook **publish** is not proven
-- Operator authorization of intake #42 is required
-- The proving ACP includes `https://example.invalid/taig-test-contact`, which Meta may reject at publish time; CAE will not rewrite the copy
+- Operator authorization of intake **#43** is required
 - Paid ads, metrics, and Results Package remain out of scope
 
 ## 14. Recommended ACI-DGIX-018

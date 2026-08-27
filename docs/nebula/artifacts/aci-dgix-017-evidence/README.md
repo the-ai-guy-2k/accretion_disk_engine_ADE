@@ -22,12 +22,18 @@ No access token, app secret, or raw Graph payload is stored in this folder.
 
 ## ACP intake (not authorized, not executed)
 
-- intake id: 42
-- packageId: `acp-taig-real-017-1787868307489`
+Intake **#42** was **rejected** by Operator instruction. Nothing was published.
+
+Replacement:
+
+- intake id: 43
+- packageId: `acp-taig-real-017-operator-1787869168564`
 - review_state: imported
 - execution_authorized: no
 - execution_status: null
 - adapter route: facebook_organic_page
 - executed: false
+- execution.message (verbatim): `... one giant leap for mankind; a larger one for humanity...`
+- no link, no CTA
 
-Operator authorization of the live TAIG Page post is still required. PASS has not been claimed.
+Operator authorization of intake **#43** is required before DGIX may publish. PASS has not been claimed.
