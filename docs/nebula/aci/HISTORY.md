@@ -28,6 +28,7 @@ ACI-001 was issued twice. The second (authoritative-path) instruction superseded
 | ACI-DGIX-015 | [ACI-DGIX-015.md](ACI-DGIX-015.md) | Meta/Facebook connection foundation | Stored during the DGIX slice |
 | ACI-DGIX-016 | [ACI-DGIX-016.md](ACI-DGIX-016.md) | Facebook organic execution adapter | Stored during the DGIX slice |
 | ACI-DGIX-017 | [ACI-DGIX-017.md](ACI-DGIX-017.md) | Real TAIG Facebook publish validation | Stored during the DGIX slice; **PASS** |
+| ACI-DGIX-018 | [ACI-DGIX-018.md](ACI-DGIX-018.md) | Operator UI organic execution validation | Stored during the DGIX slice; **BLOCKED** pending Operator authorization |
 
 **Still missing (not fabricated):**
 

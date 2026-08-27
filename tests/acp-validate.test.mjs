@@ -153,3 +153,18 @@ test("legacy ACP without execution remains valid for intake compatibility", () =
   if (!result.ok) return;
   assert.equal(result.value.execution, undefined);
 });
+
+test("review view exposes client, platform, distribution, destination, and timing", async () => {
+  const { reviewView } = await import("../src/lib/acp-validate.ts");
+  const base = load(validPath);
+  const result = validateAcp(base);
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const view = reviewView(result.value);
+  assert.equal(view.CLIENT, "TAIG");
+  assert.equal(view.PLATFORM, "facebook");
+  assert.equal(view.DISTRIBUTION_TYPE, "organic");
+  assert.equal(view.DESTINATION, "facebook for client TAIG");
+  assert.equal(view.TIMING, "now");
+  assert.equal(view.FINAL_CONTENT, result.value.execution?.message);
+});

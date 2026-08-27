@@ -22,6 +22,7 @@ Each ACR corresponds to one ACI. Evidence is taken from repository reports and v
 | [ACR-DGIX-015](ACR-DGIX-015.md) | ACI-DGIX-015 Meta/Facebook connection | COMPLETE | Connection foundation; real Meta validation blocked without credentials |
 | [ACR-DGIX-016](ACR-DGIX-016.md) | ACI-DGIX-016 Facebook organic execution | COMPLETE | Organic Page adapter; real publish validation blocked without credentials |
 | [ACR-DGIX-017](ACR-DGIX-017.md) | ACI-DGIX-017 real TAIG Facebook validation | COMPLETE | Organic TAIG Page publish VALIDATED; Meta object id persisted |
+| [ACR-DGIX-018](ACR-DGIX-018.md) | ACI-DGIX-018 Operator UI organic execution | BLOCKED | UI workflow ready; live execute awaits Operator authorization of intake #54 |
 
 ACR-001–006 files exist but were **recovered in ACI-007**, not written at original completion. See [TRACEABILITY.md](../TRACEABILITY.md).
 

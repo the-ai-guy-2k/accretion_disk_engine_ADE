@@ -599,6 +599,9 @@ export function reviewView(pkg: AcpPackage) {
       timingPreference: pkg.executionIntent.timingPreference || null,
       restrictions: pkg.executionIntent.restrictions
     },
+    CLIENT: execution?.clientId || pkg.clientBusinessId,
+    PLATFORM: execution?.platform || pkg.objective.intendedPlatforms.join(", ") || "not supplied",
+    DISTRIBUTION_TYPE: execution?.distributionType || (execution ? "organic" : "not supplied"),
     DESTINATION: execution
       ? `${execution.platform} for client ${execution.clientId}`
       : "Not execution-ready. No platform destination was supplied.",

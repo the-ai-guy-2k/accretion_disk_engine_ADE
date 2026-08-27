@@ -20,7 +20,8 @@
     "validate:aci-dgix-013": "node scripts/validate-aci-dgix-013.mjs",
     "validate:aci-dgix-014": "node scripts/validate-aci-dgix-014.mjs",
     "validate:aci-dgix-015": "node scripts/validate-aci-dgix-015.mjs",
-    "validate:aci-dgix-016": "node scripts/validate-aci-dgix-016.mjs"
+    "validate:aci-dgix-016": "node scripts/validate-aci-dgix-016.mjs",
+    "validate:aci-dgix-018": "node scripts/validate-aci-dgix-018.mjs"
   },
   "engines": {
     "node": ">=22.5.0"

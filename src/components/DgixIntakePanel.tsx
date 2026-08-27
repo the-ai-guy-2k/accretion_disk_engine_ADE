@@ -19,6 +19,17 @@ type IntakeSummary = {
   executionReady: boolean;
   executionAuthorized: boolean;
   materializedIntoAde: boolean;
+  facebookRouting?: {
+    adapter?: string | null;
+    distributionType?: string | null;
+    ready?: boolean;
+  };
+  package?: {
+    execution?: {
+      platform?: string;
+      distributionType?: string;
+    };
+  };
 };
 
 export function DgixIntakePanel() {
@@ -146,6 +157,7 @@ export function DgixIntakePanel() {
             <tr>
               <th>Campaign</th>
               <th>Business</th>
+              <th>Route</th>
               <th>State</th>
               <th>Authority</th>
             </tr>
@@ -161,6 +173,13 @@ export function DgixIntakePanel() {
                   </div>
                 </td>
                 <td>{item.clientBusinessId}</td>
+                <td className="muted">
+                  {item.package?.execution?.platform || "—"}
+                  {" / "}
+                  {item.facebookRouting?.distributionType ||
+                    item.package?.execution?.distributionType ||
+                    (item.executionReady ? "organic" : "—")}
+                </td>
                 <td>
                   {item.reviewStateLabel}
                   <div className="muted">

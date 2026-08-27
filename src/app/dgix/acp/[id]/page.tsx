@@ -46,6 +46,48 @@ export default async function AcpReviewPage({ params }: { params: Promise<{ id: 
         </p>
       )}
 
+      <div className="panel" style={{ marginBottom: "1rem" }}>
+        <h2>Intended execution</h2>
+        <p className="muted">
+          The Operator reviews these fields before authorization. DGIX does not
+          rewrite them. Authorization is not publishing.
+        </p>
+        <table className="table">
+          <tbody>
+            <tr>
+              <th>Client</th>
+              <td>{view.CLIENT}</td>
+            </tr>
+            <tr>
+              <th>Platform</th>
+              <td>{view.PLATFORM}</td>
+            </tr>
+            <tr>
+              <th>Distribution</th>
+              <td>{view.DISTRIBUTION_TYPE}</td>
+            </tr>
+            <tr>
+              <th>Destination</th>
+              <td>{view.DESTINATION}</td>
+            </tr>
+            <tr>
+              <th>Publish timing</th>
+              <td>{view.TIMING}</td>
+            </tr>
+          </tbody>
+        </table>
+        {intake.facebookRouting ? (
+          <p className={intake.facebookRouting.ready ? "status-ok" : "status-nyet"}>
+            Routing: {intake.facebookRouting.adapter || "none"} ·{" "}
+            {intake.facebookRouting.distributionType || view.DISTRIBUTION_TYPE}
+            {intake.facebookRouting.ready
+              ? " · organic Facebook Page path is selected"
+              : ` · ${intake.facebookRouting.reason}`}
+            {intake.facebookRouting.executed ? " · already executed" : " · not executed yet"}
+          </p>
+        ) : null}
+      </div>
+
       <div className="grid" style={{ marginBottom: "1rem" }}>
         <article className="card">
           <h2>DESTINATION</h2>

@@ -1,0 +1,63 @@
+{
+  "acpVersion": "1",
+  "packageId": "acp-taig-018-operator-ui-template",
+  "originatingSystem": "social-engine-build-qen",
+  "clientBusinessId": "TAIG",
+  "campaignName": "TAIG DGIX Operator UI organic execution proving post",
+  "createdAt": "2026-08-27T23:00:00Z",
+  "isTest": false,
+  "objective": {
+    "statement": "Prove the Operator can review, authorize, and execute an organic Facebook Page post from the ADE/DGIX localhost UI.",
+    "measurementTarget": {
+      "metric": "operator_ui_organic_execution",
+      "startingValue": 0,
+      "targetValue": 1,
+      "unit": "posts"
+    },
+    "intendedPlatforms": ["facebook"]
+  },
+  "audience": {
+    "description": "TAIG Solutions Facebook Page audience. This package is unpublished until the Operator authorizes and executes it."
+  },
+  "content": {
+    "posts": [
+      {
+        "title": "Operator UI proving post",
+        "body": "TAIG Solutions is confirming that an Operator can publish an authorized organic Page post from the ADE DGIX workspace.",
+        "mediaReferences": []
+      }
+    ]
+  },
+  "provenance": {
+    "originatingIntelligenceSource": "ACI-DGIX-018 Operator UI organic execution validation",
+    "sourceEvidence": [
+      {
+        "title": "ACI-DGIX-018",
+        "reference": "QEN instruction: Operator UI organic execution validation",
+        "notes": "PE evidence package. Not paid advertising. Not metric retrieval. Awaiting explicit Operator authorization."
+      }
+    ],
+    "notes": "Imported for Operator review. Import is not approval. Authorization is not publishing."
+  },
+  "executionIntent": {
+    "timingPreference": "Publish now after explicit Operator authorization and a separate execute action.",
+    "restrictions": [
+      "Human authorization is required.",
+      "Do not auto-publish on import or review.",
+      "Organic Facebook Page post only."
+    ],
+    "approvalRequirements": "human_authorization_required"
+  },
+  "measurementIntent": {
+    "signals": ["facebook_object_id"],
+    "notes": "Success is a real Meta object/post id persisted by DGIX. Platform-retrieved metrics are not part of this package."
+  },
+  "execution": {
+    "clientId": "TAIG",
+    "platform": "facebook",
+    "distributionType": "organic",
+    "postType": "text",
+    "message": "TAIG Solutions is confirming that an Operator can publish an authorized organic Page post from the ADE DGIX workspace.",
+    "publishMode": "now"
+  }
+}

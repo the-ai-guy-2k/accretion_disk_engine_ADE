@@ -1,0 +1,23 @@
+{
+  "importStatus": 201,
+  "ok": true,
+  "id": 54,
+  "packageId": "acp-taig-018-operator-ui-1787873477597",
+  "reviewState": "imported",
+  "executionAuthorized": false,
+  "canExecuteOrganic": false,
+  "client": "TAIG",
+  "platform": "facebook",
+  "distribution": "organic",
+  "destination": "facebook for client TAIG",
+  "message": "TAIG Solutions is confirming that an Operator can publish an authorized organic Page post from the ADE DGIX workspace.",
+  "timing": "now",
+  "adapter": "facebook_organic_page",
+  "executeStatus": 409,
+  "executeOk": false,
+  "pageHasIntended": true,
+  "pageHasMessage": true,
+  "pageHasAuthorize": true,
+  "workspaceOk": false,
+  "secretKeys": []
+}
