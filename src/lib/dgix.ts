@@ -34,7 +34,7 @@ export const DGIX_FLOW = [
     label: "Distribution",
     availability: "implemented" as const,
     href: "/dgix#facebook-connection",
-    note: "Organic Facebook Page publishing is implemented for authorized text posts. Real publishing still requires Operator-supplied Meta credentials/assets. Paid advertising execution is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
+    note: "Organic Facebook Page publishing is implemented and has been validated against the TAIG Solutions Page. Paid advertising execution is not implemented. ADE's mock Facebook adapter is Standard ADE only and is not used as DGIX execution."
   },
   {
     id: "measurement",
@@ -66,7 +66,7 @@ export const DGIX_IMPLEMENTED_CAPABILITIES = [
   { name: "Operator Authorization", status: "IMPLEMENTED" },
   { name: "Facebook Account Connection", status: "IMPLEMENTED" },
   { name: "Organic Facebook Execution Adapter", status: "IMPLEMENTED" },
-  { name: "Real Facebook Publishing", status: "IMPLEMENTED BUT REAL VALIDATION PENDING" }
+  { name: "Real Facebook Publishing", status: "VALIDATED" }
 ] as const;
 
 export const DGIX_FUTURE_CAPABILITIES = [
@@ -109,7 +109,7 @@ export const DGIX_ORIENTATION = [
     key: "EXECUTION",
     question: "What approved activity is being distributed?",
     answer:
-      "The Facebook Organic Adapter can publish an authorized text Page post through Graph API v26.0 when organic Page operations are available. Real publishing is implemented but real validation is pending until Operator-supplied Meta credentials/assets succeed. Paid advertising is not implemented. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
+      "The Facebook Organic Adapter publishes authorized text Page posts through Graph API v26.0 when organic Page operations are available and the Operator executes after authorization. Real Facebook publishing has been validated against the TAIG Solutions Page. Paid advertising is not implemented. The Standard ADE mock Facebook adapter is not DGIX real-platform execution."
   },
   {
     key: "RESULT",

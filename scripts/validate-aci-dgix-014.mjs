@@ -82,7 +82,7 @@ for (const label of [
 }
 mustContain(workspace.text, "Facebook Account Connection");
 mustContain(workspace.text, "Organic Facebook Execution Adapter");
-mustContain(workspace.text, "IMPLEMENTED BUT REAL VALIDATION PENDING");
+mustContain(workspace.text, "VALIDATED");
 ok("DGIX workspace reports authorization implemented and organic adapter present");
 
 const imageMissing = cloneValid("image-missing");

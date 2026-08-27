@@ -89,7 +89,7 @@ export function facebookConnectionConfigPublic() {
       firstEnv("ADE_DGIX_FB_AD_ACCESS_TOKEN", "META_AD_ACCESS_TOKEN") ||
         (adAccountId && secrets.pageAccessToken)
     ),
-    realPublishingImplemented: false,
+    realPublishingImplemented: true,
     organicExecutionAdapterImplemented: true,
     paidExecutionImplemented: false
   };

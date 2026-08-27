@@ -40,7 +40,7 @@ export type FacebookValidationPublic = {
   clientId: string | null;
   page: { id: string | null; name: string | null };
   adAccount: { id: string | null; name: string | null };
-  realPublishingImplemented: false;
+  realPublishingImplemented: boolean;
   paidExecutionImplemented: false;
   realValidation: "not_attempted" | "blocked" | "succeeded" | "failed";
   blockedReason: string | null;
@@ -59,7 +59,7 @@ function emptyValidation(overrides: Partial<FacebookValidationPublic> = {}): Fac
     clientId: cfg.clientId,
     page: { id: cfg.pageId, name: null },
     adAccount: { id: cfg.adAccountId, name: null },
-    realPublishingImplemented: false,
+    realPublishingImplemented: cfg.realPublishingImplemented,
     paidExecutionImplemented: false,
     realValidation: "not_attempted",
     blockedReason: null,
@@ -92,7 +92,7 @@ function readSnapshot(clientId: string | null): FacebookValidationPublic | null 
       id: row.ad_account_id ? String(row.ad_account_id) : null,
       name: row.ad_account_name ? String(row.ad_account_name) : null
     },
-    realPublishingImplemented: false,
+    realPublishingImplemented: facebookConnectionConfigPublic().realPublishingImplemented,
     paidExecutionImplemented: false,
     realValidation: row.connection_status === "connected" ? "succeeded" : row.last_error ? "failed" : "not_attempted",
     blockedReason: row.blocked_reason ? String(row.blocked_reason) : null,
@@ -161,7 +161,7 @@ export function facebookConnectionPublicStatus(): FacebookValidationPublic {
       ...snapshot,
       graphApiVersion: cfg.graphApiVersion,
       clientId: cfg.clientId,
-      realPublishingImplemented: false,
+      realPublishingImplemented: cfg.realPublishingImplemented,
       paidExecutionImplemented: false,
       tokenExposed: false
     };
@@ -290,7 +290,7 @@ export async function validateFacebookConnection(options?: {
     clientId: connection.clientId,
     page: { id: pageId, name: pageName },
     adAccount: { id: adId, name: adName },
-    realPublishingImplemented: false,
+    realPublishingImplemented: facebookConnectionConfigPublic().realPublishingImplemented,
     paidExecutionImplemented: false,
     realValidation: blocked ? "blocked" : organicAvailable || paidAvailable ? "succeeded" : "failed",
     blockedReason: blocked ? BLOCKED_VALIDATION : null,

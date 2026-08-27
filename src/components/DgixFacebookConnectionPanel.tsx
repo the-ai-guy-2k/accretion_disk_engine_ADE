@@ -68,9 +68,8 @@ export function DgixFacebookConnectionPanel() {
       <p>
         Connection capability is not automatic publishing. The Organic Facebook
         Execution Adapter is implemented. Real Facebook Publishing is{" "}
-        <strong>IMPLEMENTED BUT REAL VALIDATION PENDING</strong> until Meta
-        credentials/assets succeed. Paid Advertising Execution remains{" "}
-        <strong>NOT YET IMPLEMENTED</strong>.
+        <strong>VALIDATED</strong> for authorized organic Page posts. Paid
+        Advertising Execution remains <strong>NOT YET IMPLEMENTED</strong>.
       </p>
       <table className="table">
         <thead>

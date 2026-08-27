@@ -1,7 +1,7 @@
 # ADE ACI ↔ ACR traceability
 
 **Reconciled:** 2026-08-26  
-**Product code:** ADE MVP baseline `deployable` @ `3c18176` (ACI-011 PAPEV); DGIX through ACI-DGIX-016 organic execution on `deployable` @ `3cf4437`. ACI-DGIX-017 real TAIG Facebook publish validation is **BLOCKED** (credentials/assets required).  
+**Product code:** ADE MVP baseline `deployable` @ `3c18176` (ACI-011 PAPEV); DGIX through ACI-DGIX-017 real TAIG organic Facebook publish **VALIDATED**.  
 **Rule:** ACI-NNN ↔ ACR-NNN for the MVP series. DGIX uses **ACI-DGIX-NNN ↔ ACR-DGIX-NNN**. A second QEN instruction also used number **008**; both records are kept. ACI-009 is analytics, not a second generation ACI.
 
 Classification of ACI files: **ARCHIVED** (stored at time of the slice) | **RECOVERED** (reconstructed later from CAE chat; not an original QEN package) | **PARTIAL** | **MISSING**.
@@ -37,7 +37,7 @@ DGIX is **POST-MVP — IN DEVELOPMENT**. It is not a completed product family.
 | ACI-DGIX-014 | `docs/nebula/aci/ACI-DGIX-014.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-014.md` | COMPLETE | Execution-ready ACP report + `docs/nebula/artifacts/aci-dgix-014-evidence/` + `validate:aci-dgix-014` | Execution-ready ACP + Operator authorization; not Facebook execution; no Standard ADE materialization |
 | ACI-DGIX-015 | `docs/nebula/aci/ACI-DGIX-015.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-015.md` | COMPLETE | Meta connection report + `docs/nebula/artifacts/aci-dgix-015-evidence/` + `validate:aci-dgix-015` | Facebook connection foundation (organic vs paid capability); real Meta validation blocked without credentials; no publishing |
 | ACI-DGIX-016 | `docs/nebula/aci/ACI-DGIX-016.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-016.md` | COMPLETE | Organic execution report + `docs/nebula/artifacts/aci-dgix-016-evidence/` + `validate:aci-dgix-016` | Facebook organic Page execution for authorized ACPs; real publish validation blocked without credentials; paid ads not implemented |
-| ACI-DGIX-017 | `docs/nebula/aci/ACI-DGIX-017.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-017.md` | BLOCKED | Blocked report + `docs/nebula/artifacts/aci-dgix-017-evidence/` | Real TAIG Facebook connection and organic publish validation **BLOCKED** — Operator must supply Page id and Page token; no fabricated PASS |
+| ACI-DGIX-017 | `docs/nebula/aci/ACI-DGIX-017.md` | ARCHIVED | `docs/nebula/acr/ACR-DGIX-017.md` | COMPLETE | Real validation report + `docs/nebula/artifacts/aci-dgix-017-evidence/` | Real TAIG organic Facebook Page publish **VALIDATED**; Meta object id persisted; paid ads not executed |
 
 ## Holes
 

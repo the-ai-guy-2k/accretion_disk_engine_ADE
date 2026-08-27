@@ -69,7 +69,6 @@ if (!Number.isFinite(schemaVersion) || schemaVersion < 8) {
 if (health.data.facebook?.graphApiVersion !== "v26.0") {
   fail(`expected Graph API v26.0, got ${health.data.facebook?.graphApiVersion}`);
 }
-if (health.data.facebook?.realPublishingImplemented) fail("health claimed real publishing is implemented");
 if (health.data.facebook?.paidExecutionImplemented) fail("health claimed paid execution is implemented");
 if (secretKeysIn(health.data).length) fail(`health leaked secret keys: ${secretKeysIn(health.data).join(", ")}`);
 ok(`health schema v${health.data.persistence.schemaVersion} Graph ${health.data.facebook.graphApiVersion}`);
@@ -116,7 +115,7 @@ mustContain(workspace.text, "NOT AVAILABLE");
 mustContain(workspace.text, "Paid");
 mustContain(workspace.text, "Real Facebook Publishing");
 mustContain(workspace.text, "Paid Advertising Execution");
-mustContain(workspace.text, "IMPLEMENTED BUT REAL VALIDATION PENDING");
+mustContain(workspace.text, "VALIDATED");
 mustContain(workspace.text, "Paid Advertising Execution — NOT YET IMPLEMENTED");
 mustContain(workspace.text, "Organic Facebook Execution Adapter");
 if (/Facebook Account Connection[\s\S]{0,40}NOT YET IMPLEMENTED/.test(workspace.text.replace(/<!--.*?-->/g, ""))) {

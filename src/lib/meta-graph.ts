@@ -265,7 +265,7 @@ export function facebookPublicConfigBanner() {
   return {
     platform: FACEBOOK_PLATFORM,
     graphApiVersion: cfg.graphApiVersion,
-    realPublishingImplemented: false,
+    realPublishingImplemented: true,
     organicExecutionAdapterImplemented: true,
     paidExecutionImplemented: false
   };

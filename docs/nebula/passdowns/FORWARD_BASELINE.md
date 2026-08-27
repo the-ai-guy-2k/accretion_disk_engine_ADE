@@ -1,17 +1,16 @@
-# Forward baseline (ADE — post ACI-DGIX-017 BLOCKED)
+# Forward baseline (ADE — post ACI-DGIX-017 PASS)
 
 **Date:** 2026-08-27  
 **ADE MVP:** **PASS** (`deployable` product SHA `3c18176`)  
-**DGIX:** **POST-MVP — IN DEVELOPMENT** (workspace 012 through organic execution 016). ACI-DGIX-017 real TAIG Facebook publish validation is **BLOCKED** pending Operator-supplied credentials/assets.
+**DGIX:** **POST-MVP — IN DEVELOPMENT**. Organic Facebook Page publishing is **VALIDATED** against TAIG Solutions. Paid ads, metrics retrieval, Results Package export, and optimization are not implemented.
 
 ## Statement
 
-> **ADE remains the PAPEV-approved MVP. DGIX organic Facebook execution is implemented. Real TAIG Facebook connection and Page publish validation have not occurred. Real Facebook Publishing remains IMPLEMENTED BUT REAL VALIDATION PENDING. Do not claim VALIDATED without a live authorized Meta object id.**
+> **ADE remains the PAPEV-approved MVP. DGIX imported, Operator-authorized, and executed an organic Facebook Page text post through Graph API v26.0. Meta returned a real object id. Real Facebook Publishing is VALIDATED. Paid advertising, metric retrieval, and Results Package export are not implemented.**
 
 ## Next CAE default
 
 Do **not** begin ACI-DGIX-018 until the Social Engine Build QEN authorizes it.  
-Recommended 018: retry ACI-DGIX-017 real TAIG organic publish validation after `.env.local` holds `ADE_DGIX_FB_CLIENT_ID=TAIG`, the TAIG Page id, and an ADE-held Page access token.  
-Do not invent identifiers or tokens.  
+Recommended 018: Facebook metrics retrieval for the executed organic post — not paid advertising, not ACRP export, not optimization.  
 Do not treat unvalidated feature branches as the promotion baseline.  
 Do not present DGIX as complete.

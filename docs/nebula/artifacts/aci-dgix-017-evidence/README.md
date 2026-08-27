@@ -2,38 +2,23 @@
 
 Do not store API keys, tokens, or Page secrets here.
 
-## Connection validation (resumed after Operator `.env.local` input)
+## Connection
 
-DGIX `POST /api/dgix/facebook/validate` (sanitized):
+DGIX validate: client TAIG, Facebook CONNECTED, Organic AVAILABLE, Page name TAIG Solutions, paid NOT AVAILABLE. tokenExposed false. No post created by validate.
 
-- clientId: TAIG
-- platform: facebook
-- Graph API: v26.0
-- Facebook: CONNECTED
-- Organic Page Operations: AVAILABLE
-- Paid: NOT AVAILABLE (expected; not in scope)
-- Page identity name returned by Meta: TAIG Solutions
-- Page ID: present and accepted by Meta (value not archived here)
-- tokenExposed: false
-- realValidation: succeeded
-- Banner: connection validation does not publish; no post or ad was created
+## Publication PASS
 
-No access token, app secret, or raw Graph payload is stored in this folder.
+- Intake 42 rejected (not published)
+- Intake 43 authorized by Operator, then executed via `POST /api/dgix/acp/43/execute`
+- Message unchanged: `... one giant leap for mankind; a larger one for humanity...`
+- Meta object/post id: `1258891693979751_122109387345419404`
+- DGIX execution_status: executed
+- execution row: succeeded
+- Duplicate execute: 409
+- No access token in client JSON or this folder
 
-## ACP intake (not authorized, not executed)
+## Files
 
-Intake **#42** was **rejected** by Operator instruction. Nothing was published.
-
-Replacement:
-
-- intake id: 43
-- packageId: `acp-taig-real-017-operator-1787869168564`
-- review_state: imported
-- execution_authorized: no
-- execution_status: null
-- adapter route: facebook_organic_page
-- executed: false
-- execution.message (verbatim): `... one giant leap for mankind; a larger one for humanity...`
-- no link, no CTA
-
-Operator authorization of intake **#43** is required before DGIX may publish. PASS has not been claimed.
+- `pass-record.sanitized.json` — GET intake 43 + health/connection snapshot + duplicate 409 (credential keys stripped; none were present)
+- `unit-tests.txt`
+- `regression.txt`

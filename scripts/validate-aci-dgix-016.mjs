@@ -76,9 +76,7 @@ if (!Number.isFinite(schemaVersion) || schemaVersion < 9) {
 if (health.data.facebook?.graphApiVersion !== "v26.0") {
   fail(`expected Graph API v26.0, got ${health.data.facebook?.graphApiVersion}`);
 }
-if (health.data.facebook?.realPublishingImplemented) {
-  fail("health claimed live Facebook publishing was proven");
-}
+if (health.data.facebook?.paidExecutionImplemented) fail("health claimed paid execution is implemented");
 if (!health.data.facebook?.organicExecutionAdapterImplemented) {
   fail("health did not report the organic execution adapter");
 }
@@ -94,7 +92,7 @@ mustContain(workspace.text, "Operator Review");
 mustContain(workspace.text, "Operator Authorization");
 mustContain(workspace.text, "Facebook Account Connection");
 mustContain(workspace.text, "Organic Facebook Execution Adapter");
-mustContain(workspace.text, "IMPLEMENTED BUT REAL VALIDATION PENDING");
+mustContain(workspace.text, "VALIDATED");
 mustContain(workspace.text, "Paid Advertising Execution — NOT YET IMPLEMENTED");
 mustContain(workspace.text, "Facebook Metrics Retrieval — NOT YET IMPLEMENTED");
 mustContain(workspace.text, "Results Package Export — NOT YET IMPLEMENTED");
@@ -159,53 +157,63 @@ mustContain(authPage.text, "AUTHORIZED — READY FOR FACEBOOK EXECUTION");
 mustContain(authPage.text, "Execute on Facebook");
 ok("authorized organic Facebook ACP is ready for a separate execute action");
 
-const executed = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
-if (secretKeysIn(executed.data).length) fail(`execute response leaked secrets: ${secretKeysIn(executed.data).join(", ")}`);
-
-const after = await req("GET", "/api/workflow/summary");
-if (after.data.summary.queue.PUBLISHED !== before.data.summary.queue.PUBLISHED) {
-  fail("organic execute used the Standard ADE mock publisher");
-}
-if (!after.data.summary.adapter?.isMock) fail("Standard ADE mock adapter is no longer mock");
-
+const liveConfigured = Boolean(health.data.facebook?.pageAuthorizationConfigured);
 let realPublishValidated = false;
-if (executed.data.ok && executed.data.executed) {
-  if (executed.data.intake.executionStatus !== "executed") {
-    fail("successful Meta response was not recorded as EXECUTED");
+if (liveConfigured) {
+  const afterLive = await req("GET", "/api/workflow/summary");
+  if (afterLive.data.summary.queue.PUBLISHED !== before.data.summary.queue.PUBLISHED) {
+    fail("authorization used the Standard ADE mock publisher");
   }
-  if (!executed.data.execution?.externalObjectId) {
-    fail("EXECUTED without a Facebook object id");
-  }
-  if (executed.data.execution.status !== "succeeded") fail("execution row was not succeeded");
-  const again = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
-  if (again.data.ok || again.data.executed) fail("duplicate successful execution was allowed");
-  realPublishValidated = true;
-  ok("real Facebook publish returned platform evidence; duplicate publish blocked");
+  if (!afterLive.data.summary.adapter?.isMock) fail("Standard ADE mock adapter is no longer mock");
+  ok("live Meta credentials are configured; ACI-DGIX-016 regression will not publish a second Page post");
 } else {
-  if (executed.data.intake?.executionStatus === "executed") {
-    fail("failed/blocked execute was marked EXECUTED");
+  const executed = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
+  if (secretKeysIn(executed.data).length) fail(`execute response leaked secrets: ${secretKeysIn(executed.data).join(", ")}`);
+
+  const after = await req("GET", "/api/workflow/summary");
+  if (after.data.summary.queue.PUBLISHED !== before.data.summary.queue.PUBLISHED) {
+    fail("organic execute used the Standard ADE mock publisher");
   }
-  const blob = `${executed.data.error || ""} ${executed.data.blockedReason || ""}`;
-  if (!blob.includes("CREDENTIAL/ASSET INPUT REQUIRED") && executed.status !== 502) {
-    fail(`missing connection did not fail safely: ${blob || executed.status}`);
-  }
-  if (blob.includes("CREDENTIAL/ASSET INPUT REQUIRED")) {
-    if ((executed.data.intake?.executions || []).some((row) => row.status === "succeeded")) {
-      fail("blocked publish persisted a successful execution");
+  if (!after.data.summary.adapter?.isMock) fail("Standard ADE mock adapter is no longer mock");
+
+  if (executed.data.ok && executed.data.executed) {
+    if (executed.data.intake.executionStatus !== "executed") {
+      fail("successful Meta response was not recorded as EXECUTED");
     }
-    ok(BLOCKED_PUBLISH);
+    if (!executed.data.execution?.externalObjectId) {
+      fail("EXECUTED without a Facebook object id");
+    }
+    if (executed.data.execution.status !== "succeeded") fail("execution row was not succeeded");
+    const again = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
+    if (again.data.ok || again.data.executed) fail("duplicate successful execution was allowed");
+    realPublishValidated = true;
+    ok("real Facebook publish returned platform evidence; duplicate publish blocked");
   } else {
-    if (executed.data.intake?.executionStatus !== "execution_failed") {
-      fail(`Meta failure was not recorded as execution_failed (${executed.data.intake?.executionStatus})`);
+    if (executed.data.intake?.executionStatus === "executed") {
+      fail("failed/blocked execute was marked EXECUTED");
     }
-    if (!executed.data.execution || executed.data.execution.status === "succeeded") {
-      fail("failed Meta call was recorded as successful execution");
+    const blob = `${executed.data.error || ""} ${executed.data.blockedReason || ""}`;
+    if (!blob.includes("CREDENTIAL/ASSET INPUT REQUIRED") && executed.status !== 502) {
+      fail(`missing connection did not fail safely: ${blob || executed.status}`);
     }
-    const retry = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
-    if (retry.data.ok && retry.data.executed && !retry.data.execution?.externalObjectId) {
-      fail("retry after failure fabricated success");
+    if (blob.includes("CREDENTIAL/ASSET INPUT REQUIRED")) {
+      if ((executed.data.intake?.executions || []).some((row) => row.status === "succeeded")) {
+        fail("blocked publish persisted a successful execution");
+      }
+      ok(BLOCKED_PUBLISH);
+    } else {
+      if (executed.data.intake?.executionStatus !== "execution_failed") {
+        fail(`Meta failure was not recorded as execution_failed (${executed.data.intake?.executionStatus})`);
+      }
+      if (!executed.data.execution || executed.data.execution.status === "succeeded") {
+        fail("failed Meta call was recorded as successful execution");
+      }
+      const retry = await req("POST", `/api/dgix/acp/${readyImport.data.intake.id}/execute`, {});
+      if (retry.data.ok && retry.data.executed && !retry.data.execution?.externalObjectId) {
+        fail("retry after failure fabricated success");
+      }
+      ok("failed execution persisted and was not marked successful");
     }
-    ok("failed execution persisted and was not marked successful");
   }
 }
 
@@ -219,5 +227,7 @@ ok("ACP values remain unmodified and credentials stay off client records");
 console.log(
   realPublishValidated
     ? "PASS ACI-DGIX-016 Facebook organic execution (REAL FACEBOOK PUBLISHING VALIDATED)"
-    : "PASS ACI-DGIX-016 Facebook organic execution (REAL FACEBOOK PUBLISH VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED)"
+    : liveConfigured
+      ? "PASS ACI-DGIX-016 Facebook organic execution (live execute skipped; real publish validated in ACI-DGIX-017)"
+      : "PASS ACI-DGIX-016 Facebook organic execution (REAL FACEBOOK PUBLISH VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED)"
 );

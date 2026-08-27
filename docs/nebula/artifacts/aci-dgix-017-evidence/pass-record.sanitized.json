@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-08-27T22:28:22.089Z",
+  "intake": {
+    "ok": true,
+    "id": 43,
+    "packageId": "acp-taig-real-017-operator-1787869168564",
+    "reviewState": "authorized",
+    "executionStatus": "executed",
+    "message": "... one giant leap for mankind; a larger one for humanity...",
+    "routingAdapter": "facebook_organic_page",
+    "routingExecuted": false
+  },
+  "execution": {
+    "status": "succeeded",
+    "operation": "page_feed_post",
+    "graphApiVersion": "v26.0",
+    "externalObjectId": "1258891693979751_122109387345419404",
+    "attemptedAt": "2026-08-27T22:22:18.861Z",
+    "completedAt": "2026-08-27T22:22:21.985Z"
+  },
+  "duplicateExecute": {
+    "status": 409,
+    "ok": false,
+    "error": "This ACP was already executed successfully. DGIX will not publish a duplicate Facebook post from a repeated request. Retry is allowed only after EXECUTION FAILED."
+  },
+  "health": {
+    "realPublishingImplemented": true,
+    "paidExecutionImplemented": false,
+    "organicExecutionAdapterImplemented": true,
+    "graphApiVersion": "v26.0"
+  },
+  "connection": {
+    "facebook": "CONNECTED",
+    "organic": "AVAILABLE",
+    "paid": "NOT AVAILABLE",
+    "pageName": "TAIG Solutions",
+    "tokenExposed": false,
+    "realPublishingImplemented": true
+  },
+  "workspaceHasValidated": true,
+  "secretKeys": []
+}

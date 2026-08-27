@@ -39,9 +39,9 @@ export default function DgixWorkspacePage() {
         DGIX is post-MVP and in development. Campaign Package Intake, ACP
         Validation, Operator Review, Operator Authorization, Facebook Account
         Connection, and the Organic Facebook Execution Adapter are implemented.
-        Real Facebook publishing is implemented but real validation is pending
-        until Operator-supplied Meta credentials/assets succeed. Paid advertising
-        execution, metrics retrieval, and Results Package export remain{" "}
+        Real Facebook publishing is <strong>VALIDATED</strong> for authorized
+        organic TAIG Page posts. Paid advertising execution, metrics retrieval,
+        and Results Package export remain{" "}
         <strong>NOT YET IMPLEMENTED</strong>. Authorization is not publishing.
       </div>
 
@@ -207,15 +207,7 @@ export default function DgixWorkspacePage() {
             {DGIX_IMPLEMENTED_CAPABILITIES.map((item) => (
               <tr key={item.name}>
                 <td>{item.name}</td>
-                <td
-                  className={
-                    item.status === "IMPLEMENTED BUT REAL VALIDATION PENDING"
-                      ? "status-nyet"
-                      : "status-ok"
-                  }
-                >
-                  {item.status}
-                </td>
+                <td className="status-ok">{item.status}</td>
               </tr>
             ))}
             {DGIX_FUTURE_CAPABILITIES.map((item) => (

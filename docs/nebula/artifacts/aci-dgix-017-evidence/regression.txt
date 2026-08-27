@@ -1,0 +1,205 @@
+﻿---- validate:aci004 ----
+> accretion-disk-engine@0.1.0 validate:aci004
+> node scripts/validate-aci004.mjs
+
+OK: source 110 persisted
+OK: draft 152 linked to source 110
+OK: draft edited
+OK: unapproved content cannot enter queue
+OK: rejected content cannot enter queue
+OK: approved content entered queue as publication 105
+OK: failure path sets FAILED and not PUBLISHED
+OK: mock adapter hand-off identified as not real Facebook
+OK: duplicate adapter hand-off blocked
+OK: mock publish success path
+OK: published mock item is terminal
+OK: source ΓåÆ draft provenance survived
+ACI-004 HTTP validation passed against http://localhost:3000
+---- validate:aci005 ----
+> accretion-disk-engine@0.1.0 validate:aci005
+> node scripts/validate-aci005.mjs
+
+OK: schema v3 health
+OK: goal 51 created
+OK: published client 106 and informational 107
+OK: platform-collected metrics refused
+OK: manual results recorded for both publications
+OK: goal progress 8/10 from entered results
+OK: analytics rankings follow outcomes > engagement > visibility
+OK: first recommendation prefers client-result content
+OK: recommendation changed after results were updated
+OK: source ΓåÆ draft provenance preserved
+ACI-005 HTTP validation passed against http://localhost:3000
+---- validate:aci006 ----
+> accretion-disk-engine@0.1.0 validate:aci006
+> node scripts/validate-aci006.mjs
+
+OK: schema v4 or later health
+OK: goal 52 created
+OK: sources 113 and 114 created
+OK: campaign 38 linked to goal 52
+OK: two sources attached to campaign
+OK: content plan has 2 items
+OK: multiple drafts generated with goal, campaign, and source provenance
+OK: approved draft 155 entered publishing queue
+OK: rejected campaign draft cannot enter publishing queue
+OK: campaign workspace shows plan, drafts, approvals, and publishing state
+OK: campaign results endpoint reuses ACI-005 metrics primitives
+ACI-006 HTTP validation passed against http://localhost:3000
+---- validate:aci008 ----
+> accretion-disk-engine@0.1.0 validate:aci008
+> node scripts/validate-aci008.mjs
+
+OK: schema v5 health
+OK: AI ready (openai / gpt-4o-mini)
+OK: missing source does not create a draft
+OK: unknown source generate fails without a successful draft
+OK: source 115 persisted
+OK: live AI draft 157 persisted with source 115
+OK: AI draft remains editable
+OK: approved AI draft entered publishing queue
+OK: rejected AI draft cannot enter publishing queue
+OK: mock/manual draft creation still works
+ACI-008 HTTP validation passed against http://localhost:3000
+---- validate:aci009 ----
+> accretion-disk-engine@0.1.0 validate:aci009
+> node scripts/validate-aci009.mjs
+
+OK: schema v5 health
+OK: AI analytics ready (openai / gpt-4o-mini)
+OK: goal 53 created
+OK: campaign 39 linked to goal 53
+OK: published stronger 110 and weaker 111
+OK: platform-collected metrics still refused
+OK: deterministic analytics rankings preserved
+OK: invalid analysis mode fails without storing a recommendation
+OK: default analyze remains deterministic (ACI-005 contract)
+OK: failed live AI analyze does not store a fake recommendation
+OK: live AI recommendation 64 stored
+OK: live recommendation evidence matches stored manual metrics
+OK: live recommendation references stored evidence rather than invented platform analytics
+OK: deterministic analytics snapshot still available after live AI
+ACI-009 HTTP validation passed against http://localhost:3000
+---- validate:aci010 ----
+> accretion-disk-engine@0.1.0 validate:aci010
+> node scripts/validate-aci010.mjs
+
+OK: health
+OK: live AI ready
+OK: operator screens return 200
+OK: goal 54 created
+OK: campaign 40
+OK: source 118 attached to campaign
+OK: live AI draft 162
+OK: approved into publishing 112
+OK: rejected AI draft cannot publish
+OK: mock Facebook confirm
+OK: manual results recorded; platform capture refused
+OK: goal progress 2/2 from TEST DATA results
+OK: deterministic analytics available
+OK: live AI recommendation 65 cites stored evidence
+OK: hub summary includes Goal and recommendation
+ACI-010 integrated journey validation passed against http://localhost:3000
+---- validate:aci011 ----
+> accretion-disk-engine@0.1.0 validate:aci011
+> node scripts/validate-aci011.mjs
+
+OK: health MVP baseline
+OK: live AI ready; credentials not leaked
+OK: goal 55
+OK: campaign 41 + source 119
+OK: live AI draft 164 grounded in source 119
+OK: human reject blocks publishing
+OK: mock Facebook path identified; no real API implied
+OK: manual metrics stored; platform retrieval refused
+OK: Goal progress is +2 contacts from entered leads, not from views
+OK: Goal-oriented ranking prefers +2 leads over 500 views
+OK: live AI recommendation 66 cites stored leads=2
+OK: Hub summary carries Goal, recommendation, mock adapter
+ACI-011 PAPEV validation passed against http://localhost:3000
+{
+  "goalId": 55,
+  "campaignId": 41,
+  "sourceId": 119,
+  "draftId": 164,
+  "goalPublicationId": 113,
+  "vanityPublicationId": 114,
+  "recommendationId": 66,
+  "observed": "Goal #55 has achieved 2 Leads generated, meeting the target of 2. The content '[TEST DATA] Update on ADE PAPEV Engagement (operator edit)' contributed 2 Leads, while '[TEST DATA] Draft from source: [TEST DATA] TAIG operator note for PAPEV contacts Goal' generated 0 Leads.",
+  "meaning": "Goal progress is complete with 2 of 2 Leads generated. The content '[TEST DATA] Update on ADE PAPEV Engagement (operator edit)' is performing best in terms of lead generation. Engagement metrics indicate that the first content has higher visibility and reactions but did not generate leads.",
+  "action": "Consider producing another piece based on similar source material to maintain lead generation momentum."
+}
+---- validate:aci-dgix-012 ----
+> accretion-disk-engine@0.1.0 validate:aci-dgix-012
+> node scripts/validate-aci-dgix-012.mjs
+
+OK: health MVP baseline
+OK: Hub, DGIX, and Standard ADE screens return 200
+OK: Hub references DGIX
+OK: DGIX operating flow is present
+OK: unimplemented DGIX capabilities are labeled
+OK: TAIG proving mission is demonstration-only
+OK: reuse, Standard ADE vs DGIX, Client QEN, and authority are present
+OK: Standard ADE workflow summary still works; Facebook adapter remains mock
+PASS ACI-DGIX-012 operator workspace
+---- validate:aci-dgix-013 ----
+> accretion-disk-engine@0.1.0 validate:aci-dgix-013
+> node scripts/validate-aci-dgix-013.mjs
+
+OK: health schema v9
+OK: Hub, DGIX, and Standard ADE screens return 200
+OK: DGIX workspace truthfully shows ACP intake implemented
+OK: invalid ACP rejected with useful feedback
+OK: credential fields are rejected
+OK: TEST ACP imported as intake 44 without approval
+OK: ACP provenance persisted
+OK: intake list includes the TEST package
+OK: operator review is not approval
+OK: Operator review page presents ACP coherently
+OK: Standard ADE remains operational; Facebook adapter remains mock
+PASS ACI-DGIX-013 campaign package intake
+---- validate:aci-dgix-014 ----
+> accretion-disk-engine@0.1.0 validate:aci-dgix-014
+> node scripts/validate-aci-dgix-014.mjs
+
+OK: health schema v9
+OK: DGIX workspace reports authorization implemented and organic adapter present
+OK: image post requires mediaReference
+OK: scheduled execution requires scheduledAt
+OK: credentials remain outside ACP
+OK: execution-ready ACP imported as intake 45
+OK: Operator review shows destination, post type, final content, media/link, timing, objective, measurement, provenance
+OK: Operator review does not authorize
+OK: Operator can AUTHORIZE without executing
+OK: authorized package is ready for a separate Facebook execute action
+OK: authorization did not execute externally and did not materialize Standard ADE records
+OK: Operator can REJECT
+OK: existing ACP-without-execution records remain importable and are not silently authorized
+OK: ACP provenance and Operator decision remain intact
+PASS ACI-DGIX-014 execution-ready ACP
+---- validate:aci-dgix-015 ----
+> accretion-disk-engine@0.1.0 validate:aci-dgix-015
+> node scripts/validate-aci-dgix-015.mjs
+
+OK: health schema v9 Graph v26.0
+OK: server-side Facebook connection model is public without secrets
+OK: real Meta connection validation succeeded (sanitized; no tokens)
+OK: DGIX workspace shows connection vs execution truthfully
+OK: ACP remains credential-free
+OK: authorized ACPs are not automatically executed
+OK: Standard ADE remains operational
+PASS ACI-DGIX-015 Meta/Facebook connection (real Meta validation)
+---- validate:aci-dgix-016 ----
+> accretion-disk-engine@0.1.0 validate:aci-dgix-016
+> node scripts/validate-aci-dgix-016.mjs
+
+OK: health schema v9 Graph v26.0
+OK: DGIX workspace current truth is present
+OK: unauthorized imported ACP cannot execute
+OK: reviewed but unauthorized ACP cannot execute
+OK: rejected ACP cannot execute
+OK: paid ACP cannot execute through the organic adapter
+OK: authorized organic Facebook ACP is ready for a separate execute action
+OK: live Meta credentials are configured; ACI-DGIX-016 regression will not publish a second Page post
+OK: ACP values remain unmodified and credentials stay off client records
+PASS ACI-DGIX-016 Facebook organic execution (live execute skipped; real publish validated in ACI-DGIX-017)

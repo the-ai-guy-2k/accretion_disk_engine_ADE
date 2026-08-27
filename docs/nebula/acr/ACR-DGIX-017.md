@@ -2,36 +2,26 @@
 
 **ACI:** ACI-DGIX-017 — ADE/DGIX — Real TAIG Facebook Connection & Organic Publish Validation  
 **Date recorded:** 2026-08-27  
-**Status:** BLOCKED — OPERATOR ACTION REQUIRED (authorization of the live test post)  
+**Status:** COMPLETE (PASS)  
 **Build phase:** POST-MVP — DGIX FEATURE BUILD  
 **New ADE MVP capability:** none  
 **New DGIX capability:** none (validates existing organic execution)
 
-## Connection (this resume)
+## Accepted outcome
 
-After Operator-supplied `.env.local` (not committed):
+Operator-authorized DGIX intake **#43** executed through the existing Facebook Organic Adapter. Meta Graph **v26.0** returned Facebook object/post id `1258891693979751_122109387345419404`. DGIX recorded **EXECUTED** / `succeeded`. Duplicate execute was refused (409). Tokens were not exposed. Paid advertising was not executed.
 
-- Configured client = **TAIG**
-- Platform = **facebook**
-- Meta accepted Page authorization
-- Organic Page Operations = **AVAILABLE**
-- Page identity returned by Meta = **TAIG Solutions**
-- Tokens were not exposed in API JSON, Git, or this ACR
-- No post or ad was created by connection validation
-- Paid remains **NOT AVAILABLE** / not executed
+Real Facebook Publishing is **VALIDATED**.
 
-## Publication (not yet authorized)
+## Evidence (in repo)
 
-Intake **#42** was rejected. Nothing was published.
+- `ADE_ACI_DGIX_017_REAL_FACEBOOK_VALIDATION_COMPLETION_REPORT.md`
+- `docs/nebula/artifacts/aci-dgix-017-evidence/`
+- Instruction: `docs/nebula/aci/ACI-DGIX-017.md`
 
-CAE imported replacement execution-ready ACP intake **#43** (`acp-taig-real-017-operator-1787869168564`) in state **imported**. CAE did **not** authorize and did **not** execute.
+## Gaps retained
 
-Final message (verbatim): `... one giant leap for mankind; a larger one for humanity...`
-
-**REAL FACEBOOK PUBLISHING remains IMPLEMENTED BUT REAL VALIDATION PENDING** until the Operator explicitly authorizes intake #43 and Meta returns an object id.
-
-## Operator action required
-
-Authorize the exact Facebook Page text post on intake **#43** for live publication to the TAIG Solutions Page, or reject it.
-
-Do not treat this ACR as PASS.
+- Image upload
+- Paid advertising execution
+- Facebook metrics retrieval
+- Results Package export
