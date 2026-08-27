@@ -7,7 +7,7 @@
 **Baseline:** `deployable` / `main` @ `3cf4437`  
 **Feature branch:** `feature/dgix/aci-dgix-017-real-facebook-validation`  
 **Date:** 2026-08-27  
-**Result:** **BLOCKED — OPERATOR ACTION REQUIRED**  
+**Result:** **BLOCKED — OPERATOR ACTION REQUIRED** (live connection validated; publication awaits explicit Operator authorization)  
 **New ADE MVP capability:** NO  
 **New DGIX capability:** NO  
 
@@ -17,72 +17,85 @@ ACI-DGIX-018 was not started. Real Facebook Publishing was **not** changed to VA
 
 ## 1. Validation Summary
 
-This ACI is a real-world proof of the existing organic path, not a new adapter.
+First CAE pass stopped because `.env.local` was absent. The Operator then configured TAIG Page credentials in `.env.local` (not committed, not printed).
 
-CAE inspected the existing ACI-DGIX-015 configuration mechanism. Required TAIG Meta credentials/assets are **not present** in this environment:
+DGIX `POST /api/dgix/facebook/validate` then succeeded: client **TAIG**, Facebook **CONNECTED**, Organic Page Operations **AVAILABLE**, Page name **TAIG Solutions**. Connection validation created **no** post and **no** ad. Tokens were not exposed.
 
-- `.env.local` does not exist (only `.env.example` names)
-- Process/User/Machine environment: `ADE_DGIX_FB_CLIENT_ID`, Page id, and Page access token are all **UNSET**
+CAE imported the approved proving ACP as intake **#42** and stopped. Import is not authorization. Authorization is not execution.
 
-CAE stopped. Identifiers and tokens were not invented. Meta was not called outside DGIX. No Facebook post was published. PASS was not fabricated.
-
-**REAL FACEBOOK PUBLISH VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED**
+**Current block:** Operator must explicitly authorize the exact Facebook Page text post before DGIX may execute it.
 
 ## 2. TAIG Connection Status
 
 | Check | Result |
 | --- | --- |
-| Configured client = TAIG | **NOT CONFIGURED** (`ADE_DGIX_FB_CLIENT_ID` unset) |
-| Platform = facebook | Connection layer exists; no live TAIG binding |
-| Page identity / Page ID | **NOT CONFIGURED** |
-| Organic Page Operations | **NOT AVAILABLE** |
-| Token exposed | No (none configured; none returned) |
+| Configured client = TAIG | **YES** |
+| Platform = facebook | **YES** |
+| Page identity | **TAIG Solutions** (returned by Meta) |
+| Page ID | Present and accepted by Meta (not archived in this report) |
+| Organic Page Operations | **AVAILABLE** |
+| Paid operations | **NOT AVAILABLE** (out of scope) |
+| Token exposed | **No** |
 
 ## 3. Meta Authorization Status
 
-**Not attempted.** Meta cannot accept authorization that ADE does not hold. No token was sent. No fabricated CONNECTED/AVAILABLE status.
+Meta accepted the configured Page authorization for organic identity (`GET /{page-id}?fields=id,name` via the existing DGIX connection layer). Paid advertising authorization is not configured and was not used.
 
 ## 4. ACP Used
 
-**Not imported for live publish.** An execution-ready TAIG organic ACP exists as a test artifact (`examples/acp/acp-v1-taig-facebook-contacts.test.json`) but was not used to publish arbitrary content. Live execution was stopped before import/authorize/execute because the connection cannot resolve.
+Source artifact: `examples/acp/acp-v1-taig-facebook-contacts.test.json` (QEN proving copy; not CAE-generated).
+
+Imported as:
+
+- intake **#42**
+- packageId `acp-taig-real-017-1787868307489`
+- `platform = facebook`, `postType = text`, `publishMode = now`, `clientId = TAIG`
+- `distributionType` defaults to **organic**
+- routed to `facebook_organic_page` (`executed: false`)
+
+Final message (verbatim):
+
+> TEST DATA. If you run a small operation and want a clear next step on using AI without the hype, TAIG can talk it through. Send a short note describing the problem you want help with. This is final publish-ready Facebook copy prepared by the originating system. It has not been posted.
+
+Link on the ACP: `https://example.invalid/taig-test-contact`
 
 ## 5. Operator Authorization
 
-**Not performed.** Import ≠ authorization ≠ execution remains intact. CAE did not auto-authorize or auto-publish.
+**Not performed.** CAE did not auto-authorize or auto-publish. Review state remains **imported**.
 
 ## 6. Real Execution Result
 
-**Did not occur.** DGIX organic adapter was not invoked against Meta. No EXECUTED status was recorded.
+**Did not occur.** The organic adapter was not invoked for publish. No EXECUTED status.
 
 ## 7. Meta Evidence
 
-**None.** No Meta response, no Facebook object/post id. A local HTTP 200 was not treated as PASS.
+Connection evidence only: Meta returned Page identity **TAIG Solutions**. No feed-post object/post id exists yet. A local HTTP 200 on validate is not a publish PASS.
 
 ## 8. DGIX Execution Record
 
-**None created for a live TAIG publish.** No credentials were written into ACP, Git, browser state, this report, or execution records.
+No `dgix_executions` success row for a live TAIG publish. Credentials are not in ACP, Git, browser JSON, or this report.
 
 ## 9. Duplicate Protection
 
-**Not exercised against a live succeeded post.** The ACI-DGIX-016 duplicate-success guard remains in product code; it cannot be proven on Meta until a first real EXECUTED exists.
+Not yet exercised against a live succeeded post.
 
 ## 10. Errors / Resolutions
 
-| Error | Resolution |
+| Item | Resolution |
 | --- | --- |
-| Missing `.env.local` and unset organic connection variables | **BLOCKED.** Operator must supply TAIG Page id + Page access token + `ADE_DGIX_FB_CLIENT_ID=TAIG` via the existing server-side `.env.local` mechanism. |
-
-No implementation defect was identified that CAE could correct without those assets. No unrelated product work was added.
+| First pass: missing `.env.local` | Operator supplied TAIG client id, Page ID, and Page token |
+| Paid missing Ad Account | Expected; organic path independent; paid not executed |
+| Live post not yet authorized | **BLOCKED** pending explicit Operator authorization of intake #42 |
 
 ## 11. Regression
 
-Existing ADE/DGIX capability from `3cf4437` was not modified. Product tests were not re-run as a substitute for live Meta PASS. The implemented chain remains:
+No product-code change in this resume. Existing chain remains:
 
 ACP Intake → Validation → Review → Authorization → Connection Resolution → Organic Adapter → Execution
 
 ## 12. Updated DGIX Current Truth
 
-Unchanged from ACI-DGIX-016:
+Unchanged from ACI-DGIX-016 until a real EXECUTED object id exists:
 
 | Capability | Status |
 | --- | --- |
@@ -99,13 +112,13 @@ Unchanged from ACI-DGIX-016:
 
 ## 13. Known Limitations
 
-- Live TAIG Facebook publish is not proven
-- Operator-controlled Meta Page id, Page token, and logical client id are required
-- Image upload, paid ads, metrics retrieval, and Results Package remain out of scope
-- Duplicate-protection proof against a second live post remains pending first real EXECUTED
+- Live TAIG Facebook **publish** is not proven
+- Operator authorization of intake #42 is required
+- The proving ACP includes `https://example.invalid/taig-test-contact`, which Meta may reject at publish time; CAE will not rewrite the copy
+- Paid ads, metrics, and Results Package remain out of scope
 
 ## 14. Recommended ACI-DGIX-018
 
-Re-attempt **this same real TAIG connection and organic publish validation** after the Operator configures `.env.local`. Do not treat metrics retrieval as the next step until a real EXECUTED Facebook object exists.
+Do not begin until this ACI receives a real EXECUTED Meta object id (or a documented Meta refusal). After that, Facebook metrics retrieval for the executed organic post is the next bounded step.
 
 Do not begin ACI-DGIX-018 until authorized.

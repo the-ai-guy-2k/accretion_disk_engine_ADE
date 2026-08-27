@@ -2,49 +2,32 @@
 
 **ACI:** ACI-DGIX-017 — ADE/DGIX — Real TAIG Facebook Connection & Organic Publish Validation  
 **Date recorded:** 2026-08-27  
-**Status:** BLOCKED — OPERATOR ACTION REQUIRED  
+**Status:** BLOCKED — OPERATOR ACTION REQUIRED (authorization of the live test post)  
 **Build phase:** POST-MVP — DGIX FEATURE BUILD  
 **New ADE MVP capability:** none  
-**New DGIX capability:** none (this ACI validates existing organic execution)
+**New DGIX capability:** none (validates existing organic execution)
 
-## Accepted outcome
+## Connection (this resume)
 
-**Not accepted as PASS.** Real TAIG Facebook connection and organic publish validation could not be performed.
+After Operator-supplied `.env.local` (not committed):
 
-This CAE run found:
+- Configured client = **TAIG**
+- Platform = **facebook**
+- Meta accepted Page authorization
+- Organic Page Operations = **AVAILABLE**
+- Page identity returned by Meta = **TAIG Solutions**
+- Tokens were not exposed in API JSON, Git, or this ACR
+- No post or ad was created by connection validation
+- Paid remains **NOT AVAILABLE** / not executed
 
-- `.env.local` **absent**
-- `ADE_DGIX_FB_CLIENT_ID` **UNSET**
-- `FACEBOOK_PAGE_ID` / `ADE_DGIX_FB_PAGE_ID` **UNSET**
-- `META_PAGE_ACCESS_TOKEN` / `ADE_DGIX_FB_PAGE_ACCESS_TOKEN` **UNSET**
-- `META_APP_ID` **UNSET**
-- `META_APP_SECRET` **UNSET**
+## Publication (not yet authorized)
 
-CAE did not invent Page IDs, tokens, or a Facebook object id. CAE did not call Meta, did not auto-authorize, did not auto-publish, and did not change Real Facebook Publishing from **IMPLEMENTED BUT REAL VALIDATION PENDING**.
+CAE imported execution-ready ACP intake **#42** (`acp-taig-real-017-1787868307489`) in state **imported**. CAE did **not** authorize and did **not** execute.
 
-**REAL FACEBOOK PUBLISH VALIDATION BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED**
+**REAL FACEBOOK PUBLISHING remains IMPLEMENTED BUT REAL VALIDATION PENDING** until the Operator explicitly authorizes this post and Meta returns an object id.
 
 ## Operator action required
 
-Configure the existing ACI-DGIX-015 server-side connection in `.env.local` (copy from `.env.example`; never commit secrets):
+Authorize the exact Facebook Page text post below for live publication to the TAIG Solutions Page, or reject it and supply replacement execution-ready copy.
 
-| Variable | Purpose |
-| --- | --- |
-| `ADE_DGIX_FB_CLIENT_ID` | Must be `TAIG` |
-| `FACEBOOK_PAGE_ID` or `ADE_DGIX_FB_PAGE_ID` | Real TAIG Facebook Page id |
-| `META_PAGE_ACCESS_TOKEN` or `ADE_DGIX_FB_PAGE_ACCESS_TOKEN` | ADE-held Page token that Meta will accept for organic Page operations |
-
-Optional for token introspection: `META_APP_ID`, `META_APP_SECRET`.
-
-Obtain Page id and a Page access token from the TAIG Meta/Facebook Business assets (Meta Business Suite / Meta Developer App with Page permissions sufficient for Page feed publishing). Then re-authorize this ACI.
-
-## Evidence (in repo)
-
-- `ADE_ACI_DGIX_017_REAL_FACEBOOK_VALIDATION_COMPLETION_REPORT.md`
-- Instruction: `docs/nebula/aci/ACI-DGIX-017.md`
-
-No live Meta object/post id exists for this ACI. That absence is the evidence.
-
-## Product truth retained
-
-Real Facebook Publishing remains **IMPLEMENTED BUT REAL VALIDATION PENDING**. Paid advertising was not executed. ACI-DGIX-018 was not started.
+Do not treat this ACR as PASS.

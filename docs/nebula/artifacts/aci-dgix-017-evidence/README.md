@@ -2,15 +2,32 @@
 
 Do not store API keys, tokens, or Page secrets here.
 
-Real TAIG Facebook connection and organic publish validation in this CAE run:
+## Connection validation (resumed after Operator `.env.local` input)
 
-**BLOCKED — CREDENTIAL/ASSET INPUT REQUIRED**
+DGIX `POST /api/dgix/facebook/validate` (sanitized):
 
-Observed (presence only, no secret values):
+- clientId: TAIG
+- platform: facebook
+- Graph API: v26.0
+- Facebook: CONNECTED
+- Organic Page Operations: AVAILABLE
+- Paid: NOT AVAILABLE (expected; not in scope)
+- Page identity name returned by Meta: TAIG Solutions
+- Page ID: present and accepted by Meta (value not archived here)
+- tokenExposed: false
+- realValidation: succeeded
+- Banner: connection validation does not publish; no post or ad was created
 
-- `.env.local` absent
-- `ADE_DGIX_FB_CLIENT_ID` unset
-- Page id unset
-- Page access token unset
+No access token, app secret, or raw Graph payload is stored in this folder.
 
-This is not a fabricated PASS. No Meta object/post id was obtained.
+## ACP intake (not authorized, not executed)
+
+- intake id: 42
+- packageId: `acp-taig-real-017-1787868307489`
+- review_state: imported
+- execution_authorized: no
+- execution_status: null
+- adapter route: facebook_organic_page
+- executed: false
+
+Operator authorization of the live TAIG Page post is still required. PASS has not been claimed.
